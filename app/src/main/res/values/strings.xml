@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Tesi_Bertelli_Calchi_Campelli</string>
+
+    <string name="name">Name</string>
+    <string name="surname">Surname</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="gender">Gender</string>
+    <string name="birthday_date">Birthday Date</string>
+    <string name="driving_license_issue_date">Driving license issue date</string>
+    <string name="register">Register</string>
+    <string name="already_register">Already have an account? Go to Login</string>
+    <string name="login">Login</string>
+    <string name="back_to_registration">Back to Registration</string>
+    <string name="select_image">Select Image</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="select_gender">Select your gender:</string>
+    <string name="field_not_empty">Field cannot be empty</string>
+    <string name="error_email">Error! Invalid Email</string>
+    <string name="error_password_too_short">Error! Password must have 8 characters</string>
+    <string name="error_password_not_match">Error! Password don\'t match</string>
+    <string name="birthday_date_picker_title">Select birthday date</string>
+    <string name="license_date_picker_title">Select driving license issue date</string>
+</resources>

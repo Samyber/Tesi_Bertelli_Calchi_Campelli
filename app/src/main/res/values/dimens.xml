@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="top_margin_registration">32dp</dimen>
+    <dimen name="left_right_margin_registration">24dp</dimen>
+    <dimen name="height_edit_text_registration">50dp</dimen>
+    <dimen name="width_edit_text_registration">0dp</dimen>
+
+    <dimen name="top_margin_login">32dp</dimen>
+    <dimen name="left_right_margin_login">24dp</dimen>
+    <dimen name="height_edit_text_login">50dp</dimen>
+    <dimen name="width_edit_text_login">0dp</dimen>
+</resources>
