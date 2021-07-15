@@ -1,6 +1,8 @@
 package com.samaeli.tesi
 
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -27,6 +29,9 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        // Change color of startIcon of textInputLayout when their focused
+        changeIconColor()
 
         binding.goToRegistrationLogin.setOnClickListener {
             Log.d(TAG,"Go to Register Activity")
@@ -100,5 +105,16 @@ class LoginActivity : AppCompatActivity() {
         }
         binding.passwordInputLayoutLogin.error = ""
         binding.passwordInputLayoutLogin.isErrorEnabled = false
+    }
+
+    private fun changeIconColor(){
+        binding.emailEditTextLogin.setOnFocusChangeListener { v, hasFocus ->
+            val color = if(hasFocus) Color.rgb(249,170,51) else Color.rgb(52,73,85)
+            binding.emailInputLayoutLogin.setStartIconTintList(ColorStateList.valueOf(color))
+        }
+        binding.passwordEditTextLogin.setOnFocusChangeListener { v, hasFocus ->
+            val color = if(hasFocus) Color.rgb(249,170,51) else Color.rgb(52,73,85)
+            binding.passwordInputLayoutLogin.setStartIconTintList(ColorStateList.valueOf(color))
+        }
     }
 }

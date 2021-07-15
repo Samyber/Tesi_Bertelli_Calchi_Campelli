@@ -44,11 +44,13 @@
             android:layout_marginStart="@dimen/left_right_margin_registration"
             android:layout_marginTop="@dimen/top_margin_registration"
             android:layout_marginEnd="@dimen/left_right_margin_registration"
+            app:startIconDrawable="@drawable/ic_round_person_24"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/selectImageButtonRegister">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/nameEditTextRegister"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/name" />
@@ -61,11 +63,13 @@
             android:layout_width="@dimen/width_edit_text_login"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/top_margin_registration"
+            app:startIconDrawable="@drawable/ic_round_person_24"
             app:layout_constraintEnd_toEndOf="@+id/nameInputLayoutRegister"
             app:layout_constraintStart_toStartOf="@+id/nameInputLayoutRegister"
             app:layout_constraintTop_toBottomOf="@+id/nameInputLayoutRegister">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/surnameEditTextRegister"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/surname" />
@@ -77,6 +81,7 @@
             android:layout_width="@dimen/width_edit_text_login"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/top_margin_registration"
+            app:startIconDrawable="@drawable/ic_round_date_range_24"
             app:layout_constraintEnd_toEndOf="@+id/surnameInputLayoutRegister"
             app:layout_constraintStart_toStartOf="@+id/surnameInputLayoutRegister"
             app:layout_constraintTop_toBottomOf="@+id/surnameInputLayoutRegister">
@@ -131,6 +136,7 @@
             android:layout_width="@dimen/width_edit_text_login"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/top_margin_registration"
+            app:startIconDrawable="@drawable/ic_round_date_range_24"
             app:layout_constraintEnd_toEndOf="@+id/birthdayDateInputLayoutRegister"
             app:layout_constraintStart_toStartOf="@+id/birthdayDateInputLayoutRegister"
             app:layout_constraintTop_toBottomOf="@+id/genderRadioGroupRegistration">
@@ -149,11 +155,13 @@
             android:layout_width="@dimen/width_edit_text_registration"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/top_margin_registration"
+            app:startIconDrawable="@drawable/ic_round_email_24"
             app:layout_constraintEnd_toEndOf="@+id/licenseDateInputLayoutRegister"
             app:layout_constraintStart_toStartOf="@+id/licenseDateInputLayoutRegister"
             app:layout_constraintTop_toBottomOf="@+id/licenseDateInputLayoutRegister">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/emailEditTextRegister"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/email"
@@ -166,11 +174,14 @@
             android:layout_width="@dimen/width_edit_text_registration"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/top_margin_registration"
+            app:endIconMode="password_toggle"
+            app:startIconDrawable="@drawable/ic_round_password_24"
             app:layout_constraintEnd_toEndOf="@+id/emailInputLayoutRegister"
             app:layout_constraintStart_toStartOf="@+id/emailInputLayoutRegister"
             app:layout_constraintTop_toBottomOf="@+id/emailInputLayoutRegister">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/passwordEditTextRegister"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/password"
@@ -183,11 +194,14 @@
             android:layout_width="@dimen/width_edit_text_registration"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/top_margin_registration"
+            app:endIconMode="password_toggle"
+            app:startIconDrawable="@drawable/ic_round_password_24"
             app:layout_constraintEnd_toEndOf="@+id/passwordInputLayoutRegister"
             app:layout_constraintStart_toStartOf="@+id/passwordInputLayoutRegister"
             app:layout_constraintTop_toBottomOf="@+id/passwordInputLayoutRegister">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/confirmPasswordEditTextRegister"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/confirm_password"

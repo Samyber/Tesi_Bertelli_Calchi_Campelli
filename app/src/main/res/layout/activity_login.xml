@@ -15,11 +15,13 @@
         android:layout_marginLeft="@dimen/left_right_margin_login"
         android:layout_marginTop="45dp"
         android:layout_marginRight="@dimen/left_right_margin_login"
+        app:startIconDrawable="@drawable/ic_round_email_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/emailEditTextLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/email"
@@ -32,14 +34,18 @@
         android:layout_width="@dimen/width_edit_text_login"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/top_margin_login"
+        app:endIconMode="password_toggle"
+        app:startIconDrawable="@drawable/ic_round_password_24"
         app:layout_constraintEnd_toEndOf="@+id/emailInputLayoutLogin"
         app:layout_constraintStart_toStartOf="@+id/emailInputLayoutLogin"
         app:layout_constraintTop_toBottomOf="@+id/emailInputLayoutLogin">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/passwordEditTextLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/password" />
+            android:hint="@string/password"
+            android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <android.widget.Button

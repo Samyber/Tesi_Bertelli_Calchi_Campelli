@@ -1,8 +1,11 @@
 package com.samaeli.tesi
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,6 +16,8 @@ import android.widget.ScrollView
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
@@ -34,6 +39,7 @@ class RegisterActivity : AppCompatActivity() {
 
     companion object{
         val TAG = "Register Activity"
+        val years_14_milliseconds : Long = 441806400000
     }
 
     private var error : Boolean = false
@@ -54,14 +60,24 @@ class RegisterActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        // Change color of startIcon of textInputLayout when their focused
+        changeIconColor()
+
         // Disable soft keyboard when the user click on date input box
         binding.birthdayDateInputLayoutRegister.editText?.inputType = InputType.TYPE_NULL
         binding.licenseDateInputLayoutRegister.editText?.inputType = InputType.TYPE_NULL
 
         binding.birthdayDateInputLayoutRegister.editText?.setOnClickListener {
             Log.d(TAG,"Try to show datePicker for birthday date")
+            val timestamp = System.currentTimeMillis()
+            // Si possono registrare solo persone che hanno un'età maggiore di 14 anni
+            val constraintsBuilder = CalendarConstraints.Builder()
+                    .setValidator(DateValidatorPointBackward.before(timestamp - years_14_milliseconds))
+                    .setEnd(timestamp - years_14_milliseconds)
+                    .setOpenAt(timestamp - years_14_milliseconds)
             val datePicker = MaterialDatePicker.Builder.datePicker()
                     .setTitleText(R.string.birthday_date_picker_title)
+                    .setCalendarConstraints(constraintsBuilder.build())
                     .build()
 
             datePicker.show(supportFragmentManager,"")
@@ -77,8 +93,13 @@ class RegisterActivity : AppCompatActivity() {
 
         binding.licenseDateInputLayoutRegister.editText?.setOnClickListener {
             Log.d(TAG,"Try to show datePicker for birthday date")
+            // Non si possono scegliere date future
+            val constraintsBuilder = CalendarConstraints.Builder()
+                    .setValidator(DateValidatorPointBackward.now())
+                    .setEnd(System.currentTimeMillis())
             val datePicker = MaterialDatePicker.Builder.datePicker()
                     .setTitleText(R.string.license_date_picker_title)
+                    .setCalendarConstraints(constraintsBuilder.build())
                     .build()
 
             datePicker.show(supportFragmentManager,"")
@@ -148,7 +169,8 @@ class RegisterActivity : AppCompatActivity() {
                         }catch (e : Exception) {
                             if(e is FirebaseAuthUserCollisionException){
                                 Log.d(TAG,"The email exist")
-                                Toast.makeText(this,getString(R.string.error_registration)+": "+getString(R.string.error_email_exist),Toast.LENGTH_LONG).show()
+                                //Il toast compare automaticamente senza doverlo stampare
+                                //Toast.makeText(this,getString(R.string.error_registration)+": "+getString(R.string.error_email_exist),Toast.LENGTH_LONG).show()
                                 binding.emailInputLayoutRegister.error = getString(R.string.error_email_exist)
                             }else {
                                 Toast.makeText(this, getString(R.string.error_registration), Toast.LENGTH_LONG).show()
@@ -340,4 +362,28 @@ class RegisterActivity : AppCompatActivity() {
         binding.confirmPasswordInputLayoutRegister.error = ""
         binding.confirmPasswordInputLayoutRegister.isErrorEnabled = false
     }
+
+    private fun changeIconColor(){
+        binding.nameEditTextRegister.setOnFocusChangeListener { v, hasFocus ->
+            val color = if(hasFocus) Color.rgb(249,170,51) else Color.rgb(52,73,85)
+            binding.nameInputLayoutRegister.setStartIconTintList(ColorStateList.valueOf(color))
+        }
+        binding.surnameEditTextRegister.setOnFocusChangeListener { v, hasFocus ->
+            val color = if(hasFocus) Color.rgb(249,170,51) else Color.rgb(52,73,85)
+            binding.surnameInputLayoutRegister.setStartIconTintList(ColorStateList.valueOf(color))
+        }
+        binding.emailEditTextRegister.setOnFocusChangeListener { v, hasFocus ->
+            val color = if(hasFocus) Color.rgb(249,170,51) else Color.rgb(52,73,85)
+            binding.emailInputLayoutRegister.setStartIconTintList(ColorStateList.valueOf(color))
+        }
+        binding.passwordEditTextRegister.setOnFocusChangeListener { v, hasFocus ->
+            val color = if(hasFocus) Color.rgb(249,170,51) else Color.rgb(52,73,85)
+            binding.passwordInputLayoutRegister.setStartIconTintList(ColorStateList.valueOf(color))
+        }
+        binding.confirmPasswordEditTextRegister.setOnFocusChangeListener { v, hasFocus ->
+            val color = if(hasFocus) Color.rgb(249,170,51) else Color.rgb(52,73,85)
+            binding.confirmPasswordInputLayoutRegister.setStartIconTintList(ColorStateList.valueOf(color))
+        }
+    }
+
 }
