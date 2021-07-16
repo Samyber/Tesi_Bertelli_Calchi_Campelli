@@ -233,6 +233,19 @@
             app:layout_constraintStart_toStartOf="@+id/buttonRegister"
             app:layout_constraintTop_toBottomOf="@+id/buttonRegister" />
 
+        <TextView
+            android:id="@+id/alcoholCalculatorTextViewRegister"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/top_margin_registration"
+            android:text="@string/alcohol_level_calculator_register"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold|italic"
+            app:layout_constraintEnd_toEndOf="@+id/buttonRegister"
+            app:layout_constraintStart_toStartOf="@+id/buttonRegister"
+            app:layout_constraintTop_toBottomOf="@+id/alreadyRegisterTextView" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

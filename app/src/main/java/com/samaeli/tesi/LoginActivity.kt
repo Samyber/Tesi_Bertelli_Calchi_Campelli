@@ -50,6 +50,13 @@ class LoginActivity : AppCompatActivity() {
             Log.d(TAG,"Campi ok")
             performLogin()
         }
+
+        binding.alcoholCalculatorTextViewLogin.setOnClickListener {
+            Log.d(TAG,"Main Activity")
+            val intent = Intent(this,MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+        }
     }
 
     private fun performLogin(){
