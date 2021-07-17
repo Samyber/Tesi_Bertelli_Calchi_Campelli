@@ -13,7 +13,7 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="24dp"
         android:background="@drawable/rounded_button"
-        android:text="@string/add_drink"
+        android:text="@string/plus_add_drink"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

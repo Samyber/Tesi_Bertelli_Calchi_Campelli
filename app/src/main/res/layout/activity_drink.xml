@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollViewDrink"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="32dp"
+        tools:context=".calculationBloodAlcohol.DrinkActivity">
+
+        <TextView
+            android:id="@+id/quantityTextViewDrink"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/quantity"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/quantityEditTextDrink"
+            app:layout_constraintStart_toStartOf="@+id/alcoholContentTextViewDrink"
+            app:layout_constraintTop_toTopOf="@+id/quantityEditTextDrink" />
+
+        <ImageView
+            android:id="@+id/imageViewDrink"
+            android:layout_width="0dp"
+            android:layout_height="250dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/nameTextViewDrink"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:text="@string/name"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageViewDrink" />
+
+        <TextView
+            android:id="@+id/alcoholContentTextViewDrink"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/alcohol_content"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/alcoholContentEditTextDrink"
+            app:layout_constraintStart_toStartOf="@+id/nameTextViewDrink"
+            app:layout_constraintTop_toTopOf="@+id/alcoholContentEditTextDrink" />
+
+        <TextView
+            android:id="@+id/volumeTextViewDrink"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/volume"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/volumeEditTextDrink"
+            app:layout_constraintStart_toStartOf="@+id/alcoholContentTextViewDrink"
+            app:layout_constraintTop_toTopOf="@+id/volumeEditTextDrink" />
+
+        <TextView
+            android:id="@+id/hourTextViewDrink"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/hour_intake"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/hourEditTextDrink"
+            app:layout_constraintStart_toStartOf="@+id/alcoholContentTextViewDrink"
+            app:layout_constraintTop_toTopOf="@+id/hourEditTextDrink" />
+
+        <EditText
+            android:id="@+id/alcoholContentEditTextDrink"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/top_margin_drink"
+            android:ems="4"
+            android:inputType="numberDecimal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/alcoholContentTextViewDrink"
+            app:layout_constraintTop_toBottomOf="@+id/nameTextViewDrink" />
+
+        <EditText
+            android:id="@+id/volumeEditTextDrink"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/top_margin_drink"
+            android:ems="4"
+            android:inputType="number"
+            app:layout_constraintEnd_toEndOf="@+id/alcoholContentEditTextDrink"
+            app:layout_constraintStart_toStartOf="@+id/alcoholContentEditTextDrink"
+            app:layout_constraintTop_toBottomOf="@+id/alcoholContentEditTextDrink" />
+
+        <EditText
+            android:id="@+id/hourEditTextDrink"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/top_margin_drink"
+            android:ems="4"
+            android:inputType="time"
+            app:layout_constraintEnd_toEndOf="@+id/volumeEditTextDrink"
+            app:layout_constraintStart_toStartOf="@+id/volumeEditTextDrink"
+            app:layout_constraintTop_toBottomOf="@+id/volumeEditTextDrink" />
+
+        <EditText
+            android:id="@+id/quantityEditTextDrink"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/top_margin_drink"
+            android:ems="4"
+            android:inputType="number"
+            android:text="1"
+            app:layout_constraintEnd_toEndOf="@+id/volumeEditTextDrink"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/volumeEditTextDrink"
+            app:layout_constraintTop_toBottomOf="@+id/hourEditTextDrink" />
+
+        <android.widget.Button
+            android:id="@+id/addButtonDrink"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="@dimen/top_margin_drink"
+            android:layout_marginEnd="24dp"
+            android:background="@drawable/rounded_button"
+            android:text="@string/add_drink"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/quantityEditTextDrink" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

@@ -40,6 +40,12 @@
     <string name="bottom_navigation_passages">Passages</string>
     <string name="bottom_navigation_profile">My profile</string>
 
-    <string name="add_drink">+ Add drink</string>
+    <string name="plus_add_drink">+ Add drink</string>
     <string name="select_drink">Select drink</string>
+
+    <string name="volume">Volume (ml)</string>
+    <string name="alcohol_content">Alcohol content (% vol.)</string>
+    <string name="quantity">Quantity</string>
+    <string name="hour_intake">Hour intake drink</string>
+    <string name="add_drink">Add drink</string>
 </resources>

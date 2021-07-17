@@ -1,5 +1,9 @@
 package com.samaeli.tesi.models
 
-class Drink(val name:String, val quantity : Int, val alcoholicContent:Double, val imageUrl:String) {
-    constructor(): this("",0,0.0,"")
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
+class Drink(val name:String, val volume : Int, val alcoholicContent:Double, val imageUrl:String, val cocktail:Boolean):Parcelable {
+    constructor(): this("",0,0.0,"",false)
 }

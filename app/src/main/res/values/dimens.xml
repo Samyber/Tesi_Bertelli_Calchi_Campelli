@@ -9,4 +9,6 @@
     <dimen name="left_right_margin_login">24dp</dimen>
     <dimen name="height_edit_text_login">50dp</dimen>
     <dimen name="width_edit_text_login">0dp</dimen>
+
+    <dimen name="top_margin_drink">32dp</dimen>
 </resources>
