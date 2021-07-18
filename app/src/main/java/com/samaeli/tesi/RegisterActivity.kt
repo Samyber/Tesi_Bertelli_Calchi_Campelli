@@ -50,6 +50,7 @@ class RegisterActivity : AppCompatActivity() {
     private var birthdayDate : Long? = null
     private var licenseDate : Long? = null
     private var gender : String? = null
+    private var weight : Double? = null
     private var email : String? = null
     private var password : String? = null
 
@@ -237,7 +238,7 @@ class RegisterActivity : AppCompatActivity() {
             gender = "female"
         }
 
-        val user = User(uid,email!!,name!!,surname!!,birthdayDate!!,licenseDate!!,gender!!,profileImageUrl)
+        val user = User(uid,email!!,name!!,surname!!,birthdayDate!!,licenseDate!!,gender!!,profileImageUrl,weight!!)
         ref.setValue(user)
             .addOnSuccessListener {
                 Log.d(TAG,"User saved in db")
@@ -265,6 +266,7 @@ class RegisterActivity : AppCompatActivity() {
         validateEmail()
         validatePassword()
         validateConfirmPassword()
+        validateWeight()
         return !error
     }
 
@@ -304,6 +306,19 @@ class RegisterActivity : AppCompatActivity() {
         binding.birthdayDateInputLayoutRegister.isErrorEnabled = false
     }
 
+    private fun validateWeight(){
+        val stringWeight = binding.weightInputLayoutRegister.editText?.text.toString()
+
+        if(stringWeight == null || stringWeight.isEmpty() || stringWeight.isBlank()){
+            binding.weightInputLayoutRegister.error = getString(R.string.field_not_empty)
+            error = true
+            return
+        }
+        binding.weightInputLayoutRegister.error = ""
+        binding.weightInputLayoutRegister.isErrorEnabled = false
+        weight = stringWeight.toDouble()
+    }
+
     private fun validateLicenseDate(){
         val licenseDate = binding.licenseDateInputLayoutRegister.editText?.text.toString()
 
@@ -318,8 +333,6 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun validateEmail(){
         email = binding.emailInputLayoutRegister.editText?.text.toString()
-
-
 
         if(email==null || email!!.isEmpty() || email!!.isBlank()){
             binding.emailInputLayoutRegister.error = getString(R.string.field_not_empty)

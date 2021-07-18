@@ -11,4 +11,6 @@
     <dimen name="width_edit_text_login">0dp</dimen>
 
     <dimen name="top_margin_drink">32dp</dimen>
+
+    <dimen name="top_margin_alcohol_level_fragment">32dp</dimen>
 </resources>

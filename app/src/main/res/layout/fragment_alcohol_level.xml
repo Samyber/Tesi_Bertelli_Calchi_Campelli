@@ -1,21 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollViewRegister"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fillViewport="true">
 
-    <android.widget.Button
-        android:id="@+id/buttonAddDrink"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="24dp"
-        android:background="@drawable/rounded_button"
-        android:text="@string/plus_add_drink"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.widget.Button
+            android:id="@+id/buttonAddDrink"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="@dimen/top_margin_alcohol_level_fragment"
+            android:layout_marginEnd="24dp"
+            android:background="@drawable/rounded_button"
+            android:text="@string/plus_add_drink"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewAlcoholLevelFragmnet"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/top_margin_alcohol_level_fragment"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonAddDrink" />
+
+        <RadioGroup
+            android:id="@+id/genderRadioGroupAlcoholLevel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/top_margin_alcohol_level_fragment"
+            android:orientation="horizontal"
+            android:checkedButton="@+id/maleRadioButtonAlcoholLevel"
+            app:layout_constraintEnd_toEndOf="@+id/buttonAddDrink"
+            app:layout_constraintTop_toBottomOf="@+id/recyclerViewAlcoholLevelFragmnet">
+
+            <RadioButton
+                android:id="@+id/maleRadioButtonAlcoholLevel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="15dp"
+                android:text="@string/male"
+                android:textSize="16sp" />
+
+            <RadioButton
+                android:id="@+id/femaleRadioButtonAlcoholLevel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/female"
+                android:textSize="16sp" />
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/genderTextViewAlcoholLevel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/select_gender"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/genderRadioGroupAlcoholLevel"
+            app:layout_constraintStart_toStartOf="@+id/buttonAddDrink"
+            app:layout_constraintTop_toTopOf="@+id/genderRadioGroupAlcoholLevel" />
+
+        <RadioGroup
+            android:id="@+id/questionFullStomachRadioGroupAlcoholLevel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/top_margin_alcohol_level_fragment"
+            android:orientation="horizontal"
+            android:checkedButton="@id/YesrRadioButtonAlcoholLevel"
+            app:layout_constraintEnd_toEndOf="@+id/genderRadioGroupAlcoholLevel"
+            app:layout_constraintStart_toStartOf="@+id/genderRadioGroupAlcoholLevel"
+            app:layout_constraintTop_toBottomOf="@+id/genderRadioGroupAlcoholLevel">
+
+            <RadioButton
+                android:id="@+id/YesrRadioButtonAlcoholLevel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:text="@string/yes"
+                android:textSize="16dp" />
+
+            <RadioButton
+                android:id="@+id/noRadioButtonAlcoholLevel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/no"
+                android:textSize="16sp" />
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/questionFullStomachTextViewAlcoholLevel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/question_full_stomach"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/questionFullStomachRadioGroupAlcoholLevel"
+            app:layout_constraintStart_toStartOf="@+id/genderTextViewAlcoholLevel"
+            app:layout_constraintTop_toTopOf="@+id/questionFullStomachRadioGroupAlcoholLevel" />
+
+        <EditText
+            android:id="@+id/weightEditTextAlcoholLevel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/top_margin_alcohol_level_fragment"
+            android:ems="4"
+            android:hint="@string/weight"
+            android:inputType="numberDecimal"
+            app:layout_constraintEnd_toEndOf="@+id/questionFullStomachRadioGroupAlcoholLevel"
+            app:layout_constraintStart_toStartOf="@+id/questionFullStomachRadioGroupAlcoholLevel"
+            app:layout_constraintTop_toBottomOf="@+id/questionFullStomachRadioGroupAlcoholLevel" />
+
+        <TextView
+            android:id="@+id/weightTextViewAlcoholLevel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/enter_weight"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/weightEditTextAlcoholLevel"
+            app:layout_constraintStart_toStartOf="@+id/questionFullStomachTextViewAlcoholLevel"
+            app:layout_constraintTop_toTopOf="@+id/weightEditTextAlcoholLevel" />
+
+        <android.widget.Button
+            android:id="@+id/calculateButtonAlcoholLevel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/top_margin_alcohol_level_fragment"
+            android:background="@drawable/rounded_button"
+            android:text="@string/calculate"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="@+id/buttonAddDrink"
+            app:layout_constraintStart_toStartOf="@+id/buttonAddDrink"
+            app:layout_constraintTop_toBottomOf="@+id/weightEditTextAlcoholLevel" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

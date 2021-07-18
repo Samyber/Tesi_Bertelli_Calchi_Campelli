@@ -2,6 +2,7 @@ package com.samaeli.tesi.calculationBloodAlcohol
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.samaeli.tesi.R
 import com.samaeli.tesi.databinding.ActivityDrinkBinding
 import com.samaeli.tesi.models.Drink
@@ -35,7 +36,8 @@ class DrinkActivity : AppCompatActivity() {
         val targetImageView = binding.imageViewDrink
         Picasso.get().load(url).into(targetImageView)
         binding.nameTextViewDrink.text = drink!!.name
-        binding.alcoholContentEditTextDrink.setText(drink!!.alcoholicContent.toString())
+        binding.alcoholContentEditTextDrink.setText(drink!!.alcoholContent.toString())
+        Log.d(TAG,drink!!.alcoholContent.toString())
         binding.volumeEditTextDrink.setText(drink!!.volume.toString())
     }
 }

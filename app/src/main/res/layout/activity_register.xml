@@ -139,7 +139,7 @@
             app:startIconDrawable="@drawable/ic_round_date_range_24"
             app:layout_constraintEnd_toEndOf="@+id/birthdayDateInputLayoutRegister"
             app:layout_constraintStart_toStartOf="@+id/birthdayDateInputLayoutRegister"
-            app:layout_constraintTop_toBottomOf="@+id/genderRadioGroupRegistration">
+            app:layout_constraintTop_toBottomOf="@+id/weightInputLayoutRegister">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
@@ -245,6 +245,24 @@
             app:layout_constraintEnd_toEndOf="@+id/buttonRegister"
             app:layout_constraintStart_toStartOf="@+id/buttonRegister"
             app:layout_constraintTop_toBottomOf="@+id/alreadyRegisterTextView" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/weightInputLayoutRegister"
+            style="@style/style_input_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/top_margin_registration"
+            app:layout_constraintEnd_toEndOf="@+id/birthdayDateInputLayoutRegister"
+            app:layout_constraintStart_toStartOf="@+id/birthdayDateInputLayoutRegister"
+            app:layout_constraintTop_toBottomOf="@+id/genderRadioGroupRegistration"
+            app:startIconDrawable="@drawable/ic_round_monitor_weight_24">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/weight"
+                android:inputType="numberDecimal" />
+        </com.google.android.material.textfield.TextInputLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
