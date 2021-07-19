@@ -3,9 +3,11 @@ package com.samaeli.tesi
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.ktx.Firebase
 import com.samaeli.tesi.calculationBloodAlcohol.AlcoholLevelFragment
 import com.samaeli.tesi.databinding.ActivityMainBinding
 
@@ -29,6 +31,17 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction().replace(R.id.fragmentContainerMainActivity,AlcoholLevelFragment(),
                 "AlcoholLevelFragment").commit()
 
+        /*FirebaseAuth.getInstance().signInAnonymously()
+                .addOnCompleteListener {
+                    if(it.isSuccessful) {
+                        if (FirebaseAuth.getInstance().currentUser!!.email == null) {
+                            Log.d(TAG, "ciaoooooooooooooooooooooooooooooooo Anonymous user")
+                            Log.d(TAG, "ciaoooooooooooooooooooooooooooooooo"+FirebaseAuth.getInstance().uid)
+                        }
+                        FirebaseAuth.getInstance().currentUser!!.delete()
+                    }
+                }*/
+        //FirebaseAuth.getInstance().currentUser!!.delete()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

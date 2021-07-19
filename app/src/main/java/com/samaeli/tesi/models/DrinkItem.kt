@@ -6,6 +6,10 @@ import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.item_add_drink.view.*
 
+/*
+    Classe per il singolo item dell'activity SelectDrinkActivity
+ */
+
 class DrinkItem(val drink:Drink):Item<ViewHolder>() {
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.nameTextViewItemDrink.text = drink.name

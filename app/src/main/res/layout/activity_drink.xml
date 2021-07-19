@@ -103,6 +103,7 @@
             android:layout_marginTop="@dimen/top_margin_drink"
             android:ems="4"
             android:inputType="time"
+            android:focusable="false"
             app:layout_constraintEnd_toEndOf="@+id/volumeEditTextDrink"
             app:layout_constraintStart_toStartOf="@+id/volumeEditTextDrink"
             app:layout_constraintTop_toBottomOf="@+id/volumeEditTextDrink" />

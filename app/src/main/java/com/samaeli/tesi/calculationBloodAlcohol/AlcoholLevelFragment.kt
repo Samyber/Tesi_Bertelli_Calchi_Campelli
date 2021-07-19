@@ -2,6 +2,7 @@ package com.samaeli.tesi.calculationBloodAlcohol
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -39,6 +40,7 @@ class AlcoholLevelFragment : Fragment() {
             startActivity(intent)
         }
         if(FirebaseAuth.getInstance().uid != null) {
+            Log.d("MAIN ACTIVITY", "CIAOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO"+FirebaseAuth.getInstance().uid)
             completeField()
         }
 
