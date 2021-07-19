@@ -57,4 +57,7 @@
     <string name="enter_weight">Enter your weight</string>
     <string name="calculate">Calculate</string>
 
+    <string name="volume_drink_added">Volume: </string>
+    <string name="alcohol_content_drink_added">Alcohol content: </string>
+    <string name="hour_taken">Hour taken: </string>
 </resources>

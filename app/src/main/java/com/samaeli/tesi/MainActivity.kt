@@ -28,11 +28,11 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        if(FirebaseAuth.getInstance().uid==null){
+        /*if(FirebaseAuth.getInstance().uid==null){
             val intent = Intent(this,LoginActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
-        }
+        }*/
 
         supportFragmentManager.beginTransaction().replace(R.id.fragmentContainerMainActivity,AlcoholLevelFragment(),
                 "AlcoholLevelFragment").commit()
@@ -56,8 +56,8 @@ class MainActivity : AppCompatActivity() {
         this.menu = menu
         menuInflater.inflate(R.menu.nav_menu,menu)
 
-        //if(FirebaseAuth.getInstance().uid != null){
-        if(!FirebaseAuth.getInstance().currentUser!!.email.isNullOrEmpty()){
+        if(FirebaseAuth.getInstance().uid != null){
+        //if(!FirebaseAuth.getInstance().currentUser!!.email.isNullOrEmpty()){
             this.menu!!.findItem(R.id.menuRegister).setVisible(false)
             this.menu!!.findItem(R.id.menuLogin).setVisible(false)
         }else{
@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 FirebaseAuth.getInstance().signOut()
                 //Ricreo un utente anonimo
-                FirebaseAuth.getInstance().signInAnonymously()
+                //FirebaseAuth.getInstance().signInAnonymously()
                 menu!!.findItem(R.id.menuLogout).setVisible(false)
                 menu!!.findItem(R.id.menuLogin).setVisible(true)
                 menu!!.findItem(R.id.menuRegister).setVisible(true)

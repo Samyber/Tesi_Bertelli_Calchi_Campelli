@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/imageViewItemDrinkAdded"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/btn_star_big_on" />
+
+
+
+    <TextView
+        android:id="@+id/nameTextViewItemDrinkAdded"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:text="Name drink"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/imageViewItemDrinkAdded"
+        app:layout_constraintTop_toTopOf="@+id/imageViewItemDrinkAdded" />
+
+    <TableLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/nameTextViewItemDrinkAdded"
+        app:layout_constraintTop_toBottomOf="@+id/nameTextViewItemDrinkAdded">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/volumeTextViewDrinkAdded"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_column="0"
+                android:text="@string/volume_drink_added" />
+
+            <TextView
+                android:id="@+id/quantityTextViewDrinkAdded"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="2"
+                android:text="@string/quantity" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp">
+
+            <TextView
+                android:id="@+id/alcoholContentTextViewDrinkAdded"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="0"
+                android:text="@string/alcohol_content_drink_added" />
+
+
+            <TextView
+                android:id="@+id/timeTextViewDrinkAdded"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="2"
+                android:text="@string/hour_taken" />
+        </TableRow>
+
+    </TableLayout>
+
+    <ImageView
+        android:id="@+id/deleteImageViewDrinkAdded"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/nameTextViewItemDrinkAdded"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/nameTextViewItemDrinkAdded"
+        app:srcCompat="@drawable/ic_round_delete_24" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

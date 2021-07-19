@@ -46,7 +46,6 @@ class SelectDrinkActivity : AppCompatActivity() {
                     if(drink != null){
                         Log.d(TAG,"Drink name: "+drink.name)
                         Log.d(TAG,"Image url: "+drink.imageUrl)
-                        Log.d(TAG,"Cocktail: "+drink.cocktail)
                         adapter.add(DrinkItem(drink))
                     }
                 }

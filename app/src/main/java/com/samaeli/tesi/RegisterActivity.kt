@@ -39,6 +39,7 @@ class RegisterActivity : AppCompatActivity() {
 
     companion object{
         val TAG = "Register Activity"
+        // Serve per controllare che l'utente che si vuole registrare abbia almeno 14 anni
         val years_14_milliseconds : Long = 441806400000
     }
 
@@ -169,10 +170,10 @@ class RegisterActivity : AppCompatActivity() {
 
         Log.d(TAG,"Email: $email and password: $password")
 
-        if(FirebaseAuth.getInstance().uid != null){
+        /*if(FirebaseAuth.getInstance().uid != null){
             Log.d(TAG,"Cancellazione dell'utente anonimo")
             FirebaseAuth.getInstance().currentUser!!.delete()
-        }
+        }*/
 
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email!!, password!!)
                 .addOnCompleteListener {

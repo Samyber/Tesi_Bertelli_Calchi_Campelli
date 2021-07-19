@@ -1,15 +1,18 @@
 package com.samaeli.tesi.calculationBloodAlcohol
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.InputType
 import android.util.Log
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
+import com.samaeli.tesi.MainActivity
 import com.samaeli.tesi.R
 import com.samaeli.tesi.RegisterActivity
 import com.samaeli.tesi.databinding.ActivityDrinkBinding
 import com.samaeli.tesi.models.Drink
+import com.samaeli.tesi.models.DrinkAdded
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_drink.*
 
@@ -29,12 +32,16 @@ class DrinkActivity : AppCompatActivity() {
     var volume : Int? = null
     var error : Boolean = false
 
+    var db : DrinkAddedDB? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //setContentView(R.layout.activity_drink)
         binding = ActivityDrinkBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        db = DrinkAddedDB(this)
 
         drink = intent.getParcelableExtra(SelectDrinkActivity.DRINK_KEY)
         supportActionBar?.title = drink!!.name
@@ -64,7 +71,16 @@ class DrinkActivity : AppCompatActivity() {
             if(!validateFields()){
                 Log.d(TAG,"Error during adding drink")
             }
+            saveToDB()
+            val intent = Intent(this,MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
         }
+    }
+
+    private fun saveToDB(){
+        val drinkAdded = DrinkAdded(null,Drink(drink!!.name,volume!!,alcoholContent!!,drink!!.imageUrl),quantity!!,hour!!,minute!!)
+        db!!.insertDrinkAdded(drinkAdded)
     }
 
     private fun validateFields():Boolean{

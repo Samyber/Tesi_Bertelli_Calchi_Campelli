@@ -1,5 +1,6 @@
 package com.samaeli.tesi.calculationBloodAlcohol
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -13,15 +14,38 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
+import com.samaeli.tesi.MainActivity
 import com.samaeli.tesi.R
 import com.samaeli.tesi.databinding.FragmentAlcoholLevelBinding
+import com.samaeli.tesi.models.DrinkAdded
+import com.samaeli.tesi.models.DrinkAddedItem
 import com.samaeli.tesi.models.User
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.fragment_alcohol_level.*
 
 class AlcoholLevelFragment : Fragment() {
 
     private var _binding : FragmentAlcoholLevelBinding? = null
     private val binding get() = _binding!!
+
+
+    companion object {
+        var db: DrinkAddedDB? = null
+        var adapter = GroupAdapter<ViewHolder>()
+
+        fun displayDrinkAdded(context: Context){
+            adapter.clear()
+            val drinksAdded = db!!.getDrinksAdded()
+            if(drinksAdded.size > 0){
+                for(drinkAdded in drinksAdded){
+                    adapter.add(DrinkAddedItem(drinkAdded,context))
+                }
+            }
+        }
+    }
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,11 +63,16 @@ class AlcoholLevelFragment : Fragment() {
             val intent = Intent(activity,SelectDrinkActivity::class.java)
             startActivity(intent)
         }
-        //if(FirebaseAuth.getInstance().uid != null) {
         // Controllo che l'utente non sia un utente anonimo
-        if(!FirebaseAuth.getInstance().currentUser!!.email.isNullOrEmpty()){
+        //if(!FirebaseAuth.getInstance().currentUser!!.email.isNullOrEmpty()){
+        if(FirebaseAuth.getInstance().uid != null) {
             completeField()
         }
+
+        db = DrinkAddedDB(requireActivity().applicationContext)
+
+        displayDrinkAdded(requireActivity().applicationContext)
+        binding.recyclerViewAlcoholLevelFragmnet.adapter = adapter
 
         return view
     }
@@ -52,6 +81,18 @@ class AlcoholLevelFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    /*public fun displayDrinkAdded(){
+        val adapter = GroupAdapter<ViewHolder>()
+        val drinksAdded = db!!.getDrinksAdded()
+        if(drinksAdded.size > 0){
+            for(drinkAdded in drinksAdded){
+                adapter.add(DrinkAddedItem(drinkAdded))
+            }
+        }
+        Log.d("MAIN ACTIVITY",adapter.)
+        binding.recyclerViewAlcoholLevelFragmnet.adapter = adapter
+    }*/
 
     private fun completeField(){
         val uid = FirebaseAuth.getInstance().uid
