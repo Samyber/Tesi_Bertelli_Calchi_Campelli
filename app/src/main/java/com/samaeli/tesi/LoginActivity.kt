@@ -51,15 +51,36 @@ class LoginActivity : AppCompatActivity() {
             performLogin()
         }
 
-        binding.alcoholCalculatorTextViewLogin.setOnClickListener {
+        /*binding.alcoholCalculatorTextViewLogin.setOnClickListener {
             Log.d(TAG,"Main Activity")
             val intent = Intent(this,MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
+        }*/
+
+        binding.alcoholCalculatorTextViewLogin.setOnClickListener {
+            if(FirebaseAuth.getInstance().uid != null) {
+                FirebaseAuth.getInstance().signInAnonymously()
+                        .addOnCompleteListener {
+                            if (it.isSuccessful) {
+                                val intent = Intent(this, MainActivity::class.java)
+                                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                startActivity(intent)
+                            }
+                        }
+            }else{
+                val intent = Intent(this, MainActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+            }
         }
     }
 
     private fun performLogin(){
+        if(FirebaseAuth.getInstance().uid != null){
+            Log.d(RegisterActivity.TAG,"Cancellazione dell'utente anonimo")
+            FirebaseAuth.getInstance().currentUser!!.delete()
+        }
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email!!,password!!)
             .addOnCompleteListener {
                 if(!it.isSuccessful){

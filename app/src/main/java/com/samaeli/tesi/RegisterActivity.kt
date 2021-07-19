@@ -169,6 +169,11 @@ class RegisterActivity : AppCompatActivity() {
 
         Log.d(TAG,"Email: $email and password: $password")
 
+        if(FirebaseAuth.getInstance().uid != null){
+            Log.d(TAG,"Cancellazione dell'utente anonimo")
+            FirebaseAuth.getInstance().currentUser!!.delete()
+        }
+
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email!!, password!!)
                 .addOnCompleteListener {
                     if(!it.isSuccessful){

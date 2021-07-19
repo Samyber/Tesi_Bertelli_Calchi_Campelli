@@ -39,8 +39,9 @@ class AlcoholLevelFragment : Fragment() {
             val intent = Intent(activity,SelectDrinkActivity::class.java)
             startActivity(intent)
         }
-        if(FirebaseAuth.getInstance().uid != null) {
-            Log.d("MAIN ACTIVITY", "CIAOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO"+FirebaseAuth.getInstance().uid)
+        //if(FirebaseAuth.getInstance().uid != null) {
+        // Controllo che l'utente non sia un utente anonimo
+        if(!FirebaseAuth.getInstance().currentUser!!.email.isNullOrEmpty()){
             completeField()
         }
 
