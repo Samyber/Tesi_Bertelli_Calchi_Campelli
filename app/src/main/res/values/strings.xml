@@ -43,6 +43,7 @@
 
     <string name="plus_add_drink">+ Add drink</string>
     <string name="select_drink">Select drink</string>
+    <string name="plus_add_custom_drink">+ Add custom drink</string>
 
     <string name="volume">Volume (ml)</string>
     <string name="alcohol_content">Alcohol content (% vol.)</string>
@@ -60,4 +61,11 @@
     <string name="volume_drink_added">Volume: </string>
     <string name="alcohol_content_drink_added">Alcohol content: </string>
     <string name="hour_taken">Hour taken: </string>
+
+    <string name="hour">Hour</string>
+
+    <string name="custom_drink">Custom drink</string>
+
+    <string name="search">Search</string>
+    <string name="search_drink">Search a drink</string>
 </resources>

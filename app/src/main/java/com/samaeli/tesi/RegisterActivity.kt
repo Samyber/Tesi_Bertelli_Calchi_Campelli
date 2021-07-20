@@ -3,6 +3,7 @@ package com.samaeli.tesi
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -16,6 +17,7 @@ import android.widget.ScrollView
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.preference.PreferenceManager
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -55,12 +57,16 @@ class RegisterActivity : AppCompatActivity() {
     private var email : String? = null
     private var password : String? = null
 
+    //private var prefs : SharedPreferences? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //setContentView(R.layout.activity_register)
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        //prefs = PreferenceManager.getDefaultSharedPreferences(this)
 
         // Change color of startIcon of textInputLayout when their focused
         changeIconColor()
@@ -163,6 +169,32 @@ class RegisterActivity : AppCompatActivity() {
                 }
             }
     }
+
+    /*override fun onPause() {
+        val editor = prefs?.edit()
+        if(birthdayDate != null){
+            editor?.putLong("birthdayDate", birthdayDate!!)
+        }
+        if(licenseDate != null){
+            editor?.putLong("licenseDate",licenseDate!!)
+        }
+        editor?.commit()
+        super.onPause()
+    }
+
+    override fun onResume() {
+        val test : Long = -1
+        super.onResume()
+        birthdayDate = prefs?.getLong("birthdayDate",-1)
+        if(birthdayDate != test){
+            binding.birthdayDateInputLayoutRegister.editText?.setText(getDate(birthdayDate!!))
+        }
+        licenseDate = prefs?.getLong("licenseDate",-1)
+        if(licenseDate != test){
+            binding.licenseDateInputLayoutRegister.editText?.setText(getDate(licenseDate!!))
+        }
+
+    }*/
 
     private fun performRegistration(){
         /*val email = binding.emailInputLayoutRegister.editText!!.text.toString()

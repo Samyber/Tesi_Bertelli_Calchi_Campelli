@@ -49,7 +49,6 @@ class AlcoholLevelFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -63,6 +62,12 @@ class AlcoholLevelFragment : Fragment() {
             val intent = Intent(activity,SelectDrinkActivity::class.java)
             startActivity(intent)
         }
+
+        binding.buttonAddCustomDrink.setOnClickListener {
+            val intent = Intent(activity,DrinkActivity::class.java)
+            startActivity(intent)
+        }
+
         // Controllo che l'utente non sia un utente anonimo
         //if(!FirebaseAuth.getInstance().currentUser!!.email.isNullOrEmpty()){
         if(FirebaseAuth.getInstance().uid != null) {

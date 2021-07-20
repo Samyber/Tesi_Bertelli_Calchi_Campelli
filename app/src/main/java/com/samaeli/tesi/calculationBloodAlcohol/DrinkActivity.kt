@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.InputType
 import android.util.Log
+import android.view.View
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import com.samaeli.tesi.MainActivity
@@ -44,7 +45,15 @@ class DrinkActivity : AppCompatActivity() {
         db = DrinkAddedDB(this)
 
         drink = intent.getParcelableExtra(SelectDrinkActivity.DRINK_KEY)
-        supportActionBar?.title = drink!!.name
+
+        if(drink==null){
+            binding.imageViewDrink.visibility = View.GONE
+            supportActionBar?.title = getString(R.string.custom_drink)
+        }else{
+            binding.nameEditTextDrink.visibility = View.INVISIBLE
+            supportActionBar?.title = drink!!.name
+            completeFields()
+        }
 
         binding.hourEditTextDrink.inputType = InputType.TYPE_NULL
         binding.hourEditTextDrink.setOnClickListener {
@@ -64,12 +73,13 @@ class DrinkActivity : AppCompatActivity() {
             }
         }
 
-        completeFields()
+
 
         binding.addButtonDrink.setOnClickListener {
             error = false
             if(!validateFields()){
                 Log.d(TAG,"Error during adding drink")
+                return@setOnClickListener
             }
             saveToDB()
             val intent = Intent(this,MainActivity::class.java)
@@ -79,15 +89,36 @@ class DrinkActivity : AppCompatActivity() {
     }
 
     private fun saveToDB(){
-        val drinkAdded = DrinkAdded(null,Drink(drink!!.name,volume!!,alcoholContent!!,drink!!.imageUrl),quantity!!,hour!!,minute!!)
+        val drinkAdded : DrinkAdded
+        if(drink == null){
+            val name = binding.nameEditTextDrink.text.toString()
+            drinkAdded = DrinkAdded(null,Drink(name,volume!!,alcoholContent!!,null),quantity!!,hour!!,minute!!)
+        }else{
+            drinkAdded = DrinkAdded(null,Drink(drink!!.name,volume!!,alcoholContent!!,drink!!.imageUrl),quantity!!,hour!!,minute!!)
+        }
         db!!.insertDrinkAdded(drinkAdded)
     }
 
     private fun validateFields():Boolean{
+        if(drink == null){
+            validateName()
+        }
         validateAlcoholContent()
         validateVolume()
         validateQuantity()
+        validateTime()
         return !error
+    }
+
+    private fun validateName(){
+        val name = binding.nameEditTextDrink.text.toString()
+
+        if(name.isEmpty() || name.isBlank()){
+            binding.nameEditTextDrink.error = getString(R.string.field_not_empty)
+            error = true
+            return
+        }
+        binding.nameEditTextDrink.error = null
     }
 
     private fun validateAlcoholContent(){
@@ -98,7 +129,7 @@ class DrinkActivity : AppCompatActivity() {
             error = true
             return
         }
-        binding.alcoholContentEditTextDrink.error=null
+        binding.alcoholContentEditTextDrink.error = null
         alcoholContent = alcoholContentString.toDouble()
         Log.d(TAG,"Alcohol content: ${alcoholContent.toString()}")
     }
@@ -129,7 +160,16 @@ class DrinkActivity : AppCompatActivity() {
         Log.d(TAG,"Quantity: ${quantity.toString()}")
     }
 
-    // COmpleta i campi in base ai valori presenti nel db
+    private fun validateTime(){
+        if(hour == null && minute == null){
+            binding.hourEditTextDrink.error = getString(R.string.field_not_empty)
+            error = true
+            return
+        }
+        binding.hourEditTextDrink.error = null
+    }
+
+    // Completa i campi in base ai valori presenti nel db
     private fun completeFields(){
         val url = drink!!.imageUrl
         val targetImageView = binding.imageViewDrink

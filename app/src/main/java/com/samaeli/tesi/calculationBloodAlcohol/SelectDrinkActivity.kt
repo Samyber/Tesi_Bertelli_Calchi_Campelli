@@ -4,7 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import androidx.core.app.NotificationCompat
+import android.view.Menu
+import android.widget.SearchView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -23,6 +24,8 @@ class SelectDrinkActivity : AppCompatActivity() {
         val DRINK_KEY = "DRINK_KEY"
     }
 
+    var adapter = GroupAdapter<ViewHolder>()
+
     private lateinit var binding : ActivitySelectDrinkBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,31 +35,60 @@ class SelectDrinkActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
         supportActionBar?.title = getString(R.string.select_drink)
-        fetchDrinks()
+
+        adapter.setOnItemClickListener { item, view ->
+            val drinkItem = item as DrinkItem
+
+            val intent = Intent(view.context,DrinkActivity::class.java)
+            intent.putExtra(DRINK_KEY,drinkItem.drink)
+            startActivity(intent)
+        }
+        binding.recyclerViewSelectDrink.adapter = adapter
+
+        fetchDrinks(null)
+
+
     }
 
-    private fun fetchDrinks(){
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_search,menu)
+
+        val search = menu?.findItem(R.id.menuSearch)
+        val searchView = search?.actionView as SearchView
+        searchView.queryHint = getString(R.string.search_drink)
+
+        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                Log.d(TAG,"Search text changed")
+                adapter.clear()
+                fetchDrinks(newText)
+                return true
+            }
+
+        })
+
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    private fun fetchDrinks(search:String?){
         val ref = FirebaseDatabase.getInstance().getReference("/drinks")
         ref.addListenerForSingleValueEvent(object: ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
-                val adapter = GroupAdapter<ViewHolder>()
+                //adapter.clear()
                 snapshot.children.forEach {
                     val drink = it.getValue(Drink::class.java)
                     //Log.d(TAG,it.toString())
-                    if(drink != null){
+                    if(drink != null && (search==null || drink.name.contains(search,true))){
                         Log.d(TAG,"Drink name: "+drink.name)
                         Log.d(TAG,"Image url: "+drink.imageUrl)
                         adapter.add(DrinkItem(drink))
                     }
                 }
-                adapter.setOnItemClickListener { item, view ->
-                    val drinkItem = item as DrinkItem
 
-                    val intent = Intent(view.context,DrinkActivity::class.java)
-                    intent.putExtra(DRINK_KEY,drinkItem.drink)
-                    startActivity(intent)
-                }
-                binding.recyclerViewSelectDrink.adapter = adapter
             }
 
             override fun onCancelled(error: DatabaseError) {

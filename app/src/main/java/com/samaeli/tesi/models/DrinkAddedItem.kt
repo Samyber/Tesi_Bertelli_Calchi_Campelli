@@ -26,8 +26,10 @@ class DrinkAddedItem(val drinkAdded: DrinkAdded, val context:Context):Item<ViewH
         viewHolder.itemView.quantityTextViewDrinkAdded.text = context.getString(R.string.quantity)+": "+drinkAdded.quantity
         viewHolder.itemView.timeTextViewDrinkAdded.text = context.getString(R.string.hour_taken)+drinkAdded.hour.toString()+":"+drinkAdded.minute.toString()
         val url = drinkAdded.drink!!.imageUrl
-        val targetImageView = viewHolder.itemView.imageViewItemDrinkAdded
-        Picasso.get().load(url).into(targetImageView)
+        if(url != null) {
+            val targetImageView = viewHolder.itemView.imageViewItemDrinkAdded
+            Picasso.get().load(url).into(targetImageView)
+        }
 
         viewHolder.itemView.deleteImageViewDrinkAdded.setOnClickListener {
             AlcoholLevelFragment.db!!.deleteDrinkAdded(drinkAdded.id!!)
