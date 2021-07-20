@@ -2,12 +2,14 @@ package com.samaeli.tesi.calculationBloodAlcohol
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.preference.PreferenceManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -29,8 +31,14 @@ class AlcoholLevelFragment : Fragment() {
     private var _binding : FragmentAlcoholLevelBinding? = null
     private val binding get() = _binding!!
 
+    var prefs : SharedPreferences? = null
 
     companion object {
+        const val MALE_EMPTY_STOMACH = 0.7
+        const val MALE_FULL_STOMACH = 1.2
+        const val FEMALE_EMPTY_STOMACH = 0.5
+        const val FEMALE_FULL_STOMACH = 0.9
+
         var db: DrinkAddedDB? = null
         var adapter = GroupAdapter<ViewHolder>()
 
@@ -45,10 +53,9 @@ class AlcoholLevelFragment : Fragment() {
         }
     }
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        prefs = PreferenceManager.getDefaultSharedPreferences(activity)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -71,8 +78,18 @@ class AlcoholLevelFragment : Fragment() {
         // Controllo che l'utente non sia un utente anonimo
         //if(!FirebaseAuth.getInstance().currentUser!!.email.isNullOrEmpty()){
         if(FirebaseAuth.getInstance().uid != null) {
-            completeField()
+            completeFieldsFromFirebase()
+        }else{
+            val gender = prefs?.getString("gender","")
+            if(!gender.equals("")){
+                if(gender.equals("male")){
+                    binding.genderRadioGroupAlcoholLevel.check(R.id.maleRadioButtonAlcoholLevel)
+                }else{
+                    binding.genderRadioGroupAlcoholLevel.check(R.id.femaleRadioButtonAlcoholLevel)
+                }
+            }
         }
+        completeFieldsFromSharedPreference()
 
         db = DrinkAddedDB(requireActivity().applicationContext)
 
@@ -84,7 +101,24 @@ class AlcoholLevelFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        //_binding = null
+    }
+
+    override fun onPause() {
+        val editor = prefs?.edit()
+        if(binding.genderRadioGroupAlcoholLevel.checkedRadioButtonId == R.id.maleRadioButtonAlcoholLevel){
+            editor?.putString("gender","male")
+        }else{
+            editor?.putString("gender","female")
+        }
+        if(binding.questionFullStomachRadioGroupAlcoholLevel.checkedRadioButtonId == R.id.yesRadioButtonAlcoholLevel){
+            editor?.putString("full_stomach","yes")
+        }else{
+            editor?.putString("full_stomach","no")
+        }
+        editor?.putString("weight",binding.weightEditTextAlcoholLevel.text.toString())
+        editor?.commit()
+        super.onPause()
     }
 
     /*public fun displayDrinkAdded(){
@@ -99,7 +133,22 @@ class AlcoholLevelFragment : Fragment() {
         binding.recyclerViewAlcoholLevelFragmnet.adapter = adapter
     }*/
 
-    private fun completeField(){
+    private fun completeFieldsFromSharedPreference(){
+        val fullStomach = prefs?.getString("full_stomach","")
+        if(!fullStomach.equals("")){
+            if(fullStomach.equals("yes")){
+                binding.questionFullStomachRadioGroupAlcoholLevel.check(R.id.yesRadioButtonAlcoholLevel)
+            }else{
+                binding.questionFullStomachRadioGroupAlcoholLevel.check(R.id.noRadioButtonAlcoholLevel)
+            }
+        }
+        val weight = prefs?.getString("weight","")
+        if(!weight.equals("")){
+            binding.weightEditTextAlcoholLevel.setText(weight)
+        }
+    }
+
+    private fun completeFieldsFromFirebase(){
         val uid = FirebaseAuth.getInstance().uid
         val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
         ref.addListenerForSingleValueEvent(object : ValueEventListener{

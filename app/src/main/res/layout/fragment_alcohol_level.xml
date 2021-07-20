@@ -77,19 +77,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/top_margin_alcohol_level_fragment"
-            android:checkedButton="@id/YesrRadioButtonAlcoholLevel"
+            android:checkedButton="@id/yesRadioButtonAlcoholLevel"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="@+id/genderRadioGroupAlcoholLevel"
             app:layout_constraintStart_toStartOf="@+id/genderRadioGroupAlcoholLevel"
             app:layout_constraintTop_toBottomOf="@+id/genderRadioGroupAlcoholLevel">
 
             <RadioButton
-                android:id="@+id/YesrRadioButtonAlcoholLevel"
+                android:id="@+id/yesRadioButtonAlcoholLevel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="20dp"
                 android:text="@string/yes"
-                android:textSize="16dp" />
+                android:textSize="16sp" />
 
             <RadioButton
                 android:id="@+id/noRadioButtonAlcoholLevel"
