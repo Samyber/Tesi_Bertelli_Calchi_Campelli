@@ -9,20 +9,24 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.preference.PreferenceManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.ktx.Firebase
 import com.samaeli.tesi.R
 import com.samaeli.tesi.databinding.FragmentAlcoholLevelBinding
+import com.samaeli.tesi.models.DrinkAdded
 import com.samaeli.tesi.models.DrinkAddedItem
 import com.samaeli.tesi.models.User
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.fragment_alcohol_level.*
+import java.sql.Timestamp
+import java.util.*
+import kotlin.collections.ArrayList
 
 class AlcoholLevelFragment : Fragment() {
 
@@ -39,15 +43,18 @@ class AlcoholLevelFragment : Fragment() {
         // 3 years in milliseconds for the new drivers
         const val YEARS_3 = 94672800000
         const val YEARS_21 = 662709600000
+        // mg/l che si smaltiscono ogni minuto
+        const val DIGESTION_MINUTE = 0.0025
+        private var drinksAdded : ArrayList<DrinkAdded>? = null
 
         var db: DrinkAddedDB? = null
         var adapter = GroupAdapter<ViewHolder>()
 
         fun displayDrinkAdded(context: Context){
             adapter.clear()
-            val drinksAdded = db!!.getDrinksAdded()
-            if(drinksAdded.size > 0){
-                for(drinkAdded in drinksAdded){
+            drinksAdded = db!!.getDrinksAdded()
+            if(drinksAdded!!.size > 0){
+                for(drinkAdded in drinksAdded!!){
                     adapter.add(DrinkAddedItem(drinkAdded,context))
                 }
             }
@@ -76,6 +83,11 @@ class AlcoholLevelFragment : Fragment() {
             startActivity(intent)
         }
 
+        binding.calculateButtonAlcoholLevel.setOnClickListener {
+            Log.d("Alcohol Fragment","Inizio calcolo tasso alcolemico")
+            calculateAlcoholLevel()
+        }
+
         // Controllo che l'utente non sia un utente anonimo
         //if(!FirebaseAuth.getInstance().currentUser!!.email.isNullOrEmpty()){
         if(FirebaseAuth.getInstance().uid != null) {
@@ -87,6 +99,8 @@ class AlcoholLevelFragment : Fragment() {
 
         displayDrinkAdded(requireActivity().applicationContext)
         binding.recyclerViewAlcoholLevelFragmnet.adapter = adapter
+
+        //Log.d("Alcohol Level Fragment",Calendar.getInstance().get(Calendar.HOUR_OF_DAY).toString())
 
         return view
     }
@@ -108,7 +122,7 @@ class AlcoholLevelFragment : Fragment() {
         }else{
             editor?.putString("full_stomach","no")
         }
-        if(binding.newDriverRadioGroupAlcoholFragment.checkedRadioButtonId == R.id.yesNewDriverRadioButtonAlcoholFragment){
+        if(binding.newDriverRadioGroupAlcoholLevel.checkedRadioButtonId == R.id.yesNewDriverRadioButtonAlcoholLevel){
             editor?.putString("new_driver","yes")
         }else{
             editor?.putString("new_driver","no")
@@ -116,6 +130,57 @@ class AlcoholLevelFragment : Fragment() {
         editor?.putString("weight",binding.weightEditTextAlcoholLevel.text.toString())
         editor?.commit()
         super.onPause()
+    }
+
+    private fun calculateAlcoholLevel(){
+        if(drinksAdded == null || drinksAdded!!.size == 0){
+            Toast.makeText(activity,getString(R.string.error_enter_drink),Toast.LENGTH_LONG).show()
+        }
+        val c = calculateCParameter()
+        var alcoholLevelFinal : Double = 0.0
+        val weight : Double = binding.weightEditTextAlcoholLevel.text.toString().toDouble()
+
+
+        for(drinkAdded in drinksAdded!!){
+            Log.d("Alcohol Level Fragment","Ciclo")
+            // Grammi di alcol = (ml di bevanda x grado alcolico x 0,79) / 100
+            val gAlcohol : Double = (drinkAdded.drink!!.volume * drinkAdded.drink!!.alcoholContent * 0.79)/100
+            var alcoholLevel : Double = gAlcohol/(weight * c)
+            Log.d("Alcohol Level Fragment","first alcohol level "+alcoholLevel.toString())
+            // Quando si è assunto il drink
+            val timeMinute : Int = drinkAdded.hour * 60 + drinkAdded.minute
+            // Ora
+            val nowMinute : Int = Calendar.getInstance().get(Calendar.MINUTE) +
+                    (Calendar.getInstance().get(Calendar.HOUR_OF_DAY)*60)
+            //val differenceTime : Int
+            Log.d("Alcohol Level Fragment","timeMinute: "+timeMinute+" now minute "+nowMinute)
+            val differenceTime : Int = if(timeMinute < nowMinute){
+                nowMinute - timeMinute
+            }else{
+                timeMinute - nowMinute
+            }
+            alcoholLevel -= (DIGESTION_MINUTE * differenceTime)
+            if(alcoholLevel > 0){
+                alcoholLevelFinal += alcoholLevel
+            }
+        }
+        Log.d("Alcohol Level Fragment","CIAOOOOOOOOOOOOOO "+alcoholLevelFinal)
+    }
+
+    private fun calculateCParameter() : Double{
+        if(binding.genderRadioGroupAlcoholLevel.checkedRadioButtonId == R.id.maleRadioButtonAlcoholLevel){
+            if(binding.questionFullStomachRadioGroupAlcoholLevel.checkedRadioButtonId == R.id.noFullStomachRadioButtonAlcoholLevel){
+                return MALE_EMPTY_STOMACH
+            }else{
+                return MALE_FULL_STOMACH
+            }
+        }else{
+            if(binding.questionFullStomachRadioGroupAlcoholLevel.checkedRadioButtonId == R.id.noFullStomachRadioButtonAlcoholLevel){
+                return FEMALE_EMPTY_STOMACH
+            }else{
+                return FEMALE_FULL_STOMACH
+            }
+        }
     }
 
     // Se l'utente è loggato e si ruota lo schermo si manteien memorizzzato solo se è a stomaco pieno oopure no.
@@ -133,9 +198,9 @@ class AlcoholLevelFragment : Fragment() {
             val newDriver = prefs?.getString("new_driver","")
             if(!newDriver.equals("")){
                 if(newDriver.equals("yes")){
-                    binding.newDriverRadioGroupAlcoholFragment.check(R.id.yesNewDriverRadioButtonAlcoholFragment)
+                    binding.newDriverRadioGroupAlcoholLevel.check(R.id.yesNewDriverRadioButtonAlcoholLevel)
                 }else{
-                    binding.newDriverRadioGroupAlcoholFragment.check(R.id.noNewDriverRadioButtonAlcoholFragment)
+                    binding.newDriverRadioGroupAlcoholLevel.check(R.id.noNewDriverRadioButtonAlcoholLevel)
                 }
             }
             val weight = prefs?.getString("weight","")
@@ -168,10 +233,10 @@ class AlcoholLevelFragment : Fragment() {
                 val timestamp = System.currentTimeMillis()
                 // Controllo se l'utente è neopatentato oppure no
                 if(timestamp - user.birthdayDate > YEARS_21 && timestamp - user.licenseDate > YEARS_3){
-                    binding.newDriverRadioGroupAlcoholFragment.check(R.id.noNewDriverRadioButtonAlcoholFragment)
+                    binding.newDriverRadioGroupAlcoholLevel.check(R.id.noNewDriverRadioButtonAlcoholLevel)
                     Log.d("Fragment alcohol","Old driver")
                 }else{
-                    binding.newDriverRadioGroupAlcoholFragment.check(R.id.yesNewDriverRadioButtonAlcoholFragment)
+                    binding.newDriverRadioGroupAlcoholLevel.check(R.id.yesNewDriverRadioButtonAlcoholLevel)
                     Log.d("Fragment alcohol","New driver")
                 }
             }

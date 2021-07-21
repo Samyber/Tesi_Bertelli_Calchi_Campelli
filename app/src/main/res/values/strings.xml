@@ -58,6 +58,7 @@
     <string name="no">No</string>
     <string name="enter_weight">Enter your weight</string>
     <string name="calculate">Calculate</string>
+    <string name="error_enter_drink">Enter at least one drink</string>
 
     <string name="volume_drink_added">Volume: </string>
     <string name="alcohol_content_drink_added">Alcohol content: </string>

@@ -21,10 +21,10 @@ class DrinkAddedItem(val drinkAdded: DrinkAdded, val context:Context):Item<ViewH
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.nameTextViewItemDrinkAdded.text = drinkAdded.drink!!.name
         // Bisogna passare il contesto per poter accedere alle stringhe
-        viewHolder.itemView.volumeTextViewDrinkAdded.text = context.getString(R.string.volume_drink_added) + drinkAdded.drink!!.volume.toString()
-        viewHolder.itemView.alcoholContentTextViewDrinkAdded.text = context.getString(R.string.alcohol_content_drink_added)+drinkAdded.drink!!.alcoholContent.toString()
-        viewHolder.itemView.quantityTextViewDrinkAdded.text = context.getString(R.string.quantity)+": "+drinkAdded.quantity
-        viewHolder.itemView.timeTextViewDrinkAdded.text = context.getString(R.string.hour_taken)+drinkAdded.hour.toString()+":"+drinkAdded.minute.toString()
+        viewHolder.itemView.volumeTextViewDrinkAdded.text = context.getString(R.string.volume_drink_added) +":"+ drinkAdded.drink!!.volume.toString()+" ml"
+        viewHolder.itemView.alcoholContentTextViewDrinkAdded.text = context.getString(R.string.alcohol_content_drink_added)+": "+drinkAdded.drink!!.alcoholContent.toString()+" %"
+        viewHolder.itemView.quantityTextViewDrinkAdded.text = context.getString(R.string.quantity)+":  "+drinkAdded.quantity
+        viewHolder.itemView.timeTextViewDrinkAdded.text = context.getString(R.string.hour_taken)+" "+drinkAdded.hour.toString()+":"+drinkAdded.minute.toString()
         val url = drinkAdded.drink!!.imageUrl
         if(url != null) {
             val targetImageView = viewHolder.itemView.imageViewItemDrinkAdded
