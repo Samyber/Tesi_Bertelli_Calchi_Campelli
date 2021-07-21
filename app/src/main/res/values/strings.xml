@@ -53,6 +53,7 @@
     <string name="time_taken_drink">Select the time you taken the drink</string>
 
     <string name="question_full_stomach">Are you on a full stomach?</string>
+    <string name="question_new_driver">Are you a new driver?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="enter_weight">Enter your weight</string>
@@ -68,4 +69,6 @@
 
     <string name="search">Search</string>
     <string name="search_drink">Search a drink</string>
+
+    <string name="loading">Loading...</string>
 </resources>

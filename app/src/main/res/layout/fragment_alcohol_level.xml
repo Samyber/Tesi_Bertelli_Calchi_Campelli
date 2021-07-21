@@ -77,14 +77,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/top_margin_alcohol_level_fragment"
-            android:checkedButton="@id/yesRadioButtonAlcoholLevel"
+            android:checkedButton="@id/yesFullStomachRadioButtonAlcoholLevel"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="@+id/genderRadioGroupAlcoholLevel"
             app:layout_constraintStart_toStartOf="@+id/genderRadioGroupAlcoholLevel"
             app:layout_constraintTop_toBottomOf="@+id/genderRadioGroupAlcoholLevel">
 
             <RadioButton
-                android:id="@+id/yesRadioButtonAlcoholLevel"
+                android:id="@+id/yesFullStomachRadioButtonAlcoholLevel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="20dp"
@@ -92,7 +92,7 @@
                 android:textSize="16sp" />
 
             <RadioButton
-                android:id="@+id/noRadioButtonAlcoholLevel"
+                android:id="@+id/noFullStomachRadioButtonAlcoholLevel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/no"
@@ -119,7 +119,7 @@
             android:inputType="numberDecimal"
             app:layout_constraintEnd_toEndOf="@+id/questionFullStomachRadioGroupAlcoholLevel"
             app:layout_constraintStart_toStartOf="@+id/questionFullStomachRadioGroupAlcoholLevel"
-            app:layout_constraintTop_toBottomOf="@+id/questionFullStomachRadioGroupAlcoholLevel" />
+            app:layout_constraintTop_toBottomOf="@+id/newDriverRadioGroupAlcoholFragment" />
 
         <TextView
             android:id="@+id/weightTextViewAlcoholLevel"
@@ -128,7 +128,7 @@
             android:text="@string/enter_weight"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="@+id/weightEditTextAlcoholLevel"
-            app:layout_constraintStart_toStartOf="@+id/questionFullStomachTextViewAlcoholLevel"
+            app:layout_constraintStart_toStartOf="@+id/newDriverTextViewAlcoholFragment"
             app:layout_constraintTop_toTopOf="@+id/weightEditTextAlcoholLevel" />
 
         <android.widget.Button
@@ -154,6 +154,44 @@
             app:layout_constraintEnd_toEndOf="@+id/buttonAddDrink"
             app:layout_constraintStart_toStartOf="@+id/buttonAddDrink"
             app:layout_constraintTop_toBottomOf="@+id/buttonAddDrink" />
+
+        <RadioGroup
+            android:id="@+id/newDriverRadioGroupAlcoholFragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/top_margin_alcohol_level_fragment"
+            android:orientation="horizontal"
+            android:checkedButton="@+id/noNewDriverRadioButtonAlcoholFragment"
+            app:layout_constraintEnd_toEndOf="@+id/questionFullStomachRadioGroupAlcoholLevel"
+            app:layout_constraintStart_toStartOf="@+id/questionFullStomachRadioGroupAlcoholLevel"
+            app:layout_constraintTop_toBottomOf="@+id/questionFullStomachRadioGroupAlcoholLevel">
+
+            <RadioButton
+                android:id="@+id/yesNewDriverRadioButtonAlcoholFragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:layout_weight="1"
+                android:text="@string/yes"
+                android:textSize="16sp" />
+
+            <RadioButton
+                android:id="@+id/noNewDriverRadioButtonAlcoholFragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/no" />
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/newDriverTextViewAlcoholFragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/question_new_driver"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/newDriverRadioGroupAlcoholFragment"
+            app:layout_constraintStart_toStartOf="@+id/questionFullStomachTextViewAlcoholLevel"
+            app:layout_constraintTop_toTopOf="@+id/newDriverRadioGroupAlcoholFragment" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>

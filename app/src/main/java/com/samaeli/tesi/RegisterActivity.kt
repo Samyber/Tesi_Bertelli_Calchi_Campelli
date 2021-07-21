@@ -57,7 +57,7 @@ class RegisterActivity : AppCompatActivity() {
     private var email : String? = null
     private var password : String? = null
 
-    //private var prefs : SharedPreferences? = null
+    private val loadingDialog = LoadingDialog(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,8 +65,6 @@ class RegisterActivity : AppCompatActivity() {
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-
-        //prefs = PreferenceManager.getDefaultSharedPreferences(this)
 
         // Change color of startIcon of textInputLayout when their focused
         changeIconColor()
@@ -144,6 +142,7 @@ class RegisterActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
             Log.d(TAG,"Campi ok")
+            loadingDialog.startLoadingDialog()
             performRegistration()
         }
 
@@ -280,9 +279,9 @@ class RegisterActivity : AppCompatActivity() {
         ref.setValue(user)
             .addOnSuccessListener {
                 Log.d(TAG,"User saved in db")
-
                 val intent = Intent(this,MainActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                loadingDialog.dismissLoadingDialog()
                 startActivity(intent)
             }
             .addOnFailureListener {

@@ -16,10 +16,8 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
-import com.samaeli.tesi.MainActivity
 import com.samaeli.tesi.R
 import com.samaeli.tesi.databinding.FragmentAlcoholLevelBinding
-import com.samaeli.tesi.models.DrinkAdded
 import com.samaeli.tesi.models.DrinkAddedItem
 import com.samaeli.tesi.models.User
 import com.xwray.groupie.GroupAdapter
@@ -38,6 +36,9 @@ class AlcoholLevelFragment : Fragment() {
         const val MALE_FULL_STOMACH = 1.2
         const val FEMALE_EMPTY_STOMACH = 0.5
         const val FEMALE_FULL_STOMACH = 0.9
+        // 3 years in milliseconds for the new drivers
+        const val YEARS_3 = 94672800000
+        const val YEARS_21 = 662709600000
 
         var db: DrinkAddedDB? = null
         var adapter = GroupAdapter<ViewHolder>()
@@ -79,15 +80,6 @@ class AlcoholLevelFragment : Fragment() {
         //if(!FirebaseAuth.getInstance().currentUser!!.email.isNullOrEmpty()){
         if(FirebaseAuth.getInstance().uid != null) {
             completeFieldsFromFirebase()
-        }else{
-            val gender = prefs?.getString("gender","")
-            if(!gender.equals("")){
-                if(gender.equals("male")){
-                    binding.genderRadioGroupAlcoholLevel.check(R.id.maleRadioButtonAlcoholLevel)
-                }else{
-                    binding.genderRadioGroupAlcoholLevel.check(R.id.femaleRadioButtonAlcoholLevel)
-                }
-            }
         }
         completeFieldsFromSharedPreference()
 
@@ -111,40 +103,53 @@ class AlcoholLevelFragment : Fragment() {
         }else{
             editor?.putString("gender","female")
         }
-        if(binding.questionFullStomachRadioGroupAlcoholLevel.checkedRadioButtonId == R.id.yesRadioButtonAlcoholLevel){
+        if(binding.questionFullStomachRadioGroupAlcoholLevel.checkedRadioButtonId == R.id.yesFullStomachRadioButtonAlcoholLevel){
             editor?.putString("full_stomach","yes")
         }else{
             editor?.putString("full_stomach","no")
+        }
+        if(binding.newDriverRadioGroupAlcoholFragment.checkedRadioButtonId == R.id.yesNewDriverRadioButtonAlcoholFragment){
+            editor?.putString("new_driver","yes")
+        }else{
+            editor?.putString("new_driver","no")
         }
         editor?.putString("weight",binding.weightEditTextAlcoholLevel.text.toString())
         editor?.commit()
         super.onPause()
     }
 
-    /*public fun displayDrinkAdded(){
-        val adapter = GroupAdapter<ViewHolder>()
-        val drinksAdded = db!!.getDrinksAdded()
-        if(drinksAdded.size > 0){
-            for(drinkAdded in drinksAdded){
-                adapter.add(DrinkAddedItem(drinkAdded))
+    // Se l'utente è loggato e si ruota lo schermo si manteien memorizzzato solo se è a stomaco pieno oopure no.
+    // Gli altri valori vengono rispristinati a quelli memorizzati nel profilo dell'utente
+    private fun completeFieldsFromSharedPreference(){
+        if(FirebaseAuth.getInstance().uid == null){
+            val gender = prefs?.getString("gender","")
+            if(!gender.equals("")){
+                if(gender.equals("male")){
+                    binding.genderRadioGroupAlcoholLevel.check(R.id.maleRadioButtonAlcoholLevel)
+                }else{
+                    binding.genderRadioGroupAlcoholLevel.check(R.id.femaleRadioButtonAlcoholLevel)
+                }
+            }
+            val newDriver = prefs?.getString("new_driver","")
+            if(!newDriver.equals("")){
+                if(newDriver.equals("yes")){
+                    binding.newDriverRadioGroupAlcoholFragment.check(R.id.yesNewDriverRadioButtonAlcoholFragment)
+                }else{
+                    binding.newDriverRadioGroupAlcoholFragment.check(R.id.noNewDriverRadioButtonAlcoholFragment)
+                }
+            }
+            val weight = prefs?.getString("weight","")
+            if(!weight.equals("")){
+                binding.weightEditTextAlcoholLevel.setText(weight)
             }
         }
-        Log.d("MAIN ACTIVITY",adapter.)
-        binding.recyclerViewAlcoholLevelFragmnet.adapter = adapter
-    }*/
-
-    private fun completeFieldsFromSharedPreference(){
         val fullStomach = prefs?.getString("full_stomach","")
         if(!fullStomach.equals("")){
             if(fullStomach.equals("yes")){
-                binding.questionFullStomachRadioGroupAlcoholLevel.check(R.id.yesRadioButtonAlcoholLevel)
+                binding.questionFullStomachRadioGroupAlcoholLevel.check(R.id.yesFullStomachRadioButtonAlcoholLevel)
             }else{
-                binding.questionFullStomachRadioGroupAlcoholLevel.check(R.id.noRadioButtonAlcoholLevel)
+                binding.questionFullStomachRadioGroupAlcoholLevel.check(R.id.noFullStomachRadioButtonAlcoholLevel)
             }
-        }
-        val weight = prefs?.getString("weight","")
-        if(!weight.equals("")){
-            binding.weightEditTextAlcoholLevel.setText(weight)
         }
     }
 
@@ -159,6 +164,15 @@ class AlcoholLevelFragment : Fragment() {
                     binding.genderRadioGroupAlcoholLevel.check(R.id.maleRadioButtonAlcoholLevel)
                 }else{
                     binding.genderRadioGroupAlcoholLevel.check(R.id.femaleRadioButtonAlcoholLevel)
+                }
+                val timestamp = System.currentTimeMillis()
+                // Controllo se l'utente è neopatentato oppure no
+                if(timestamp - user.birthdayDate > YEARS_21 && timestamp - user.licenseDate > YEARS_3){
+                    binding.newDriverRadioGroupAlcoholFragment.check(R.id.noNewDriverRadioButtonAlcoholFragment)
+                    Log.d("Fragment alcohol","Old driver")
+                }else{
+                    binding.newDriverRadioGroupAlcoholFragment.check(R.id.yesNewDriverRadioButtonAlcoholFragment)
+                    Log.d("Fragment alcohol","New driver")
                 }
             }
 
