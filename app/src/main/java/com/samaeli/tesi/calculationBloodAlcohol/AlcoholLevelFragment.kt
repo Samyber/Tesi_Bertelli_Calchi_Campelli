@@ -23,8 +23,6 @@ import com.samaeli.tesi.models.DrinkAddedItem
 import com.samaeli.tesi.models.User
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
-import kotlinx.android.synthetic.main.fragment_alcohol_level.*
-import java.sql.Timestamp
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -144,7 +142,7 @@ class AlcoholLevelFragment : Fragment() {
         for(drinkAdded in drinksAdded!!){
             Log.d("Alcohol Level Fragment","Ciclo")
             // Grammi di alcol = (ml di bevanda x grado alcolico x 0,79) / 100
-            val gAlcohol : Double = (drinkAdded.drink!!.volume * drinkAdded.drink!!.alcoholContent * 0.79)/100
+            val gAlcohol : Double = (drinkAdded.drink!!.volume * drinkAdded.quantity * drinkAdded.drink!!.alcoholContent * 0.79)/100
             var alcoholLevel : Double = gAlcohol/(weight * c)
             Log.d("Alcohol Level Fragment","first alcohol level "+alcoholLevel.toString())
             // Quando si è assunto il drink
@@ -165,6 +163,33 @@ class AlcoholLevelFragment : Fragment() {
             }
         }
         Log.d("Alcohol Level Fragment","CIAOOOOOOOOOOOOOO "+alcoholLevelFinal)
+
+        val limit = calculateLimit()
+
+        val time = calculateTimeMinuteBeforeDriving(alcoholLevelFinal,limit)
+
+        val intent = Intent(activity,ResultCalculationActivity::class.java)
+        //intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+        intent.putExtra("alcohol_level",alcoholLevelFinal)
+        intent.putExtra("time_before_driving",time)
+        startActivity(intent)
+    }
+
+    private fun calculateTimeMinuteBeforeDriving(alcoholLevelFinal : Double,limit:Double):Int{
+        val time  = if(alcoholLevelFinal > limit){
+                (alcoholLevelFinal - limit)/ DIGESTION_MINUTE
+        }else{
+            0.0
+        }
+        return time.toInt()
+    }
+
+    private fun calculateLimit():Double{
+        return if(binding.newDriverRadioGroupAlcoholLevel.checkedRadioButtonId == R.id.noNewDriverRadioButtonAlcoholLevel){
+            0.5
+        }else{
+            0.0
+        }
     }
 
     private fun calculateCParameter() : Double{

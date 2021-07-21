@@ -9,6 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Tesi_Bertelli_Calchi_Campelli">
+        <activity android:name=".calculationBloodAlcohol.ResultCalculationActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
         <activity android:name=".calculationBloodAlcohol.DrinkActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
