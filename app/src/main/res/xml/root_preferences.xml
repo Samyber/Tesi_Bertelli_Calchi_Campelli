@@ -1,0 +1,16 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="@string/alcohol_level_calculation_category">
+
+
+        <EditTextPreference
+            android:text="0.5"
+            android:key="limit_edit_text_preference"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="@string/limit_for_drive" />
+    </PreferenceCategory>
+
+
+</PreferenceScreen>

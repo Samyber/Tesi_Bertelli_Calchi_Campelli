@@ -23,6 +23,7 @@ import com.samaeli.tesi.models.DrinkAddedItem
 import com.samaeli.tesi.models.User
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
+import java.lang.Double.parseDouble
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -31,7 +32,9 @@ class AlcoholLevelFragment : Fragment() {
     private var _binding : FragmentAlcoholLevelBinding? = null
     private val binding get() = _binding!!
 
-    var prefs : SharedPreferences? = null
+    private var prefs : SharedPreferences? = null
+
+    private var limitOldDriver : Double = 0.5
 
     companion object {
         const val MALE_EMPTY_STOMACH = 0.7
@@ -62,6 +65,7 @@ class AlcoholLevelFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         prefs = PreferenceManager.getDefaultSharedPreferences(activity)
+        PreferenceManager.setDefaultValues(activity,R.xml.root_preferences,false)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -88,6 +92,7 @@ class AlcoholLevelFragment : Fragment() {
 
         // Controllo che l'utente non sia un utente anonimo
         //if(!FirebaseAuth.getInstance().currentUser!!.email.isNullOrEmpty()){
+        // TODO Provare a spostare questo in onResume !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         if(FirebaseAuth.getInstance().uid != null) {
             completeFieldsFromFirebase()
         }
@@ -103,9 +108,15 @@ class AlcoholLevelFragment : Fragment() {
         return view
     }
 
-    override fun onDestroyView() {
+    /*override fun onDestroyView() {
         super.onDestroyView()
         //_binding = null
+    }*/
+
+    override fun onResume() {
+        super.onResume()
+        limitOldDriver = parseDouble(prefs?.getString("limit_edit_text_preference","0.5"))
+        Log.d("Alcohol Level Fragment","Limit: $limitOldDriver")
     }
 
     override fun onPause() {
@@ -133,6 +144,7 @@ class AlcoholLevelFragment : Fragment() {
     private fun calculateAlcoholLevel(){
         if(drinksAdded == null || drinksAdded!!.size == 0){
             Toast.makeText(activity,getString(R.string.error_enter_drink),Toast.LENGTH_LONG).show()
+            return
         }
         val c = calculateCParameter()
         var alcoholLevelFinal : Double = 0.0
@@ -186,7 +198,7 @@ class AlcoholLevelFragment : Fragment() {
 
     private fun calculateLimit():Double{
         return if(binding.newDriverRadioGroupAlcoholLevel.checkedRadioButtonId == R.id.noNewDriverRadioButtonAlcoholLevel){
-            0.5
+            limitOldDriver
         }else{
             0.0
         }
