@@ -11,6 +11,7 @@ import com.samaeli.tesi.databinding.FragmentAlcoholLevelBinding
 import kotlinx.android.synthetic.main.activity_result_calculation.*
 import java.math.RoundingMode
 
+// Activity che mostra il risultato del calcolo del tasso alcolemico
 class ResultCalculationActivity : AppCompatActivity() {
 
     companion object{
@@ -32,10 +33,13 @@ class ResultCalculationActivity : AppCompatActivity() {
         Log.d(TAG,alcoholLevel.toString())
         Log.d(TAG,timeBeforeDriving.toString())
 
+        // Arritondamento del tasso alcolemico alla seconda cifra decimale
         val alcoholLevelTwoDecimal = alcoholLevel.toBigDecimal().setScale(2,RoundingMode.HALF_EVEN)
 
         binding.alcoholContentTextViewResultCalculation.text = getString(R.string.your_alcohol_content)+" "+alcoholLevelTwoDecimal+" mg/l"
 
+        // Se il tempo che bisogna aspettare per potersi mettere alla guida è zero =>
+        // Si mostra la schermata Seccess altrimenti not success
         if(timeBeforeDriving == 0){
             displaySuccess()
         }else{
@@ -54,12 +58,9 @@ class ResultCalculationActivity : AppCompatActivity() {
         val hour : Int = (timeBeforeDriving/60)
         val minute : Int = timeBeforeDriving - (hour * 60)
         if(hour > 0) {
-            binding.timeTextViewAlcoholContent.text =
-                getString(R.string.time_for_drive) + " $hour " +
-                        getString(R.string.hour) + " $minute" + getString(R.string.minute)
+            binding.timeTextViewAlcoholContent.text = " $hour " + getString(R.string.hour) + " $minute " + getString(R.string.minute)
         }else{
-            binding.timeTextViewAlcoholContent.text =
-                getString(R.string.time_for_drive) + " $minute" + getString(R.string.minute)
+            binding.timeTextViewAlcoholContent.text = " $minute " + getString(R.string.minute)
         }
     }
 }

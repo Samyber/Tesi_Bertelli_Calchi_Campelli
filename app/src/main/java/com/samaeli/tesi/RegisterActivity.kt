@@ -73,10 +73,11 @@ class RegisterActivity : AppCompatActivity() {
         binding.birthdayDateInputLayoutRegister.editText?.inputType = InputType.TYPE_NULL
         binding.licenseDateInputLayoutRegister.editText?.inputType = InputType.TYPE_NULL
 
+        // Show dataPicker for birthday date
         binding.birthdayDateInputLayoutRegister.editText?.setOnClickListener {
             Log.d(TAG,"Try to show datePicker for birthday date")
             val timestamp = System.currentTimeMillis()
-            // Si possono registrare solo persone che hanno un'età maggiore di 14 anni
+            // COntrollo che la persona che si sta registrando abbia almeno 14 anni
             val constraintsBuilder = CalendarConstraints.Builder()
                     .setValidator(DateValidatorPointBackward.before(timestamp - years_14_milliseconds))
                     .setEnd(timestamp - years_14_milliseconds)
@@ -88,6 +89,7 @@ class RegisterActivity : AppCompatActivity() {
 
             datePicker.show(supportFragmentManager,"")
 
+            // Se l'utente decidedi clicca su ok la data inserita viene visualizzata neel'editText
             datePicker.addOnPositiveButtonClickListener {
                 val date = getDate(it)
                 birthdayDate = it
@@ -97,9 +99,10 @@ class RegisterActivity : AppCompatActivity() {
 
         }
 
+        // Show dataPicker for License date
         binding.licenseDateInputLayoutRegister.editText?.setOnClickListener {
             Log.d(TAG,"Try to show datePicker for birthday date")
-            // Non si possono scegliere date future
+            // Controllo che l'utente non possa scegliere una data futura
             val constraintsBuilder = CalendarConstraints.Builder()
                     .setValidator(DateValidatorPointBackward.now())
                     .setEnd(System.currentTimeMillis())
@@ -110,6 +113,7 @@ class RegisterActivity : AppCompatActivity() {
 
             datePicker.show(supportFragmentManager,"")
 
+            // Se l'utente decidedi clicca su ok la data inserita viene visualizzata neel'editText
             datePicker.addOnPositiveButtonClickListener {
                 val date = getDate(it)
                 licenseDate = it
@@ -126,6 +130,7 @@ class RegisterActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        // Go to select photo
         binding.selectImageButtonRegister.setOnClickListener {
             Log.d(TAG,"Try to show photo selector")
             val intent = Intent(Intent.ACTION_PICK)
@@ -134,18 +139,20 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         binding.buttonRegister.setOnClickListener {
-            error = false
+            error = false // variabile che vale true se si è verificato almeno un errore durante la registrazione
             if(!validateRegistration()){
-                Log.d(TAG,getString(R.string.error_login))
+                Log.d(TAG,getString(R.string.error_registration))
                 binding.scrollViewRegister.scrollTo(0,0)
                 Toast.makeText(this,getString(R.string.error_registration),Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
             Log.d(TAG,"Campi ok")
+            // Si inizia il dialog del loading
             loadingDialog.startLoadingDialog()
             performRegistration()
         }
 
+        // GO to MainActivity e Alcohol Level Fragment
         binding.alcoholCalculatorTextViewRegister.setOnClickListener {
             Log.d(LoginActivity.TAG,"Main Activity")
             val intent = Intent(this,MainActivity::class.java)
@@ -155,6 +162,7 @@ class RegisterActivity : AppCompatActivity() {
 
     }
 
+    // Codice che viene eseguito dopo che l'utente ha scelto la foto
     var startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
         result: ActivityResult ->
             if(result.resultCode == Activity.RESULT_OK){
@@ -169,49 +177,17 @@ class RegisterActivity : AppCompatActivity() {
             }
     }
 
-    /*override fun onPause() {
-        val editor = prefs?.edit()
-        if(birthdayDate != null){
-            editor?.putLong("birthdayDate", birthdayDate!!)
-        }
-        if(licenseDate != null){
-            editor?.putLong("licenseDate",licenseDate!!)
-        }
-        editor?.commit()
-        super.onPause()
-    }
-
-    override fun onResume() {
-        val test : Long = -1
-        super.onResume()
-        birthdayDate = prefs?.getLong("birthdayDate",-1)
-        if(birthdayDate != test){
-            binding.birthdayDateInputLayoutRegister.editText?.setText(getDate(birthdayDate!!))
-        }
-        licenseDate = prefs?.getLong("licenseDate",-1)
-        if(licenseDate != test){
-            binding.licenseDateInputLayoutRegister.editText?.setText(getDate(licenseDate!!))
-        }
-
-    }*/
-
     private fun performRegistration(){
-        /*val email = binding.emailInputLayoutRegister.editText!!.text.toString()
-        val password = binding.passwordInputLayoutRegister.editText!!.text.toString()*/
-
         Log.d(TAG,"Email: $email and password: $password")
 
-        /*if(FirebaseAuth.getInstance().uid != null){
-            Log.d(TAG,"Cancellazione dell'utente anonimo")
-            FirebaseAuth.getInstance().currentUser!!.delete()
-        }*/
-
+        // Creazione dell'utente su Firebase
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email!!, password!!)
                 .addOnCompleteListener {
                     if(!it.isSuccessful){
                         try {
                             throw it.exception!!
                         }catch (e : Exception) {
+                            // if che viene eseguito se la mail inserita dall'utente è già presente in Firebase
                             if(e is FirebaseAuthUserCollisionException){
                                 Log.d(TAG,"The email exist")
                                 //Il toast compare automaticamente senza doverlo stampare
@@ -225,6 +201,7 @@ class RegisterActivity : AppCompatActivity() {
                         return@addOnCompleteListener
                     }
                     Log.d(TAG,"Success Registration")
+                    // Se l'utente ha selezionato una foto viene caricata se no si passa subito al salvataggio dell'utente in FirebaseDatabase
                     if(selectPhotoUri != null){
                         uploadImageToFirebase()
                     }else{
@@ -246,7 +223,7 @@ class RegisterActivity : AppCompatActivity() {
         val fileName = FirebaseAuth.getInstance().uid
         val ref = FirebaseStorage.getInstance().getReference("/images/$fileName")
 
-        //Ridimensionamento immagine prima del caricamento su FirebaseStorage
+        // Ridimensionamento immagine prima del caricamento su FirebaseStorage
         // Se il caricamento dell'immagine richiede molto (passa molto tempo da quando si clicca il bottone register a quando
         // si viene rimandata nell'altra activity) ridurre valore di quality in compress
         val bitmap = MediaStore.Images.Media.getBitmap(contentResolver,selectPhotoUri)
@@ -281,6 +258,7 @@ class RegisterActivity : AppCompatActivity() {
                 Log.d(TAG,"User saved in db")
                 val intent = Intent(this,MainActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                // Si termina il dialog del loading
                 loadingDialog.dismissLoadingDialog()
                 startActivity(intent)
             }
@@ -290,11 +268,13 @@ class RegisterActivity : AppCompatActivity() {
             }
     }
 
+    // Metodo che ritorna la data corrispondente al timestamp passato come parametro
     private fun getDate(timestamp:Long):String{
         val formatter = SimpleDateFormat("dd/MM/yyyy")
         return formatter.format(timestamp)
     }
 
+//     Metodo che ritorna true se i dati inseriti dall'utente sono validi, altrimenti ritorna false
     private fun validateRegistration():Boolean{
         validateName()
         validateSurname()
@@ -307,6 +287,7 @@ class RegisterActivity : AppCompatActivity() {
         return !error
     }
 
+    // Controllo che l'utente abbia inserito il nome
     private fun validateName(){
         name = binding.nameInputLayoutRegister.editText?.text.toString()
 
@@ -319,6 +300,7 @@ class RegisterActivity : AppCompatActivity() {
         binding.nameInputLayoutRegister.isErrorEnabled = false
     }
 
+    // Controllo che l'utente abbia inserito il cognome
     private fun validateSurname(){
         surname = binding.surnameInputLayoutRegister.editText?.text.toString()
 
@@ -331,6 +313,7 @@ class RegisterActivity : AppCompatActivity() {
         binding.surnameInputLayoutRegister.isErrorEnabled = false
     }
 
+    // Controllo che l'utente abbia inserito la data di nascita
     private fun validateBirthdayDate(){
         val birthday = binding.birthdayDateInputLayoutRegister.editText?.text.toString()
 
@@ -343,6 +326,7 @@ class RegisterActivity : AppCompatActivity() {
         binding.birthdayDateInputLayoutRegister.isErrorEnabled = false
     }
 
+    // Controllo che l'utente abbia inserito il peso
     private fun validateWeight(){
         val stringWeight = binding.weightInputLayoutRegister.editText?.text.toString()
 
@@ -356,6 +340,7 @@ class RegisterActivity : AppCompatActivity() {
         weight = stringWeight.toDouble()
     }
 
+    // Controllo che l'utente abbia inserito la data in cui ha preso la patente
     private fun validateLicenseDate(){
         val licenseDate = binding.licenseDateInputLayoutRegister.editText?.text.toString()
 
@@ -368,6 +353,7 @@ class RegisterActivity : AppCompatActivity() {
         binding.licenseDateInputLayoutRegister.isErrorEnabled = false
     }
 
+    // Controllo che l'utente abbia inserito una mail valida
     private fun validateEmail(){
         email = binding.emailInputLayoutRegister.editText?.text.toString()
 
@@ -385,6 +371,7 @@ class RegisterActivity : AppCompatActivity() {
         binding.emailInputLayoutRegister.isErrorEnabled = false
     }
 
+    // Controllo che l'utente abbia inserito una password valida
     private fun validatePassword(){
         password = binding.passwordInputLayoutRegister.editText?.text.toString()
 
@@ -402,6 +389,7 @@ class RegisterActivity : AppCompatActivity() {
         binding.passwordInputLayoutRegister.isErrorEnabled = false
     }
 
+    // Controllo che l'utente abbia confermato correttamente la password
     private fun validateConfirmPassword(){
         val confirmPassword = binding.confirmPasswordInputLayoutRegister.editText?.text.toString()
 
@@ -420,6 +408,7 @@ class RegisterActivity : AppCompatActivity() {
         binding.confirmPasswordInputLayoutRegister.isErrorEnabled = false
     }
 
+    // Metodo che cambia colore alla startIcon del TextInputLayout quando è evidenziato
     private fun changeIconColor(){
         binding.nameEditTextRegister.setOnFocusChangeListener { v, hasFocus ->
             val color = if(hasFocus) Color.rgb(249,170,51) else Color.rgb(52,73,85)

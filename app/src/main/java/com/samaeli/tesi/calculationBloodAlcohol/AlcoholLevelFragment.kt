@@ -34,13 +34,16 @@ class AlcoholLevelFragment : Fragment() {
 
     private var prefs : SharedPreferences? = null
 
+    // Variabile che contiene il limite del tasso alcolemico per far guidare i non neopatentati
     private var limitOldDriver : Double = 0.5
 
     companion object {
+        // Parametri forniti dall'Istituto superiore della sanità
         const val MALE_EMPTY_STOMACH = 0.7
         const val MALE_FULL_STOMACH = 1.2
         const val FEMALE_EMPTY_STOMACH = 0.5
         const val FEMALE_FULL_STOMACH = 0.9
+
         // 3 years in milliseconds for the new drivers
         const val YEARS_3 = 94672800000
         const val YEARS_21 = 662709600000
@@ -51,6 +54,7 @@ class AlcoholLevelFragment : Fragment() {
         var db: DrinkAddedDB? = null
         var adapter = GroupAdapter<ViewHolder>()
 
+        // Metodo che visualizza i drink che sono stati aggiunti da un utente
         fun displayDrinkAdded(context: Context){
             adapter.clear()
             drinksAdded = db!!.getDrinksAdded()
@@ -76,34 +80,35 @@ class AlcoholLevelFragment : Fragment() {
         val view = binding.root
 
         binding.buttonAddDrink.setOnClickListener {
+            // Go to SelectDrinkActivity
             val intent = Intent(activity,SelectDrinkActivity::class.java)
             startActivity(intent)
         }
 
         binding.buttonAddCustomDrink.setOnClickListener {
+            // Go to DrinkActivity
             val intent = Intent(activity,DrinkActivity::class.java)
             startActivity(intent)
         }
 
         binding.calculateButtonAlcoholLevel.setOnClickListener {
+            // Inizio calcolo del tasso alcolemico
             Log.d("Alcohol Fragment","Inizio calcolo tasso alcolemico")
             calculateAlcoholLevel()
         }
 
-        // Controllo che l'utente non sia un utente anonimo
-        //if(!FirebaseAuth.getInstance().currentUser!!.email.isNullOrEmpty()){
-        // TODO Provare a spostare questo in onResume !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        if(FirebaseAuth.getInstance().uid != null) {
+        // Pezzo spostato in onResume
+        /*if(FirebaseAuth.getInstance().uid != null) {
             completeFieldsFromFirebase()
         }
-        completeFieldsFromSharedPreference()
+        completeFieldsFromSharedPreference()*/
 
+        //  Oggetto di tipo DrinkAddedDb per eseguire le query su SQLite Database
         db = DrinkAddedDB(requireActivity().applicationContext)
 
+        // display drink aggiunti dall'utente
         displayDrinkAdded(requireActivity().applicationContext)
         binding.recyclerViewAlcoholLevelFragmnet.adapter = adapter
-
-        //Log.d("Alcohol Level Fragment",Calendar.getInstance().get(Calendar.HOUR_OF_DAY).toString())
 
         return view
     }
@@ -115,12 +120,19 @@ class AlcoholLevelFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        // Se l'utente è registrato si caricano i valori con quelli inseriti dall'utente nel suo profilo
+        if(FirebaseAuth.getInstance().uid != null) {
+            completeFieldsFromFirebase()
+        }
+        // Si caricano i valori da SharedPreference
+        completeFieldsFromSharedPreference()
         limitOldDriver = parseDouble(prefs?.getString("limit_edit_text_preference","0.5"))
         Log.d("Alcohol Level Fragment","Limit: $limitOldDriver")
     }
 
     override fun onPause() {
         val editor = prefs?.edit()
+        // Salvataggio dei valori inseriti dall'utente in modo che vengano ripristinati se si ruota lo schermo
         if(binding.genderRadioGroupAlcoholLevel.checkedRadioButtonId == R.id.maleRadioButtonAlcoholLevel){
             editor?.putString("gender","male")
         }else{
@@ -141,7 +153,9 @@ class AlcoholLevelFragment : Fragment() {
         super.onPause()
     }
 
+    // Calcolo il tasso alcolemico dell'utente
     private fun calculateAlcoholLevel(){
+        // Controllo che l'utente abbia inserito almeno un drink
         if(drinksAdded == null || drinksAdded!!.size == 0){
             Toast.makeText(activity,getString(R.string.error_enter_drink),Toast.LENGTH_LONG).show()
             return
@@ -150,7 +164,7 @@ class AlcoholLevelFragment : Fragment() {
         var alcoholLevelFinal : Double = 0.0
         val weight : Double = binding.weightEditTextAlcoholLevel.text.toString().toDouble()
 
-
+        // For eseguito per ogni drink inserito dall'utente
         for(drinkAdded in drinksAdded!!){
             Log.d("Alcohol Level Fragment","Ciclo")
             // Grammi di alcol = (ml di bevanda x grado alcolico x 0,79) / 100
@@ -162,31 +176,42 @@ class AlcoholLevelFragment : Fragment() {
             // Ora
             val nowMinute : Int = Calendar.getInstance().get(Calendar.MINUTE) +
                     (Calendar.getInstance().get(Calendar.HOUR_OF_DAY)*60)
-            //val differenceTime : Int
+
             Log.d("Alcohol Level Fragment","timeMinute: "+timeMinute+" now minute "+nowMinute)
+            // Quanto è passato da quando si è assunto il drink ad ora
             val differenceTime : Int = if(timeMinute < nowMinute){
                 nowMinute - timeMinute
             }else{
                 timeMinute - nowMinute
             }
+            // Calcolo del tasso alcolemico che il drink ha dato all'utente tenedo conto del tempo
+            // che è trascorso da quando l'ha assunto
             alcoholLevel -= (DIGESTION_MINUTE * differenceTime)
+            // Se maggiore di zero lo sommo al tasso alcolemico totale
             if(alcoholLevel > 0){
                 alcoholLevelFinal += alcoholLevel
             }
         }
-        Log.d("Alcohol Level Fragment","CIAOOOOOOOOOOOOOO "+alcoholLevelFinal)
+        Log.d("Alcohol Level Fragment",alcoholLevelFinal.toString())
 
+        // Calcolo il limite del tasso alcolemico
         val limit = calculateLimit()
 
+        // Calcolo quanto tempo bisogna aspettare per potersi rimettere alla guida
         val time = calculateTimeMinuteBeforeDriving(alcoholLevelFinal,limit)
 
+        // Go to ResultCalculationActivity
         val intent = Intent(activity,ResultCalculationActivity::class.java)
         //intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
         intent.putExtra("alcohol_level",alcoholLevelFinal)
         intent.putExtra("time_before_driving",time)
         startActivity(intent)
+
+        // Cancello i drink selezionati dall'utente dal DB locale
+        db!!.deleteDrinksAdded()
     }
 
+    // Metodo che calcola quanto tempo l'utente deve aspettare per potersi rimettere alla guida
     private fun calculateTimeMinuteBeforeDriving(alcoholLevelFinal : Double,limit:Double):Int{
         val time  = if(alcoholLevelFinal > limit){
                 (alcoholLevelFinal - limit)/ DIGESTION_MINUTE
@@ -196,6 +221,7 @@ class AlcoholLevelFragment : Fragment() {
         return time.toInt()
     }
 
+    // Metodo che calcola il limite del tasso alcolemico per poter guidare
     private fun calculateLimit():Double{
         return if(binding.newDriverRadioGroupAlcoholLevel.checkedRadioButtonId == R.id.noNewDriverRadioButtonAlcoholLevel){
             limitOldDriver
@@ -204,6 +230,7 @@ class AlcoholLevelFragment : Fragment() {
         }
     }
 
+    // Calcolo del parametro C che serve della formula del calcolo del tasso alcolemico
     private fun calculateCParameter() : Double{
         if(binding.genderRadioGroupAlcoholLevel.checkedRadioButtonId == R.id.maleRadioButtonAlcoholLevel){
             if(binding.questionFullStomachRadioGroupAlcoholLevel.checkedRadioButtonId == R.id.noFullStomachRadioButtonAlcoholLevel){
@@ -222,6 +249,7 @@ class AlcoholLevelFragment : Fragment() {
 
     // Se l'utente è loggato e si ruota lo schermo si manteien memorizzzato solo se è a stomaco pieno oopure no.
     // Gli altri valori vengono rispristinati a quelli memorizzati nel profilo dell'utente
+    // Metodo che ripristina i valori inseriti dall'utente se si ruota lo schermo
     private fun completeFieldsFromSharedPreference(){
         if(FirebaseAuth.getInstance().uid == null){
             val gender = prefs?.getString("gender","")
@@ -255,6 +283,7 @@ class AlcoholLevelFragment : Fragment() {
         }
     }
 
+    // Metodo che compila i vari campi in base ai valori memorizzati nel profilo dell'utente
     private fun completeFieldsFromFirebase(){
         val uid = FirebaseAuth.getInstance().uid
         val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
@@ -280,7 +309,6 @@ class AlcoholLevelFragment : Fragment() {
 
             override fun onCancelled(error: DatabaseError) {
             }
-
         })
     }
 

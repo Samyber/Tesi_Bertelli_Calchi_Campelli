@@ -1,0 +1,88 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollViewRegister"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="32dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/circleImageProfile"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="@dimen/top_margin_profile"
+            android:src="@drawable/ic_round_person_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+        </de.hdodenhof.circleimageview.CircleImageView>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/nameInputLayoutProfile"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.style_input_layout_profile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/left_right_margin_profile"
+            android:layout_marginTop="@dimen/top_margin_profile"
+            android:layout_marginRight="@dimen/left_right_margin_profile"
+            android:hint="@string/name"
+            app:startIconDrawable="@drawable/ic_round_person_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/circleImageProfile">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/nameEditTextProfile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/surnameInputLayoutProfile"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.style_input_layout_profile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/top_margin_profile"
+            android:hint="@string/surname"
+            app:startIconDrawable="@drawable/ic_round_person_24"
+            app:layout_constraintEnd_toEndOf="@+id/nameInputLayoutProfile"
+            app:layout_constraintStart_toStartOf="@+id/nameInputLayoutProfile"
+            app:layout_constraintTop_toBottomOf="@+id/nameInputLayoutProfile">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/surnameEditTextProfile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/birthdayDateInputLayoutProfile"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.style_input_layout_profile"
+            android:layout_width="@dimen/width_edit_text_login"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/top_margin_profile"
+            app:layout_constraintEnd_toEndOf="@+id/surnameInputLayoutProfile"
+            app:layout_constraintStart_toStartOf="@+id/surnameInputLayoutProfile"
+            app:layout_constraintTop_toBottomOf="@+id/surnameInputLayoutProfile"
+            app:startIconDrawable="@drawable/ic_round_date_range_24">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/birthdayEditTextProfile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:hint="@string/birthday_date" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

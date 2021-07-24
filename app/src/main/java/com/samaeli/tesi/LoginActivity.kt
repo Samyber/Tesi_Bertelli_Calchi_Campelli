@@ -33,6 +33,7 @@ class LoginActivity : AppCompatActivity() {
         // Change color of startIcon of textInputLayout when their focused
         changeIconColor()
 
+        // Go to Register Activity
         binding.goToRegistrationLogin.setOnClickListener {
             Log.d(TAG,"Go to Register Activity")
             val intent = Intent(this,RegisterActivity::class.java)
@@ -41,7 +42,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.buttonLogin.setOnClickListener {
-            error = false
+            error = false // variabile che vale true se si è verificato almeno un errore durante la registrazione
             if(!validateLogin()){
                 Log.d(TAG,getString(R.string.error_login))
                 Toast.makeText(this,getString(R.string.error_login),Toast.LENGTH_LONG).show()
@@ -51,36 +52,17 @@ class LoginActivity : AppCompatActivity() {
             performLogin()
         }
 
+        // Go to MainActivity and Alcohol Level Fragment
         binding.alcoholCalculatorTextViewLogin.setOnClickListener {
             Log.d(TAG,"Main Activity")
             val intent = Intent(this,MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
         }
-
-        /*binding.alcoholCalculatorTextViewLogin.setOnClickListener {
-            if(FirebaseAuth.getInstance().uid != null) {
-                FirebaseAuth.getInstance().signInAnonymously()
-                        .addOnCompleteListener {
-                            if (it.isSuccessful) {
-                                val intent = Intent(this, MainActivity::class.java)
-                                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                startActivity(intent)
-                            }
-                        }
-            }else{
-                val intent = Intent(this, MainActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intent)
-            }
-        }*/
     }
 
     private fun performLogin(){
-        /*if(FirebaseAuth.getInstance().uid != null){
-            Log.d(RegisterActivity.TAG,"Cancellazione dell'utente anonimo")
-            FirebaseAuth.getInstance().currentUser!!.delete()
-        }*/
+        // Login dell'utente su Firebase
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email!!,password!!)
             .addOnCompleteListener {
                 if(!it.isSuccessful){
@@ -100,12 +82,14 @@ class LoginActivity : AppCompatActivity() {
             }
     }
 
+    // Metodo che ritorna folse se in dati inseriti dall'utente non sono validi altrimenti ritorna true
     private fun validateLogin():Boolean{
         validateEmail()
         validatePassword()
         return !error
     }
 
+    // Controllo che l'utente abbia inserito una mail valida
     private fun validateEmail(){
         email = binding.emailInputLayoutLogin.editText?.text.toString()
 
@@ -123,6 +107,7 @@ class LoginActivity : AppCompatActivity() {
         binding.emailInputLayoutLogin.isErrorEnabled = false
     }
 
+    // Controllo che l'utente abbia inserito una password valida
     private fun validatePassword(){
         password = binding.passwordInputLayoutLogin.editText?.text.toString()
 
@@ -135,6 +120,7 @@ class LoginActivity : AppCompatActivity() {
         binding.passwordInputLayoutLogin.isErrorEnabled = false
     }
 
+    // Metodo che cambia colore alla startIcon del TextInputLayout quando è evidenziato
     private fun changeIconColor(){
         binding.emailEditTextLogin.setOnFocusChangeListener { v, hasFocus ->
             val color = if(hasFocus) Color.rgb(249,170,51) else Color.rgb(52,73,85)

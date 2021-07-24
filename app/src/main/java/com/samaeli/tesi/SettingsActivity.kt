@@ -17,14 +17,7 @@ class SettingsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        /*setContentView(R.layout.settings_activity)
-        if (savedInstanceState == null) {
-            supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.settings, SettingsFragment())
-                    .commit()
-        }
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)*/
+
         supportFragmentManager.beginTransaction().replace(android.R.id.content, SettingsFragment()).commit()
     }
 
@@ -35,38 +28,15 @@ class SettingsActivity : AppCompatActivity() {
             val prefLimit : EditTextPreference? = findPreference("limit_edit_text_preference")
 
             createListener(prefLimit)
-
-            //prefLimit?.setOn
-
-            /*prefLimit?.onPreferenceChangeListener = object : Preference.OnPreferenceChangeListener {
-                override fun onPreferenceChange(preference: Preference?, newValue: Any?): Boolean {
-                    Toast.makeText(activity,"Value change",Toast.LENGTH_LONG).show()
-                    Log.d("Settings Fragment","Value changed")
-                    if(newValue?.toString().isNullOrEmpty() || newValue?.toString()!!.isBlank()){
-                        errorPrefLimit(prefLimit)
-                        return true
-                    }
-                    try {
-                        val num = parseInt(newValue?.toString())
-                        if(num < 0){
-                            errorPrefLimit(prefLimit)
-                            return true
-                        }
-                    }catch (e:NumberFormatException){
-                        errorPrefLimit(prefLimit)
-                    }
-                    return true
-                }
-
-            }*/
-
         }
 
+        // Metodo eseguito se il valore inserito dall'utente come limite di tasso alcolemico non è valido
         private fun errorPrefLimit(prefLimit : EditTextPreference?){
             prefLimit?.text = "0.5"
             Toast.makeText(activity,getString(R.string.error_limit_pref),Toast.LENGTH_LONG).show()
         }
 
+        // Metodo che permette di controllare che il valore inserito dall'utente come limite di tasso alcolemico sia valido
         private fun createListener(prefLimit : EditTextPreference?){
             val listener = object : SharedPreferences.OnSharedPreferenceChangeListener{
                 override fun onSharedPreferenceChanged(

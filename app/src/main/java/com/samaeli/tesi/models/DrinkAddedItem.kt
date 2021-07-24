@@ -21,16 +21,22 @@ class DrinkAddedItem(val drinkAdded: DrinkAdded, val context:Context):Item<ViewH
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.nameTextViewItemDrinkAdded.text = drinkAdded.drink!!.name
         // Bisogna passare il contesto per poter accedere alle stringhe
-        viewHolder.itemView.volumeTextViewDrinkAdded.text = context.getString(R.string.volume_drink_added) +":"+ drinkAdded.drink!!.volume.toString()+" ml"
-        viewHolder.itemView.alcoholContentTextViewDrinkAdded.text = context.getString(R.string.alcohol_content_drink_added)+": "+drinkAdded.drink!!.alcoholContent.toString()+" %"
+        viewHolder.itemView.volumeTextViewDrinkAdded.text = context.getString(R.string.volume_drink_added) +" "+ drinkAdded.drink!!.volume.toString()+" ml"
+        viewHolder.itemView.alcoholContentTextViewDrinkAdded.text = context.getString(R.string.alcohol_content_drink_added)+" "+drinkAdded.drink!!.alcoholContent.toString()+" %"
         viewHolder.itemView.quantityTextViewDrinkAdded.text = context.getString(R.string.quantity)+":  "+drinkAdded.quantity
-        viewHolder.itemView.timeTextViewDrinkAdded.text = context.getString(R.string.hour_taken)+" "+drinkAdded.hour.toString()+":"+drinkAdded.minute.toString()
+        var minuteString = drinkAdded.minute.toString()
+        if(minuteString.length == 1){
+            minuteString = "0"+minuteString
+        }
+        viewHolder.itemView.timeTextViewDrinkAdded.text = context.getString(R.string.hour_taken)+" "+drinkAdded.hour.toString()+":"+minuteString
         val url = drinkAdded.drink!!.imageUrl
         if(url != null) {
             val targetImageView = viewHolder.itemView.imageViewItemDrinkAdded
             Picasso.get().load(url).into(targetImageView)
         }
 
+        // Listener per cui se si clicca sul cestino rosso in corrispondenza del drink inserito lo si
+        // cancella dal DB
         viewHolder.itemView.deleteImageViewDrinkAdded.setOnClickListener {
             AlcoholLevelFragment.db!!.deleteDrinkAdded(drinkAdded.id!!)
             AlcoholLevelFragment.displayDrinkAdded(context)

@@ -11,12 +11,17 @@
         <item name="cornerSize">15dp</item>
     </style>
     -->
-    <style name="style_input_layout">
+    <style name="style_input_layout_register_login">
         <item name="boxBackgroundColor">@color/white</item>
         <item name="boxStrokeColor">@color/secondaryColor</item>
         <item name="hintTextColor">@color/secondaryColor</item>
         <item name="boxCornerRadiusTopEnd">8dp</item>
         <item name="boxCornerRadiusTopStart">8dp</item>
         <item name="startIconTint">@color/primaryColor</item>
+    </style>
+
+    <style name="Widget.MaterialComponents.TextInputLayout.OutlinedBox.style_input_layout_profile">
+        <item name="boxStrokeColor">@color/secondaryColor</item>
+        <item name="hintTextColor">@color/secondaryColor</item>
     </style>
 </resources>

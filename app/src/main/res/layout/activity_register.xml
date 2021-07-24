@@ -38,7 +38,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/nameInputLayoutRegister"
-            style="@style/style_input_layout"
+            style="@style/style_input_layout_register_login"
             android:layout_width="@dimen/width_edit_text_login"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/left_right_margin_registration"
@@ -59,7 +59,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/surnameInputLayoutRegister"
-            style="@style/style_input_layout"
+            style="@style/style_input_layout_register_login"
             android:layout_width="@dimen/width_edit_text_login"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/top_margin_registration"
@@ -77,7 +77,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/birthdayDateInputLayoutRegister"
-            style="@style/style_input_layout"
+            style="@style/style_input_layout_register_login"
             android:layout_width="@dimen/width_edit_text_login"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/top_margin_registration"
@@ -133,7 +133,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/licenseDateInputLayoutRegister"
-            style="@style/style_input_layout"
+            style="@style/style_input_layout_register_login"
             android:layout_width="@dimen/width_edit_text_login"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/top_margin_registration"
@@ -153,7 +153,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/emailInputLayoutRegister"
-            style="@style/style_input_layout"
+            style="@style/style_input_layout_register_login"
             android:layout_width="@dimen/width_edit_text_registration"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/top_margin_registration"
@@ -172,7 +172,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/passwordInputLayoutRegister"
-            style="@style/style_input_layout"
+            style="@style/style_input_layout_register_login"
             android:layout_width="@dimen/width_edit_text_registration"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/top_margin_registration"
@@ -192,7 +192,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/confirmPasswordInputLayoutRegister"
-            style="@style/style_input_layout"
+            style="@style/style_input_layout_register_login"
             android:layout_width="@dimen/width_edit_text_registration"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/top_margin_registration"
@@ -250,7 +250,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/weightInputLayoutRegister"
-            style="@style/style_input_layout"
+            style="@style/style_input_layout_register_login"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/top_margin_registration"

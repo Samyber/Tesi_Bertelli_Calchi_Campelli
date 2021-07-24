@@ -9,6 +9,8 @@ import android.text.Editable
 import com.samaeli.tesi.models.Drink
 import com.samaeli.tesi.models.DrinkAdded
 
+// Classe che ha il compito di eseguery le query per aggiungere ed eliminare i dati dal database locale
+
 class DrinkAddedDB (){
     var context:Context?=null
 
@@ -89,6 +91,7 @@ class DrinkAddedDB (){
         }
     }
 
+    // Metodo che ritorna un ArrayList contenete tutti i drink che ha inserito l'utente
     fun getDrinksAdded(): ArrayList<DrinkAdded>{
         var drinksAdded = ArrayList<DrinkAdded>()
         openReadableDB()
@@ -101,6 +104,7 @@ class DrinkAddedDB (){
         return drinksAdded
     }
 
+    // Metodo che ritorna un Drink passando come parametro il cursore
     private fun getDrinkAddedFromCursor(cursor:Cursor):DrinkAdded?{
         if(cursor.count == 0){
             return null
@@ -125,6 +129,7 @@ class DrinkAddedDB (){
         }
     }
 
+    // Metodo per inserire un nuovo drink nel database
     fun insertDrinkAdded(drinkAdded : DrinkAdded):Long{
         val cv = ContentValues()
         cv.put(DRINK_ADDED_NAME, drinkAdded.drink!!.name)
@@ -142,6 +147,7 @@ class DrinkAddedDB (){
         return rowId
     }
 
+    // Metodo che permette di eliminare un drink dal db sapendo il suo id
     fun deleteDrinkAdded(id:Long):Int{
         val where = DRINK_ADDED_ID + "= ?"
         val whereArgs = arrayOf(id.toString())
@@ -153,7 +159,8 @@ class DrinkAddedDB (){
         return rowCount
     }
 
-    fun deleteDrinkAdded():Int{
+    // Metodo che permette di concellare tutti i drink dal db
+    fun deleteDrinksAdded():Int{
         openWriteableDB()
         val rowCount = db!!.delete(DRINK_ADDED_TABLE,null,null)
         closeDB()

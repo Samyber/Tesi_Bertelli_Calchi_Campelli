@@ -9,7 +9,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/emailInputLayoutLogin"
-        style="@style/style_input_layout"
+        style="@style/style_input_layout_register_login"
         android:layout_width="@dimen/width_edit_text_login"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/left_right_margin_login"
@@ -30,7 +30,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/passwordInputLayoutLogin"
-        style="@style/style_input_layout"
+        style="@style/style_input_layout_register_login"
         android:layout_width="@dimen/width_edit_text_login"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/top_margin_login"

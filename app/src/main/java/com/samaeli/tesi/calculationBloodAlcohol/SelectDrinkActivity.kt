@@ -17,6 +17,8 @@ import com.samaeli.tesi.models.DrinkItem
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 
+// Activity che ha il compito di mostrare la lista dei drink che l'utente può scegliere
+
 class SelectDrinkActivity : AppCompatActivity() {
 
     companion object{
@@ -36,6 +38,7 @@ class SelectDrinkActivity : AppCompatActivity() {
         setContentView(view)
         supportActionBar?.title = getString(R.string.select_drink)
 
+        // Go to DrinkActivity
         adapter.setOnItemClickListener { item, view ->
             val drinkItem = item as DrinkItem
 
@@ -50,6 +53,7 @@ class SelectDrinkActivity : AppCompatActivity() {
 
     }
 
+    // Metodo che gestisce la barra di ricerca dei drink
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_search,menu)
 
@@ -74,6 +78,7 @@ class SelectDrinkActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
+    // Metodo che visualizza i drink che sono presenti su Firebase
     private fun fetchDrinks(search:String?){
         val ref = FirebaseDatabase.getInstance().getReference("/drinks")
         ref.addListenerForSingleValueEvent(object: ValueEventListener{
@@ -93,7 +98,6 @@ class SelectDrinkActivity : AppCompatActivity() {
 
             override fun onCancelled(error: DatabaseError) {
             }
-
         })
     }
 }

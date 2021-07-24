@@ -46,15 +46,19 @@ class DrinkActivity : AppCompatActivity() {
 
         drink = intent.getParcelableExtra(SelectDrinkActivity.DRINK_KEY)
 
+        // Se drink == null => l'utente vuole inserire un drink custom e quindi si nasconde l'immagine
         if(drink==null){
             binding.imageViewDrink.visibility = View.GONE
             supportActionBar?.title = getString(R.string.custom_drink)
         }else{
+            // Se l'utente ha selezionato un drink si nasconde l'EditText dal nome e si completano i
+                // campi sulla base del drink scelto dall'utente
             binding.nameEditTextDrink.visibility = View.INVISIBLE
             supportActionBar?.title = drink!!.name
             completeFields()
         }
 
+        // Show TimePicker for the time when the user take a drink
         binding.hourEditTextDrink.inputType = InputType.TYPE_NULL
         binding.hourEditTextDrink.setOnClickListener {
             Log.d(TAG, "Try to show timePicker")
@@ -68,26 +72,32 @@ class DrinkActivity : AppCompatActivity() {
             picker.addOnPositiveButtonClickListener {
                 hour = picker.hour
                 minute = picker.minute
-                Log.d(TAG, hour.toString() + ":" + minute.toString())
-                binding.hourEditTextDrink.setText(hour.toString() + ":" + minute.toString())
+                var minuteString = minute.toString()
+                if(minuteString.length==1){
+                    minuteString = "0"+minuteString
+                }
+                Log.d(TAG, hour.toString() + ":" + minuteString)
+                binding.hourEditTextDrink.setText(hour.toString() + ":" + minuteString)
             }
         }
 
 
 
         binding.addButtonDrink.setOnClickListener {
-            error = false
+            error = false // variabile che vale true se si è verificato almeno un errore durante l'inserimento dei dati del drink
             if(!validateFields()){
                 Log.d(TAG,"Error during adding drink")
                 return@setOnClickListener
             }
             saveToDB()
+            // Go to MainActivity
             val intent = Intent(this,MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
         }
     }
 
+    // Metodo che salva il drink scelto dall'utente nel db locale
     private fun saveToDB(){
         val drinkAdded : DrinkAdded
         if(drink == null){
@@ -99,6 +109,7 @@ class DrinkActivity : AppCompatActivity() {
         db!!.insertDrinkAdded(drinkAdded)
     }
 
+    // Metodo ceh controlla che i dati inseriti dall'utente siano corretti
     private fun validateFields():Boolean{
         if(drink == null){
             validateName()
@@ -110,6 +121,7 @@ class DrinkActivity : AppCompatActivity() {
         return !error
     }
 
+    // Controllo che l'utente abbia inserito il nome
     private fun validateName(){
         val name = binding.nameEditTextDrink.text.toString()
 
@@ -121,6 +133,7 @@ class DrinkActivity : AppCompatActivity() {
         binding.nameEditTextDrink.error = null
     }
 
+    // Controllo che l'utente abbia inserito la percentuale alcolica del drink
     private fun validateAlcoholContent(){
         val alcoholContentString = binding.alcoholContentEditTextDrink.text.toString()
 
@@ -134,6 +147,7 @@ class DrinkActivity : AppCompatActivity() {
         Log.d(TAG,"Alcohol content: ${alcoholContent.toString()}")
     }
 
+    // Controllo che l'utente abbia inserito il volume
     private fun validateVolume(){
         val volumeString = binding.volumeEditTextDrink.text.toString()
 
@@ -147,6 +161,7 @@ class DrinkActivity : AppCompatActivity() {
         Log.d(TAG,"Volume: ${volume.toString()}")
     }
 
+    // Controllo che l'utente abbia inserito la quantità e che sia maggiore di 0
     private fun validateQuantity(){
         val quantityString = binding.quantityEditTextDrink.text.toString()
 
@@ -155,11 +170,17 @@ class DrinkActivity : AppCompatActivity() {
             error = true
             return
         }
-        binding.quantityEditTextDrink.error = null
         quantity = quantityString.toInt()
+        if(quantity == 0){
+            binding.quantityEditTextDrink.error = getString(R.string.error_quantity)
+            error = true
+            return
+        }
+        binding.quantityEditTextDrink.error = null
         Log.d(TAG,"Quantity: ${quantity.toString()}")
     }
 
+    // Controllo che l'utente abbia inserito quando ha bevuto il drink
     private fun validateTime(){
         if(hour == null && minute == null){
             binding.hourEditTextDrink.error = getString(R.string.field_not_empty)
