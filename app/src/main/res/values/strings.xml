@@ -28,7 +28,7 @@
     <string name="error_registration">Error during registration</string>
     <string name="error_login">Error during login</string>
     <string name="error_email_exist">Error! Email exist</string>
-    <string name="error_weight">Error! weight must be > 0</string>
+    <string name="error_weight">Error! Weight must be > 0</string>
 
     <string name="birthday_date_picker_title">Select birthday date</string>
     <string name="license_date_picker_title">Select driving license issue date</string>
@@ -88,6 +88,7 @@
     <string name="title_activity_settings">SettingsActivity</string>
     <string name="alcohol_level_calculation_category">Alcohol level calculation</string>
     <string name="limit_for_drive">Limit of blood alcohol content for drive</string>
+    <string name="limit_for_new_driver">Limit of blood alcohol content for new driver</string>
     <string name="error_limit_pref">Value insert how limit is not valid</string>
 
     <string name="save_data">Save data</string>

@@ -57,11 +57,12 @@ class ProfileFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if(FirebaseAuth.getInstance().uid == null){
+        /*if(FirebaseAuth.getInstance().uid == null){
             val intent = Intent(activity,LoginActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
-        }
+        }*/ // Spostato in MainActivity
+
         loadingDialog = LoadingDialog(requireActivity())
     }
 

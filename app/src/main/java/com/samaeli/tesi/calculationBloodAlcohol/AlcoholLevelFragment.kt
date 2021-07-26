@@ -94,6 +94,11 @@ class AlcoholLevelFragment : Fragment() {
         binding.calculateButtonAlcoholLevel.setOnClickListener {
             // Inizio calcolo del tasso alcolemico
             Log.d("Alcohol Fragment","Inizio calcolo tasso alcolemico")
+            if(!checkWeight()){
+                Log.d("Alcohol Level Fragment",getString(R.string.error_weight))
+                Toast.makeText(activity,getString(R.string.error_weight),Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
             calculateAlcoholLevel()
         }
 
@@ -310,6 +315,22 @@ class AlcoholLevelFragment : Fragment() {
             override fun onCancelled(error: DatabaseError) {
             }
         })
+    }
+
+    private fun checkWeight():Boolean{
+        val stringWeight = binding.weightEditTextAlcoholLevel.text.toString()
+
+        if(stringWeight == null || stringWeight.isEmpty() || stringWeight.isBlank()){
+            binding.weightEditTextAlcoholLevel.error = getString(R.string.field_not_empty)
+            return false
+        }
+        val weight = stringWeight.toDouble()
+        if(weight!! <= 0.0){
+            binding.weightEditTextAlcoholLevel.error = getString(R.string.error_weight)
+            return false
+        }
+        binding.weightEditTextAlcoholLevel.error = null
+        return true
     }
 
 }

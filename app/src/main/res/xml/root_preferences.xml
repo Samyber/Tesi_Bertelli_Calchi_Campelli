@@ -11,6 +11,12 @@
             android:singleLine="true"
             android:title="@string/limit_for_drive" />
     </PreferenceCategory>
+    <EditTextPreference
+        android:text="0.0"
+        android:key="limit_new_driver_edit_text_preference"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/limit_for_new_driver" />
 
 
 </PreferenceScreen>

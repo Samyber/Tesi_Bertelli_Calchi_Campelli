@@ -45,6 +45,11 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 R.id.bottomNavigationProfile ->{
+                    if(FirebaseAuth.getInstance().uid == null){
+                        val intent = Intent(this,LoginActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        startActivity(intent)
+                    }
                     val profileFragment = supportFragmentManager.findFragmentByTag("ProfileFragment")
                     if(profileFragment == null || !profileFragment.isVisible) {
                         Log.d(TAG, "Try to show ProfileFragment")

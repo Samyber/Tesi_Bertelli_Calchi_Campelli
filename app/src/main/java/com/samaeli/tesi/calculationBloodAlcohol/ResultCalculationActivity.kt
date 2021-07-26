@@ -50,6 +50,7 @@ class ResultCalculationActivity : AppCompatActivity() {
     private fun displaySuccess(){
         binding.resultTextViewResultCalculation.text = getString(R.string.passed)
         binding.timeTextViewAlcoholContent.alpha = 0f
+        binding.timeStringTextViewAlcoholContent.alpha = 0f
     }
 
     private fun displayNotSuccess(timeBeforeDriving : Int){
