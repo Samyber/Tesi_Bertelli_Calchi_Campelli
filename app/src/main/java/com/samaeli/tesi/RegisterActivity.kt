@@ -74,7 +74,7 @@ class RegisterActivity : AppCompatActivity() {
         binding.licenseDateInputLayoutRegister.editText?.inputType = InputType.TYPE_NULL
 
         // Show dataPicker for birthday date
-        binding.birthdayDateInputLayoutRegister.editText?.setOnClickListener {
+        binding.birthdayDateEditTextRegister.setOnClickListener {
             Log.d(TAG,"Try to show datePicker for birthday date")
             val timestamp = System.currentTimeMillis()
             // COntrollo che la persona che si sta registrando abbia almeno 14 anni
@@ -94,13 +94,13 @@ class RegisterActivity : AppCompatActivity() {
                 val date = getDate(it)
                 birthdayDate = it
                 Log.d(TAG,"Birthday date insert: $date")
-                binding.birthdayDateInputLayoutRegister.editText?.setText(date)
+                binding.birthdayDateEditTextRegister.setText(date)
             }
 
         }
 
         // Show dataPicker for License date
-        binding.licenseDateInputLayoutRegister.editText?.setOnClickListener {
+        binding.drivingLicenseEditTextRegister.setOnClickListener {
             Log.d(TAG,"Try to show datePicker for birthday date")
             // Controllo che l'utente non possa scegliere una data futura
             val constraintsBuilder = CalendarConstraints.Builder()
@@ -118,7 +118,7 @@ class RegisterActivity : AppCompatActivity() {
                 val date = getDate(it)
                 licenseDate = it
                 Log.d(TAG,"License date insert: $date")
-                binding.licenseDateInputLayoutRegister.editText?.setText(date)
+                binding.drivingLicenseEditTextRegister.setText(date)
             }
         }
 
@@ -289,7 +289,7 @@ class RegisterActivity : AppCompatActivity() {
 
     // Controllo che l'utente abbia inserito il nome
     private fun validateName(){
-        name = binding.nameInputLayoutRegister.editText?.text.toString()
+        name = binding.nameEditTextRegister.text.toString()
 
         if(name==null || name!!.isEmpty() || name!!.isBlank()) {
             binding.nameInputLayoutRegister.error = getString(R.string.field_not_empty)
@@ -302,7 +302,7 @@ class RegisterActivity : AppCompatActivity() {
 
     // Controllo che l'utente abbia inserito il cognome
     private fun validateSurname(){
-        surname = binding.surnameInputLayoutRegister.editText?.text.toString()
+        surname = binding.surnameEditTextRegister.text.toString()
 
         if(surname==null || surname!!.isEmpty() || surname!!.isBlank()) {
             binding.surnameInputLayoutRegister.error = getString(R.string.field_not_empty)
@@ -315,7 +315,7 @@ class RegisterActivity : AppCompatActivity() {
 
     // Controllo che l'utente abbia inserito la data di nascita
     private fun validateBirthdayDate(){
-        val birthday = binding.birthdayDateInputLayoutRegister.editText?.text.toString()
+        val birthday = binding.birthdayDateEditTextRegister.text.toString()
 
         if(birthday.isEmpty() || birthday.isBlank()){
             binding.birthdayDateInputLayoutRegister.error = getString(R.string.field_not_empty)
@@ -328,21 +328,26 @@ class RegisterActivity : AppCompatActivity() {
 
     // Controllo che l'utente abbia inserito il peso
     private fun validateWeight(){
-        val stringWeight = binding.weightInputLayoutRegister.editText?.text.toString()
+        val stringWeight = binding.weightEditTextRegister.text.toString()
 
         if(stringWeight == null || stringWeight.isEmpty() || stringWeight.isBlank()){
             binding.weightInputLayoutRegister.error = getString(R.string.field_not_empty)
             error = true
             return
         }
+        weight = stringWeight.toDouble()
+        if(weight!! <= 0.0){
+            binding.weightInputLayoutRegister.error = getString(R.string.error_weight)
+            error = true
+            return
+        }
         binding.weightInputLayoutRegister.error = ""
         binding.weightInputLayoutRegister.isErrorEnabled = false
-        weight = stringWeight.toDouble()
     }
 
     // Controllo che l'utente abbia inserito la data in cui ha preso la patente
     private fun validateLicenseDate(){
-        val licenseDate = binding.licenseDateInputLayoutRegister.editText?.text.toString()
+        val licenseDate = binding.drivingLicenseEditTextRegister.text.toString()
 
         if(licenseDate.isEmpty() || licenseDate.isBlank()){
             binding.licenseDateInputLayoutRegister.error = getString(R.string.field_not_empty)
@@ -355,7 +360,7 @@ class RegisterActivity : AppCompatActivity() {
 
     // Controllo che l'utente abbia inserito una mail valida
     private fun validateEmail(){
-        email = binding.emailInputLayoutRegister.editText?.text.toString()
+        email = binding.emailEditTextRegister.text.toString()
 
         if(email==null || email!!.isEmpty() || email!!.isBlank()){
             binding.emailInputLayoutRegister.error = getString(R.string.field_not_empty)
@@ -373,7 +378,7 @@ class RegisterActivity : AppCompatActivity() {
 
     // Controllo che l'utente abbia inserito una password valida
     private fun validatePassword(){
-        password = binding.passwordInputLayoutRegister.editText?.text.toString()
+        password = binding.passwordEditTextRegister.text.toString()
 
         if(password==null || password!!.isEmpty() || password!!.isBlank()){
             binding.passwordInputLayoutRegister.error = getString(R.string.field_not_empty)
@@ -391,7 +396,7 @@ class RegisterActivity : AppCompatActivity() {
 
     // Controllo che l'utente abbia confermato correttamente la password
     private fun validateConfirmPassword(){
-        val confirmPassword = binding.confirmPasswordInputLayoutRegister.editText?.text.toString()
+        val confirmPassword = binding.confirmPasswordEditTextRegister.text.toString()
 
         if(confirmPassword.isEmpty() || confirmPassword.isBlank()){
             binding.confirmPasswordInputLayoutRegister.error = getString(R.string.field_not_empty)
@@ -429,6 +434,10 @@ class RegisterActivity : AppCompatActivity() {
         binding.confirmPasswordEditTextRegister.setOnFocusChangeListener { v, hasFocus ->
             val color = if(hasFocus) Color.rgb(249,170,51) else Color.rgb(52,73,85)
             binding.confirmPasswordInputLayoutRegister.setStartIconTintList(ColorStateList.valueOf(color))
+        }
+        binding.weightEditTextRegister.setOnFocusChangeListener { v, hasFocus ->
+            val color = if(hasFocus) Color.rgb(249,170,51) else Color.rgb(52,73,85)
+            binding.weightInputLayoutRegister.setStartIconTintList(ColorStateList.valueOf(color))
         }
     }
 

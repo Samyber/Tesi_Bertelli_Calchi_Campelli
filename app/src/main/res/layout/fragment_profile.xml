@@ -1,7 +1,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/scrollViewRegister"
+    android:id="@+id/scrollViewProfile"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
@@ -10,6 +10,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingBottom="32dp">
+
+        <android.widget.Button
+            android:id="@+id/selectPhotoButtonProfile"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/rounded_select_image_button"
+            android:text="@string/select_image"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/circleImageProfile"
+            app:layout_constraintEnd_toEndOf="@+id/circleImageProfile"
+            app:layout_constraintStart_toStartOf="@+id/circleImageProfile"
+            app:layout_constraintTop_toTopOf="@+id/circleImageProfile" />
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/circleImageProfile"
@@ -76,12 +88,120 @@
             app:startIconDrawable="@drawable/ic_round_date_range_24">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/birthdayEditTextProfile"
+                android:id="@+id/birthdayDateEditTextProfile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:focusable="false"
                 android:hint="@string/birthday_date" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <RadioGroup
+            android:id="@+id/genderRadioGroupProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/top_margin_profile"
+            android:background="@drawable/rounded_edit_text"
+            android:checkedButton="@+id/maleRadioButtonRegistration"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="@+id/birthdayDateInputLayoutProfile"
+            app:layout_constraintStart_toStartOf="@+id/birthdayDateInputLayoutProfile"
+            app:layout_constraintTop_toBottomOf="@+id/birthdayDateInputLayoutProfile">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_weight="1"
+                android:text="@string/select_gender"
+                android:textSize="16sp" />
+
+            <RadioButton
+                android:id="@+id/maleRadioButtonProfile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="18dp"
+                android:layout_marginRight="18dp"
+                android:text="@string/male" />
+
+            <RadioButton
+                android:id="@+id/femaleRadioButtonProfile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="16dp"
+                android:text="@string/female" />
+        </RadioGroup>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/weightInputLayoutProfile"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.style_input_layout_profile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/top_margin_profile"
+            app:layout_constraintEnd_toEndOf="@+id/birthdayDateInputLayoutProfile"
+            app:layout_constraintStart_toStartOf="@+id/birthdayDateInputLayoutProfile"
+            app:layout_constraintTop_toBottomOf="@+id/genderRadioGroupProfile"
+            app:startIconDrawable="@drawable/ic_round_monitor_weight_24">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/weightEditTextProfile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/weight"
+                android:inputType="numberDecimal" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/licenseDateInputLayoutProfile"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.style_input_layout_profile"
+            android:layout_width="@dimen/width_edit_text_login"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/top_margin_profile"
+            app:layout_constraintEnd_toEndOf="@+id/weightInputLayoutProfile"
+            app:layout_constraintStart_toStartOf="@+id/weightInputLayoutProfile"
+            app:layout_constraintTop_toBottomOf="@+id/weightInputLayoutProfile"
+            app:startIconDrawable="@drawable/ic_round_date_range_24">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/drivingLicenseEditTextProfile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:hint="@string/driving_license_issue_date"
+                android:inputType="date" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/emailInputLayoutProfile"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.style_input_layout_profile"
+            android:layout_width="@dimen/width_edit_text_registration"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/top_margin_profile"
+            app:layout_constraintEnd_toEndOf="@+id/licenseDateInputLayoutProfile"
+            app:layout_constraintStart_toStartOf="@+id/licenseDateInputLayoutProfile"
+            app:layout_constraintTop_toBottomOf="@+id/licenseDateInputLayoutProfile"
+            app:startIconDrawable="@drawable/ic_round_email_24">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/emailEditTextProfile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/email"
+                android:inputType="textEmailAddress" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <android.widget.Button
+            android:id="@+id/saveDataButtonProfile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/top_margin_profile"
+            android:background="@drawable/rounded_button"
+            android:text="@string/save_data"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="@+id/emailInputLayoutProfile"
+            app:layout_constraintStart_toStartOf="@+id/emailInputLayoutProfile"
+            app:layout_constraintTop_toBottomOf="@+id/emailInputLayoutProfile" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
