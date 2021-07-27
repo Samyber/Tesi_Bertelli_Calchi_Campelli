@@ -104,4 +104,6 @@
     <string name="confirm_new_password">Confirm new password</string>
     <string name="change_password">Change password</string>
     <string name="error_update_password">Error update password</string>
+    <string name="error_old_password">Error! Old password is wrong</string>
+    <string name="password_changed">Password changed</string>
 </resources>

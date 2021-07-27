@@ -409,7 +409,7 @@ class RegisterActivity : AppCompatActivity() {
             error = true
             return
         }
-        val password = binding.passwordInputLayoutRegister.editText?.text.toString()
+        //val password = binding.passwordInputLayoutRegister.editText?.text.toString()
         if(!confirmPassword.equals(password)){
             binding.confirmPasswordInputLayoutRegister.error = getString(R.string.error_password_not_match)
             error = true
