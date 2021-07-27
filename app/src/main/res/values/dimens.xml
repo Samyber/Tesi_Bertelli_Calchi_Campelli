@@ -16,4 +16,7 @@
 
     <dimen name="top_margin_profile">32dp</dimen>
     <dimen name="left_right_margin_profile">24dp</dimen>
+
+    <dimen name="top_margin_modify_password">32dp</dimen>
+    <dimen name="left_right_margin_modify_password">24dp</dimen>
 </resources>

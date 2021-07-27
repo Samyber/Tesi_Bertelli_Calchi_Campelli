@@ -29,6 +29,7 @@
     <string name="error_login">Error during login</string>
     <string name="error_email_exist">Error! Email exist</string>
     <string name="error_weight">Error! Weight must be > 0</string>
+    <string name="error_check_fields">Error! Check the fields</string>
 
     <string name="birthday_date_picker_title">Select birthday date</string>
     <string name="license_date_picker_title">Select driving license issue date</string>
@@ -91,7 +92,16 @@
     <string name="limit_for_new_driver">Limit of blood alcohol content for new driver</string>
     <string name="error_limit_pref">Value insert how limit is not valid</string>
 
+    <!-- Profile -->
     <string name="save_data">Save data</string>
     <string name="error_update_profile">Error during update profile</string>
     <string name="ok_update_profile">Profile changed successfully</string>
+    <string name="update_password">Update password</string>
+
+    <!-- ModifyPasswordActivity -->
+    <string name="old_password">Old password</string>
+    <string name="new_password">New password</string>
+    <string name="confirm_new_password">Confirm new password</string>
+    <string name="change_password">Change password</string>
+    <string name="error_update_password">Error update password</string>
 </resources>

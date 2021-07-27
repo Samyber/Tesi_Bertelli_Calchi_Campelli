@@ -126,8 +126,9 @@ class RegisterActivity : AppCompatActivity() {
         binding.alreadyRegisterTextView.setOnClickListener {
             Log.d(TAG,"Go to Login Activity")
             val intent = Intent(this,LoginActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+            //intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
+            finish()
         }
 
         // Go to select photo
@@ -155,9 +156,10 @@ class RegisterActivity : AppCompatActivity() {
         // GO to MainActivity e Alcohol Level Fragment
         binding.alcoholCalculatorTextViewRegister.setOnClickListener {
             Log.d(LoginActivity.TAG,"Main Activity")
-            val intent = Intent(this,MainActivity::class.java)
+            /*val intent = Intent(this,MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
+            startActivity(intent)*/
+            finish()
         }
 
     }
@@ -187,6 +189,7 @@ class RegisterActivity : AppCompatActivity() {
                         try {
                             throw it.exception!!
                         }catch (e : Exception) {
+                            loadingDialog.dismissLoadingDialog()
                             // if che viene eseguito se la mail inserita dall'utente è già presente in Firebase
                             if(e is FirebaseAuthUserCollisionException){
                                 Log.d(TAG,"The email exist")
@@ -209,6 +212,7 @@ class RegisterActivity : AppCompatActivity() {
                     }
                 }
                 .addOnFailureListener {
+                    loadingDialog.dismissLoadingDialog()
                     Toast.makeText(this,getString(R.string.error_registration)+": ${it.message}",Toast.LENGTH_LONG).show()
                     Log.d(TAG,getString(R.string.error_registration)+": ${it.message}")
                 }
@@ -256,13 +260,15 @@ class RegisterActivity : AppCompatActivity() {
         ref.setValue(user)
             .addOnSuccessListener {
                 Log.d(TAG,"User saved in db")
-                val intent = Intent(this,MainActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                /*val intent = Intent(this,MainActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)*/
                 // Si termina il dialog del loading
                 loadingDialog.dismissLoadingDialog()
-                startActivity(intent)
+                //startActivity(intent)
+                finish()
             }
             .addOnFailureListener {
+                loadingDialog.dismissLoadingDialog()
                 Log.d(TAG,"Impossibile salvare l'utente nel db: ${it.message}")
                 Toast.makeText(this,getString(R.string.error_registration)+": ${it.message}",Toast.LENGTH_LONG).show()
             }

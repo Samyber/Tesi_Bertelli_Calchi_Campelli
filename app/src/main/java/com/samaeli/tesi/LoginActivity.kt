@@ -37,8 +37,9 @@ class LoginActivity : AppCompatActivity() {
         binding.goToRegistrationLogin.setOnClickListener {
             Log.d(TAG,"Go to Register Activity")
             val intent = Intent(this,RegisterActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+            //intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
+            finish()
         }
 
         binding.buttonLogin.setOnClickListener {
@@ -55,9 +56,10 @@ class LoginActivity : AppCompatActivity() {
         // Go to MainActivity and Alcohol Level Fragment
         binding.alcoholCalculatorTextViewLogin.setOnClickListener {
             Log.d(TAG,"Main Activity")
-            val intent = Intent(this,MainActivity::class.java)
+            /*val intent = Intent(this,MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
+            startActivity(intent)*/
+            finish()
         }
     }
 
@@ -72,9 +74,10 @@ class LoginActivity : AppCompatActivity() {
                 }
                 Log.d(TAG,"Login effettuato con utente ${it.result?.user?.uid}")
 
-                val intent = Intent(this,MainActivity::class.java)
+                /*val intent = Intent(this,MainActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intent)
+                startActivity(intent)*/
+                finish()
             }
             .addOnFailureListener {
                 Log.d(TAG,getString(R.string.error_login)+": ${it.message}")

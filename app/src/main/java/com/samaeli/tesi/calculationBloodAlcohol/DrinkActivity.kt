@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.text.InputType
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import com.samaeli.tesi.MainActivity
@@ -16,6 +17,7 @@ import com.samaeli.tesi.models.Drink
 import com.samaeli.tesi.models.DrinkAdded
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_drink.*
+import kotlinx.android.synthetic.main.fragment_profile.*
 
 class DrinkActivity : AppCompatActivity() {
 
@@ -87,6 +89,7 @@ class DrinkActivity : AppCompatActivity() {
             error = false // variabile che vale true se si è verificato almeno un errore durante l'inserimento dei dati del drink
             if(!validateFields()){
                 Log.d(TAG,"Error during adding drink")
+                Toast.makeText(this,getString(R.string.error_check_fields),Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
             saveToDB()

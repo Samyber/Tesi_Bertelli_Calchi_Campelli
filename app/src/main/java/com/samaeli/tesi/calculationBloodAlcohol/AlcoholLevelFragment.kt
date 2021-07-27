@@ -36,6 +36,8 @@ class AlcoholLevelFragment : Fragment() {
 
     // Variabile che contiene il limite del tasso alcolemico per far guidare i non neopatentati
     private var limitOldDriver : Double = 0.5
+    // Variabile che contiene il limite del tasso alcolemico per far guidare i neopatentati
+    private var limitNewDriver : Double = 0.0
 
     companion object {
         // Parametri forniti dall'Istituto superiore della sanità
@@ -132,7 +134,9 @@ class AlcoholLevelFragment : Fragment() {
         // Si caricano i valori da SharedPreference
         completeFieldsFromSharedPreference()
         limitOldDriver = parseDouble(prefs?.getString("limit_edit_text_preference","0.5"))
-        Log.d("Alcohol Level Fragment","Limit: $limitOldDriver")
+        limitNewDriver = parseDouble(prefs?.getString("limit_new_driver_edit_text_preference","0.0"))
+        Log.d("Alcohol Level Fragment","Limit old driver: $limitOldDriver")
+        Log.d("Alcohol Level Fragment","Limit new driver: $limitNewDriver")
     }
 
     override fun onPause() {
@@ -231,7 +235,7 @@ class AlcoholLevelFragment : Fragment() {
         return if(binding.newDriverRadioGroupAlcoholLevel.checkedRadioButtonId == R.id.noNewDriverRadioButtonAlcoholLevel){
             limitOldDriver
         }else{
-            0.0
+            limitNewDriver
         }
     }
 
@@ -325,7 +329,7 @@ class AlcoholLevelFragment : Fragment() {
             return false
         }
         val weight = stringWeight.toDouble()
-        if(weight!! <= 0.0){
+        if(weight <= 0.0){
             binding.weightEditTextAlcoholLevel.error = getString(R.string.error_weight)
             return false
         }

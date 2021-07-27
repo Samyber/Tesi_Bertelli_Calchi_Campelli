@@ -28,8 +28,11 @@ class SettingsActivity : AppCompatActivity() {
             val prefLimit : EditTextPreference? = findPreference("limit_edit_text_preference")
             val prefLimitNewDriver : EditTextPreference? = findPreference("limit_new_driver_edit_text_preference")
 
+            if(prefLimit?.text.isNullOrEmpty() || prefLimitNewDriver?.text.isNullOrEmpty()){
+                PreferenceManager.setDefaultValues(activity,R.xml.root_preferences,false)
+            }
+
             createListenerLimit(prefLimit,prefLimitNewDriver)
-            //createListenerLimitNewDriver(prefLimitNewDriver)
         }
 
         // Metodo eseguito se il valore inserito dall'utente come limite di tasso alcolemico non è valido
@@ -69,10 +72,10 @@ class SettingsActivity : AppCompatActivity() {
                     try {
                         val num = parseDouble(limitNewDriverPrefValue)
                         if(num < 0){
-                            errorPrefLimit(prefLimit)
+                            errorPrefLimitNewDriver(prefLimitNewDriver)
                         }
                     }catch (e:NumberFormatException){
-                        errorPrefLimit(prefLimit)
+                        errorPrefLimitNewDriver(prefLimitNewDriver)
                     }
                 }
 

@@ -148,6 +148,12 @@ class ProfileFragment : Fragment() {
             }
         }
 
+        // Go to ModifyPasswordActivity
+        binding.updatePasswordButtonProfile.setOnClickListener {
+            val intent = Intent(activity,ModifyPasswordActivity::class.java)
+            startActivity(intent)
+        }
+
         return view
     }
 
