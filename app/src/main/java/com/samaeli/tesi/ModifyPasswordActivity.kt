@@ -1,5 +1,7 @@
 package com.samaeli.tesi
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -7,6 +9,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.samaeli.tesi.databinding.ActivityModifyPasswordBinding
 
 class ModifyPasswordActivity : AppCompatActivity() {
@@ -21,6 +24,8 @@ class ModifyPasswordActivity : AppCompatActivity() {
     private var oldPassword : String? = null
     private var newPassword : String? = null
 
+    private var loadingDialog : LoadingDialog? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //setContentView(R.layout.activity_modify_password)
@@ -29,8 +34,12 @@ class ModifyPasswordActivity : AppCompatActivity() {
         setContentView(view)
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
-            title = "Update password"
+            title = getString(R.string.update_password)
         }
+
+        changeIconColor()
+        loadingDialog = LoadingDialog(this)
+
         binding.changePasswordButtonModifyPassword.setOnClickListener {
             Log.d(TAG,"Try to modify password")
             error = false
@@ -39,20 +48,8 @@ class ModifyPasswordActivity : AppCompatActivity() {
                 Toast.makeText(this,getString(R.string.error_update_password),Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
-            val user = FirebaseAuth.getInstance().currentUser
-            val credential = EmailAuthProvider.getCredential(user!!.email.toString(),oldPassword.toString())
-            user.reauthenticate(credential)
-                    .addOnSuccessListener {
-                        binding.oldPasswordInputLayoutModifyPassword.error = ""
-                        binding.oldPasswordInputLayoutModifyPassword.isErrorEnabled = false
-                        user.updatePassword(newPassword.toString())
-                        Toast.makeText(this,getString(R.string.password_changed),Toast.LENGTH_LONG).show()
-                        finish()
-                    }
-                    .addOnFailureListener {
-                        binding.oldPasswordInputLayoutModifyPassword.error = getString(R.string.error_old_password)
-                        Log.d(TAG,getString(R.string.error_old_password))
-                    }
+            loadingDialog!!.startLoadingDialog()
+            updatePassword()
         }
     }
 
@@ -61,6 +58,30 @@ class ModifyPasswordActivity : AppCompatActivity() {
             android.R.id.home -> finish()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun updatePassword(){
+        val user = FirebaseAuth.getInstance().currentUser
+        val credential = EmailAuthProvider.getCredential(user!!.email.toString(),oldPassword.toString())
+        user.reauthenticate(credential)
+                .addOnSuccessListener {
+                    /*binding.oldPasswordInputLayoutModifyPassword.error = ""
+                    binding.oldPasswordInputLayoutModifyPassword.isErrorEnabled = false*/
+                    user.updatePassword(newPassword.toString())
+                    loadingDialog!!.dismissLoadingDialog()
+                    Toast.makeText(this,getString(R.string.password_changed),Toast.LENGTH_LONG).show()
+                    finish()
+                }
+                .addOnFailureListener {
+                    loadingDialog!!.dismissLoadingDialog()
+                    // If che viene eseguito se l'utente ha sbagliato la vecchia password
+                    if(it is FirebaseAuthInvalidCredentialsException) {
+                        binding.oldPasswordInputLayoutModifyPassword.error = getString(R.string.error_old_password)
+                    }else{
+                        Toast.makeText(this,"Error: ${it.message}",Toast.LENGTH_LONG).show()
+                    }
+                    Log.d(TAG, "Error: ${it.message}")
+                }
     }
 
     private fun validateUpdatePassword():Boolean{
@@ -114,6 +135,21 @@ class ModifyPasswordActivity : AppCompatActivity() {
         }
         binding.confirmNewPasswordInputLayoutModifyPassword.error = ""
         binding.confirmNewPasswordInputLayoutModifyPassword.isErrorEnabled = false
+    }
+
+    private fun changeIconColor(){
+        binding.oldPasswordEditTextModifyPassword.setOnFocusChangeListener { v, hasFocus ->
+            val color = if(hasFocus) Color.rgb(249,170,51) else Color.rgb(52,73,85)
+            binding.oldPasswordInputLayoutModifyPassword.setStartIconTintList(ColorStateList.valueOf(color))
+        }
+        binding.newPasswordEditTextModifyPassword.setOnFocusChangeListener { v, hasFocus ->
+            val color = if(hasFocus) Color.rgb(249,170,51) else Color.rgb(52,73,85)
+            binding.newPasswordInputLayoutModifyPassword.setStartIconTintList(ColorStateList.valueOf(color))
+        }
+        binding.confirmNewPasswordEditTextModifyPassword.setOnFocusChangeListener { v, hasFocus ->
+            val color = if(hasFocus) Color.rgb(249,170,51) else Color.rgb(52,73,85)
+            binding.confirmNewPasswordInputLayoutModifyPassword.setStartIconTintList(ColorStateList.valueOf(color))
+        }
     }
 
 }

@@ -41,6 +41,7 @@ class ProfileFragment : Fragment() {
 
     companion object{
         val TAG = "Profile Fragment"
+        var user : User? = null
     }
 
     private var _binding : FragmentProfileBinding? = null
@@ -54,10 +55,9 @@ class ProfileFragment : Fragment() {
     private var name : String? = null
     private var surname : String? = null
     private var weight : Double? = null
-    private var email : String? = null
     private var changePhoto : Boolean = false
 
-    private var user : User? = null
+    //private var user : User? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -159,6 +159,13 @@ class ProfileFragment : Fragment() {
             startActivity(intent)
         }
 
+        // Go to ModifyEmailActivity
+        binding.updateEmailButtonProfile.setOnClickListener {
+            val intent = Intent(activity,ModifyEmailActivity::class.java)
+            intent.putExtra("user",user)
+            startActivity(intent)
+        }
+
         // Show dialog box
         binding.deleteAccountButtonProfile.setOnClickListener {
             showDialogBox()
@@ -221,23 +228,8 @@ class ProfileFragment : Fragment() {
         }else{
             user!!.gender = "female"
         }
-        if(!user!!.email.equals(email)){
-            FirebaseAuth.getInstance().currentUser!!.updateEmail(email!!)
-                    .addOnCompleteListener {
-                        if(!it.isSuccessful){
-                            loadingDialog!!.dismissLoadingDialog()
-                            Toast.makeText(activity, getString(R.string.error_update_profile), Toast.LENGTH_LONG).show()
-                            Log.d(RegisterActivity.TAG, getString(R.string.error_update_profile))
-                            binding.emailInputLayoutProfile.error = getString(R.string.error_email_exist)
-                            return@addOnCompleteListener
-                        }
-                        user!!.email = email!!
-                        updateDatabase()
-                    }
-        }else{
-            updateDatabase()
-        }
 
+        updateDatabase()
     }
 
     private fun updateDatabase(){
@@ -258,7 +250,6 @@ class ProfileFragment : Fragment() {
         validateSurname()
         validateBirthdayDate()
         validateLicenseDate()
-        validateEmail()
         validateWeight()
         return !error
     }
@@ -279,7 +270,6 @@ class ProfileFragment : Fragment() {
                 }
                 binding.weightEditTextProfile.setText(user!!.weight.toString())
                 binding.drivingLicenseEditTextProfile.setText(getDate(user!!.licenseDate))
-                binding.emailEditTextProfile.setText(user!!.email)
                 if(user!!.profileImageUrl == null){
                     binding.circleImageProfile.alpha = 0f
                 }else{
@@ -430,24 +420,6 @@ class ProfileFragment : Fragment() {
         binding.licenseDateInputLayoutProfile.isErrorEnabled = false
     }
 
-    // Controllo che l'utente abbia inserito una mail valida
-    private fun validateEmail(){
-        email = binding.emailEditTextProfile.text.toString()
-
-        if(email==null || email!!.isEmpty() || email!!.isBlank()){
-            binding.emailInputLayoutProfile.error = getString(R.string.field_not_empty)
-            error = true
-            return
-        }
-        if(!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-            binding.emailInputLayoutProfile.error = getString(R.string.error_email)
-            error = true
-            return
-        }
-        binding.emailInputLayoutProfile.error = ""
-        binding.emailInputLayoutProfile.isErrorEnabled = false
-    }
-
     private fun changeIconColor(){
         binding.nameEditTextProfile.setOnFocusChangeListener { v, hasFocus ->
             val color = if(hasFocus) Color.rgb(249,170,51) else Color.rgb(52,73,85)
@@ -457,10 +429,10 @@ class ProfileFragment : Fragment() {
             val color = if(hasFocus) Color.rgb(249,170,51) else Color.rgb(52,73,85)
             binding.surnameInputLayoutProfile.setStartIconTintList(ColorStateList.valueOf(color))
         }
-        binding.emailEditTextProfile.setOnFocusChangeListener { v, hasFocus ->
+        /*binding.emailEditTextProfile.setOnFocusChangeListener { v, hasFocus ->
             val color = if(hasFocus) Color.rgb(249,170,51) else Color.rgb(52,73,85)
             binding.emailInputLayoutProfile.setStartIconTintList(ColorStateList.valueOf(color))
-        }
+        }*/
         binding.weightEditTextProfile.setOnFocusChangeListener { v, hasFocus ->
             val color = if(hasFocus) Color.rgb(249,170,51) else Color.rgb(52,73,85)
             binding.weightInputLayoutProfile.setStartIconTintList(ColorStateList.valueOf(color))

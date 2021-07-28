@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.samaeli.tesi.databinding.ActivityLoginBinding
 import kotlinx.android.synthetic.main.activity_login.*
 
@@ -63,16 +64,21 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+
     private fun performLogin(){
         // Login dell'utente su Firebase
-        FirebaseAuth.getInstance().signInWithEmailAndPassword(email!!,password!!)
-            .addOnCompleteListener {
-                if(!it.isSuccessful){
-                    Log.d(TAG,getString(R.string.error_login))
-                    Toast.makeText(this,getString(R.string.error_login),Toast.LENGTH_LONG).show()
+        val instance = FirebaseAuth.getInstance()
+        instance.setLanguageCode("fr")
+        //FirebaseAuth.getInstance().signInWithEmailAndPassword(email!!,password!!)
+        instance.signInWithEmailAndPassword(email!!,password!!)
+            //.addOnCompleteListener {
+                .addOnSuccessListener {
+                /*if(!it.isSuccessful){
+                    Log.d(TAG,getString(R.string.error_email_password_incorrect))
+                    Toast.makeText(this,getString(R.string.error_email_password_incorrect),Toast.LENGTH_LONG).show()
                     return@addOnCompleteListener
-                }
-                Log.d(TAG,"Login effettuato con utente ${it.result?.user?.uid}")
+                }*/
+                Log.d(TAG,"Login effettuato con utente ${it.user?.uid}")
 
                 /*val intent = Intent(this,MainActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -80,8 +86,13 @@ class LoginActivity : AppCompatActivity() {
                 finish()
             }
             .addOnFailureListener {
-                Log.d(TAG,getString(R.string.error_login)+": ${it.message}")
-                Toast.makeText(this,getString(R.string.error_login)+": ${it.message}",Toast.LENGTH_LONG).show()
+                if(it is FirebaseAuthInvalidCredentialsException){
+                    Log.d(TAG,getString(R.string.error_email_password_incorrect))
+                    Toast.makeText(this,getString(R.string.error_email_password_incorrect),Toast.LENGTH_LONG).show()
+                }else {
+                    Log.d(TAG, getString(R.string.error_login) + ": ${it.message}")
+                    Toast.makeText(this, getString(R.string.error_login) + ": ${it.message}", Toast.LENGTH_LONG).show()
+                }
             }
     }
 
@@ -94,7 +105,7 @@ class LoginActivity : AppCompatActivity() {
 
     // Controllo che l'utente abbia inserito una mail valida
     private fun validateEmail(){
-        email = binding.emailInputLayoutLogin.editText?.text.toString()
+        email = binding.emailEditTextLogin.text.toString()
 
         if(email==null || email!!.isEmpty() || email!!.isBlank()){
             binding.emailInputLayoutLogin.error = getString(R.string.field_not_empty)
@@ -112,7 +123,7 @@ class LoginActivity : AppCompatActivity() {
 
     // Controllo che l'utente abbia inserito una password valida
     private fun validatePassword(){
-        password = binding.passwordInputLayoutLogin.editText?.text.toString()
+        password = binding.passwordEditTextLogin.text.toString()
 
         if(password==null || password!!.isEmpty() || password!!.isBlank()){
             binding.passwordInputLayoutLogin.error = getString(R.string.field_not_empty)

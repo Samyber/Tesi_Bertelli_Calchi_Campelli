@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ModifyEmailActivity"
+    android:background="@color/primaryColorLight">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/oldEmailInputLayoutModifyEmail"
+        style="@style/style_input_layout_register_login"
+        android:layout_width="@dimen/width_edit_text_login"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/left_right_margin_modify_email"
+        android:layout_marginTop="@dimen/top_margin_modify_email"
+        android:layout_marginRight="@dimen/left_right_margin_modify_email"
+        app:startIconDrawable="@drawable/ic_round_email_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/oldEmailEditTextModifyEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/passwordInputLayoutModifyEmail"
+        style="@style/style_input_layout_register_login"
+        android:layout_width="@dimen/width_edit_text_login"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/top_margin_modify_email"
+        app:endIconMode="password_toggle"
+        app:startIconDrawable="@drawable/ic_round_password_24"
+        app:layout_constraintEnd_toEndOf="@+id/oldEmailInputLayoutModifyEmail"
+        app:layout_constraintStart_toStartOf="@+id/oldEmailInputLayoutModifyEmail"
+        app:layout_constraintTop_toBottomOf="@+id/oldEmailInputLayoutModifyEmail">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/passwordEditTextModifyEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/password"
+            android:inputType="textPassword" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/newEmailInputLayoutModifyEmail"
+        style="@style/style_input_layout_register_login"
+        android:layout_width="@dimen/width_edit_text_login"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/top_margin_modify_email"
+        app:layout_constraintEnd_toEndOf="@+id/passwordInputLayoutModifyEmail"
+        app:layout_constraintStart_toStartOf="@+id/passwordInputLayoutModifyEmail"
+        app:layout_constraintTop_toBottomOf="@+id/passwordInputLayoutModifyEmail"
+        app:startIconDrawable="@drawable/ic_round_email_24">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/newEmailEditTextModifyEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/new_email"
+            android:inputType="textEmailAddress" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <android.widget.Button
+        android:id="@+id/changeEmailButtonModifyEmail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/top_margin_modify_email"
+        android:background="@drawable/rounded_button"
+        android:text="@string/change_email"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="@+id/newEmailInputLayoutModifyEmail"
+        app:layout_constraintStart_toStartOf="@+id/newEmailInputLayoutModifyEmail"
+        app:layout_constraintTop_toBottomOf="@+id/newEmailInputLayoutModifyEmail" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -29,6 +29,8 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+
+
         // Display AlcoholLevelFragment
         supportFragmentManager.beginTransaction().replace(R.id.fragmentContainerMainActivity,AlcoholLevelFragment(),
                 "AlcoholLevelFragment").commit()
@@ -72,6 +74,9 @@ class MainActivity : AppCompatActivity() {
         if(alcoholLevelFragment != null && alcoholLevelFragment.isVisible && binding.bottomNavigationView.selectedItemId != R.id.bottomNavigationAlcoholLevel){
             binding.bottomNavigationView.selectedItemId = R.id.bottomNavigationAlcoholLevel
         }
+        // Metodo che viene choamato in onResume in modo tale che dopo che l'utente si è loggato o registrato e viene
+        // fatto il resume della MainActivity il menu cambi mostrando solo le voci opportune
+        displayCorrectItemsMenu()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -79,16 +84,34 @@ class MainActivity : AppCompatActivity() {
         this.menu = menu
         menuInflater.inflate(R.menu.nav_menu,menu)
 
-        if(FirebaseAuth.getInstance().uid != null){
+        /*if(FirebaseAuth.getInstance().uid != null){
             // Se l'utente è registrato si nascondono dal menu le voci login e Register
             this.menu!!.findItem(R.id.menuRegister).setVisible(false)
             this.menu!!.findItem(R.id.menuLogin).setVisible(false)
         }else{
             // Se l'utente non è registrato si nasconde dal menu la voce logout
             this.menu!!.findItem(R.id.menuLogout).setVisible(false)
-        }
+        }*/
+
+        displayCorrectItemsMenu()
 
         return super.onCreateOptionsMenu(menu)
+    }
+
+    private fun displayCorrectItemsMenu(){
+        if(menu != null) {
+            if (FirebaseAuth.getInstance().uid != null) {
+                // Se l'utente è registrato si nascondono dal menu le voci login e Register
+                this.menu!!.findItem(R.id.menuRegister).setVisible(false)
+                this.menu!!.findItem(R.id.menuLogin).setVisible(false)
+                this.menu!!.findItem(R.id.menuLogout).setVisible(true)
+            } else {
+                // Se l'utente non è registrato si nasconde dal menu la voce logout
+                this.menu!!.findItem(R.id.menuLogout).setVisible(false)
+                this.menu!!.findItem(R.id.menuRegister).setVisible(true)
+                this.menu!!.findItem(R.id.menuLogin).setVisible(true)
+            }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

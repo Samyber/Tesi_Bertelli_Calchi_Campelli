@@ -171,25 +171,6 @@
                 android:inputType="date" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/emailInputLayoutProfile"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.style_input_layout_profile"
-            android:layout_width="@dimen/width_edit_text_registration"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/top_margin_profile"
-            app:layout_constraintEnd_toEndOf="@+id/licenseDateInputLayoutProfile"
-            app:layout_constraintStart_toStartOf="@+id/licenseDateInputLayoutProfile"
-            app:layout_constraintTop_toBottomOf="@+id/licenseDateInputLayoutProfile"
-            app:startIconDrawable="@drawable/ic_round_email_24">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/emailEditTextProfile"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/email"
-                android:inputType="textEmailAddress" />
-        </com.google.android.material.textfield.TextInputLayout>
-
         <android.widget.Button
             android:id="@+id/saveDataButtonProfile"
             android:layout_width="0dp"
@@ -198,9 +179,21 @@
             android:background="@drawable/rounded_button"
             android:text="@string/save_data"
             android:textColor="@color/white"
-            app:layout_constraintEnd_toEndOf="@+id/emailInputLayoutProfile"
-            app:layout_constraintStart_toStartOf="@+id/emailInputLayoutProfile"
-            app:layout_constraintTop_toBottomOf="@+id/emailInputLayoutProfile" />
+            app:layout_constraintEnd_toEndOf="@+id/licenseDateInputLayoutProfile"
+            app:layout_constraintStart_toStartOf="@+id/licenseDateInputLayoutProfile"
+            app:layout_constraintTop_toBottomOf="@+id/licenseDateInputLayoutProfile" />
+
+        <android.widget.Button
+            android:id="@+id/updateEmailButtonProfile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/top_margin_profile"
+            android:background="@drawable/rounded_button"
+            android:text="@string/update_email"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="@+id/saveDataButtonProfile"
+            app:layout_constraintStart_toStartOf="@+id/saveDataButtonProfile"
+            app:layout_constraintTop_toBottomOf="@+id/saveDataButtonProfile" />
 
         <android.widget.Button
             android:id="@+id/updatePasswordButtonProfile"
@@ -210,9 +203,9 @@
             android:background="@drawable/rounded_button"
             android:text="@string/update_password"
             android:textColor="@color/white"
-            app:layout_constraintEnd_toEndOf="@+id/saveDataButtonProfile"
-            app:layout_constraintStart_toStartOf="@+id/saveDataButtonProfile"
-            app:layout_constraintTop_toBottomOf="@+id/saveDataButtonProfile" />
+            app:layout_constraintEnd_toEndOf="@+id/updateEmailButtonProfile"
+            app:layout_constraintStart_toStartOf="@+id/updateEmailButtonProfile"
+            app:layout_constraintTop_toBottomOf="@+id/updateEmailButtonProfile" />
 
         <android.widget.Button
             android:id="@+id/deleteAccountButtonProfile"
