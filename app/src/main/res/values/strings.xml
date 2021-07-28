@@ -97,6 +97,9 @@
     <string name="error_update_profile">Error during update profile</string>
     <string name="ok_update_profile">Profile changed successfully</string>
     <string name="update_password">Update password</string>
+    <string name="delete_account">Delete account</string>
+    <string name="message_dialog_box_delete">Are you sure to delete this account?</string>
+    <string name="error_during_delete_user">Error during delete user</string>
 
     <!-- ModifyPasswordActivity -->
     <string name="old_password">Old password</string>

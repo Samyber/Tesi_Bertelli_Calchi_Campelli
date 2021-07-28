@@ -13,4 +13,5 @@
     <color name="secondaryColor">#F9aa33</color>
     <color name="secondaryColorLight">#FFDC65</color>
     <color name="secondaryColorDark">#C17B00</color>
+    <color name="red">#CD0808</color>
 </resources>

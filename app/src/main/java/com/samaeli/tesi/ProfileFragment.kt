@@ -1,6 +1,8 @@
 package com.samaeli.tesi
 
 import android.app.Activity
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Bitmap
@@ -20,6 +22,8 @@ import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthEmailException
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -30,6 +34,7 @@ import com.samaeli.tesi.databinding.FragmentProfileBinding
 import com.samaeli.tesi.models.User
 import com.squareup.picasso.Picasso
 import java.io.ByteArrayOutputStream
+import java.lang.Exception
 import java.text.SimpleDateFormat
 
 class ProfileFragment : Fragment() {
@@ -154,6 +159,11 @@ class ProfileFragment : Fragment() {
             startActivity(intent)
         }
 
+        // Show dialog box
+        binding.deleteAccountButtonProfile.setOnClickListener {
+            showDialogBox()
+        }
+
         return view
     }
 
@@ -167,6 +177,7 @@ class ProfileFragment : Fragment() {
                 val bitmap = MediaStore.Images.Media.getBitmap(activity?.contentResolver, selectPhotoUri)
                 binding.circleImageProfile.setImageBitmap(bitmap)
                 binding.selectPhotoButtonProfile.alpha = 0f
+                binding.circleImageProfile.alpha = 1f
                 changePhoto = true
             }
         }
@@ -212,8 +223,24 @@ class ProfileFragment : Fragment() {
         }
         if(!user!!.email.equals(email)){
             FirebaseAuth.getInstance().currentUser!!.updateEmail(email!!)
-            user!!.email = email!!
+                    .addOnCompleteListener {
+                        if(!it.isSuccessful){
+                            loadingDialog!!.dismissLoadingDialog()
+                            Toast.makeText(activity, getString(R.string.error_update_profile), Toast.LENGTH_LONG).show()
+                            Log.d(RegisterActivity.TAG, getString(R.string.error_update_profile))
+                            binding.emailInputLayoutProfile.error = getString(R.string.error_email_exist)
+                            return@addOnCompleteListener
+                        }
+                        user!!.email = email!!
+                        updateDatabase()
+                    }
+        }else{
+            updateDatabase()
         }
+
+    }
+
+    private fun updateDatabase(){
         val uid = FirebaseAuth.getInstance().uid
         val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
         ref.setValue(user)
@@ -267,6 +294,64 @@ class ProfileFragment : Fragment() {
             }
 
         })
+    }
+
+    private fun showDialogBox(){
+        AlertDialog.Builder(activity)
+                .setMessage(R.string.message_dialog_box_delete)
+                .setPositiveButton(R.string.yes,DialogInterface.OnClickListener { dialog, which ->
+                    val uid = FirebaseAuth.getInstance().uid
+                    val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
+                    ref.removeValue()
+                            .addOnCompleteListener {
+                                if(!it.isSuccessful){
+                                    Log.d(TAG,getString(R.string.error_during_delete_user))
+                                    Toast.makeText(activity,getString(R.string.error_during_delete_user),Toast.LENGTH_LONG).show()
+                                }
+                                Log.d(TAG,"Cancellazione da firebase database ok")
+                                if(user!!.profileImageUrl!=null) {
+                                    deleteImage(uid)
+                                }else{
+                                    deleteAccount(uid)
+                                }
+                            }
+                            .addOnFailureListener {
+                                Log.d(TAG,getString(R.string.error_during_delete_user))
+                                Toast.makeText(activity,getString(R.string.error_during_delete_user),Toast.LENGTH_LONG).show()
+                            }
+                })
+                .setNegativeButton(R.string.no,DialogInterface.OnClickListener { dialog, which ->
+                    dialog.cancel()
+                })
+                .show()
+    }
+
+    private fun deleteImage(uid:String?){
+        val ref = FirebaseStorage.getInstance().getReference("/images/$uid")
+        ref.delete()
+                .addOnCompleteListener {
+                    if(!it.isSuccessful){
+                        Log.d(TAG,"Error during delete image")
+                        Toast.makeText(activity,"Error during delete image",Toast.LENGTH_LONG).show()
+                        deleteAccount(uid)
+                    }
+                    Log.d(TAG,"Cancellazione da firebase database ok")
+                    deleteAccount(uid)
+                }
+                .addOnFailureListener {
+                    Log.d(TAG,"Error during delete image")
+                    Toast.makeText(activity,"Error during delete image",Toast.LENGTH_LONG).show()
+                    deleteAccount(uid)
+                }
+    }
+
+    private fun deleteAccount(uid:String?){
+        FirebaseAuth.getInstance().currentUser!!.delete()
+                .addOnSuccessListener {
+                    val intent = Intent(activity,MainActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(intent)
+                }
     }
 
     private fun getDate(timestamp:Long):String{

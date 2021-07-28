@@ -214,6 +214,18 @@
             app:layout_constraintStart_toStartOf="@+id/saveDataButtonProfile"
             app:layout_constraintTop_toBottomOf="@+id/saveDataButtonProfile" />
 
+        <android.widget.Button
+            android:id="@+id/deleteAccountButtonProfile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/top_margin_profile"
+            android:background="@drawable/rounded_button_red"
+            android:text="@string/delete_account"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="@+id/updatePasswordButtonProfile"
+            app:layout_constraintStart_toStartOf="@+id/updatePasswordButtonProfile"
+            app:layout_constraintTop_toBottomOf="@+id/updatePasswordButtonProfile" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
