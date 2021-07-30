@@ -119,4 +119,19 @@
     <string name="error_old_email">Error! Old email is wrong</string>
     <string name="email_changed">Email changed</string>
     <string name="error_password">Error! The password is wrong</string>
+
+    <string name="passage_request">Passage request</string>
+    <string name="passage_provide">Passage Provide</string>
+    <string name="recent_offerts">Recent Offerts</string>
+
+
+    <string name="departure_information">Departure information</string>
+    <string name="address">Address</string>
+    <string name="city">City</string>
+    <string name="arrival_information">Arrival information</string>
+    <string name="other_informations">Other informations</string>
+    <string name="number_person">Number person</string>
+    <string name="require_passage">Require passage</string>
+    <string name="insert_ride_informations">Insert ride informations</string>
+
 </resources>

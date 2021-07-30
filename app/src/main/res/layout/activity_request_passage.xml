@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Passages.RequestPassageActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:paddingBottom="32dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/departureInformationTextViewRequestPassage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="6dp"
+            android:text="@string/departure_information"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/departureAddressInputLayoutRequestPassage"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.style_input_layout_profile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="@dimen/top_margin_request_passage"
+            android:layout_marginEnd="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/departureInformationTextViewRequestPassage"
+            app:startIconDrawable="@drawable/ic_round_address_24">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/departureAddressEditRequestPassage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/address"
+                android:inputType="textPersonName" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/departureCityInputLayoutRequestPassage"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.style_input_layout_profile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/top_margin_request_passage"
+            app:layout_constraintEnd_toEndOf="@+id/departureAddressInputLayoutRequestPassage"
+            app:layout_constraintStart_toStartOf="@+id/departureAddressInputLayoutRequestPassage"
+            app:layout_constraintTop_toBottomOf="@+id/departureAddressInputLayoutRequestPassage"
+            app:startIconDrawable="@drawable/ic_round_location_city_24">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/departureCityEditRequestPassage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/city"
+                android:inputType="textPersonName" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/arrivalInformationTextViewRequestPassage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/top_margin_request_passage"
+            android:text="@string/arrival_information"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/departureInformationTextViewRequestPassage"
+            app:layout_constraintTop_toBottomOf="@+id/departureCityInputLayoutRequestPassage" />
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/arrivalAddressInputLayoutRequestPassage"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.style_input_layout_profile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/top_margin_request_passage"
+            app:layout_constraintEnd_toEndOf="@+id/departureCityInputLayoutRequestPassage"
+            app:layout_constraintStart_toStartOf="@+id/departureCityInputLayoutRequestPassage"
+            app:layout_constraintTop_toBottomOf="@+id/arrivalInformationTextViewRequestPassage"
+            app:startIconDrawable="@drawable/ic_round_address_24">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/arrivalAddressEditRequestPassage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/address"
+                android:inputType="textPersonName" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/arrivalCityInputLayoutRequestPassage"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.style_input_layout_profile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/top_margin_request_passage"
+            app:layout_constraintEnd_toEndOf="@+id/arrivalAddressInputLayoutRequestPassage"
+            app:layout_constraintStart_toStartOf="@+id/arrivalAddressInputLayoutRequestPassage"
+            app:layout_constraintTop_toBottomOf="@+id/arrivalAddressInputLayoutRequestPassage"
+            app:startIconDrawable="@drawable/ic_round_location_city_24">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/arrivalCityEditRequestPassage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/city"
+                android:inputType="textPersonName" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/otherInformationsTextViewRequestPassage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/top_margin_request_passage"
+            android:text="@string/other_informations"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/arrivalInformationTextViewRequestPassage"
+            app:layout_constraintTop_toBottomOf="@+id/arrivalCityInputLayoutRequestPassage" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/hourInputLayoutRequestPassage"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.style_input_layout_profile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="@dimen/top_margin_request_passage"
+            app:layout_constraintEnd_toEndOf="@+id/arrivalCityInputLayoutRequestPassage"
+            app:layout_constraintStart_toStartOf="@+id/arrivalCityInputLayoutRequestPassage"
+            app:layout_constraintTop_toBottomOf="@+id/otherInformationsTextViewRequestPassage"
+            app:startIconDrawable="@drawable/ic_round_hour_24">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/hourEditRequestPassage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hour"
+                android:inputType="textPersonName" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/numberPersonInputLayoutRequestPassage"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.style_input_layout_profile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/top_margin_request_passage"
+            app:layout_constraintEnd_toEndOf="@+id/hourInputLayoutRequestPassage"
+            app:layout_constraintStart_toStartOf="@+id/hourInputLayoutRequestPassage"
+            app:layout_constraintTop_toBottomOf="@+id/hourInputLayoutRequestPassage"
+            app:startIconDrawable="@drawable/ic_round_person_24">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/numberPersonEditRequestPassage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/number_person"
+                android:inputType="number" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <android.widget.Button
+            android:id="@+id/requirePassageButtonRequestPassage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/top_margin_request_passage"
+            android:background="@drawable/rounded_button"
+            android:text="@string/require_passage"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="@+id/numberPersonInputLayoutRequestPassage"
+            app:layout_constraintStart_toStartOf="@+id/numberPersonInputLayoutRequestPassage"
+            app:layout_constraintTop_toBottomOf="@+id/numberPersonInputLayoutRequestPassage" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

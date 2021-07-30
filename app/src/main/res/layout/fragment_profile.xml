@@ -64,9 +64,9 @@
             android:layout_marginTop="@dimen/top_margin_profile"
             android:hint="@string/surname"
             app:startIconDrawable="@drawable/ic_round_person_24"
-            app:layout_constraintEnd_toEndOf="@+id/nameInputLayoutProfile"
-            app:layout_constraintStart_toStartOf="@+id/nameInputLayoutProfile"
-            app:layout_constraintTop_toBottomOf="@+id/nameInputLayoutProfile">
+            app:layout_constraintEnd_toEndOf="@+id/departureAddressInputLayoutRequestPassage"
+            app:layout_constraintStart_toStartOf="@+id/departureAddressInputLayoutRequestPassage"
+            app:layout_constraintTop_toBottomOf="@+id/departureAddressInputLayoutRequestPassage">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/surnameEditTextProfile"

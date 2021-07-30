@@ -7,10 +7,9 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.ktx.Firebase
+import com.samaeli.tesi.Passages.PassagesChoiseFragment
 import com.samaeli.tesi.calculationBloodAlcohol.AlcoholLevelFragment
 import com.samaeli.tesi.databinding.ActivityMainBinding
-import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -44,6 +43,16 @@ class MainActivity : AppCompatActivity() {
                         Log.d(TAG,"Try to show AlcoholLevelFragment")
                         supportFragmentManager.beginTransaction().replace(R.id.fragmentContainerMainActivity,AlcoholLevelFragment(),
                             "AlcoholLevelFragment").commit()
+                    }
+                }
+                R.id.bottomNavigationPassages ->{
+                    if(FirebaseAuth.getInstance().uid == null){
+                        val intent = Intent(this,LoginActivity::class.java)
+                        startActivity(intent)
+                    }else{
+                        Log.d(TAG,"Try to show PassagesChoiseFragment")
+                        supportFragmentManager.beginTransaction().replace(R.id.fragmentContainerMainActivity, PassagesChoiseFragment(),
+                        "PassagesChoiseFragment").commit()
                     }
                 }
                 R.id.bottomNavigationProfile ->{
