@@ -133,5 +133,10 @@
     <string name="number_person">Number person</string>
     <string name="require_passage">Require passage</string>
     <string name="insert_ride_informations">Insert ride informations</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="error_departure_address">Error! Departure address is not valid</string>
+    <string name="error_arrival_address">Error! Arrival address is not valid</string>
+    <string name="error_number_person">Error! Passengers exceed limit</string>
+    <string name="passage_created">The passage is created</string>
 
 </resources>
