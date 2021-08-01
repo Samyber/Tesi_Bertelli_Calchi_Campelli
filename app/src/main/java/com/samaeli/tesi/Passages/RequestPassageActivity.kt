@@ -103,7 +103,7 @@ class RequestPassageActivity : AppCompatActivity() {
     private fun savePassageToFirebase(){
         val uid = FirebaseAuth.getInstance().uid
         val ref = FirebaseDatabase.getInstance().getReference("passages/$uid")
-        val passage = Passage(departureAddress!!,departureCity!!,arrivalAddress!!,arrivalCity!!,hour!!,minute!!,numberPerson!!,
+        val passage = Passage(uid.toString(),departureAddress!!,departureCity!!,arrivalAddress!!,arrivalCity!!,hour!!,minute!!,numberPerson!!,
         departureLatitude!!,departureLongitude!!,arrivalLatitude!!,arrivalLongitude!!)
         ref.setValue(passage)
                 .addOnSuccessListener {

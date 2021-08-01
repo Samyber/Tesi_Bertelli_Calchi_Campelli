@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Passages.PassageSummaryActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/userInformationTextViewSummaryPassage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="6dp"
+            android:text="@string/user_information"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/photoCircleImageViewPassageSummary"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/ic_round_person_24"
+            app:layout_constraintStart_toStartOf="@+id/userInformationTextViewSummaryPassage"
+            app:layout_constraintTop_toBottomOf="@+id/userInformationTextViewSummaryPassage">
+        </de.hdodenhof.circleimageview.CircleImageView>
+
+        <TextView
+            android:id="@+id/nameUserTextViewPassageSummary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:text="@string/name"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/photoCircleImageViewPassageSummary"
+            app:layout_constraintTop_toTopOf="@+id/photoCircleImageViewPassageSummary" />
+
+        <TextView
+            android:id="@+id/ageUserTextViewPassageSummary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/age"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="@+id/nameUserTextViewPassageSummary"
+            app:layout_constraintTop_toBottomOf="@+id/nameUserTextViewPassageSummary" />
+
+        <TextView
+            android:id="@+id/genderTextViewPassageSummary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="M"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/nameUserTextViewPassageSummary"
+            app:layout_constraintStart_toEndOf="@+id/nameUserTextViewPassageSummary"
+            app:layout_constraintTop_toTopOf="@+id/nameUserTextViewPassageSummary" />
+
+        <TextView
+            android:id="@+id/passageInformationTextViewSummaryPassage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/passage_information"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/userInformationTextViewSummaryPassage"
+            app:layout_constraintTop_toBottomOf="@+id/photoCircleImageViewPassageSummary" />
+
+        <TextView
+            android:id="@+id/departureTextViewPassageSummary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/departure"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/passageInformationTextViewSummaryPassage"
+            app:layout_constraintTop_toBottomOf="@+id/passageInformationTextViewSummaryPassage" />
+
+        <TextView
+            android:id="@+id/departureAddressTextViewPassageSummary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/address"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="@+id/departureTextViewPassageSummary"
+            app:layout_constraintTop_toBottomOf="@+id/departureTextViewPassageSummary" />
+
+        <TextView
+            android:id="@+id/departureCityTextViewPassageSummary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/city"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="@+id/departureAddressTextViewPassageSummary"
+            app:layout_constraintTop_toBottomOf="@+id/departureAddressTextViewPassageSummary" />
+
+        <TextView
+            android:id="@+id/arrivalTextViewPassageSummary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/arrival"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/departureTextViewPassageSummary"
+            app:layout_constraintTop_toBottomOf="@+id/departureCityTextViewPassageSummary" />
+
+        <TextView
+            android:id="@+id/arrivalAddressTextViewPassageSummary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/address"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="@+id/departureAddressTextViewPassageSummary"
+            app:layout_constraintTop_toBottomOf="@+id/arrivalTextViewPassageSummary" />
+
+        <TextView
+            android:id="@+id/arrivalCityTextViewPassageSummary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/city"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="@+id/arrivalAddressTextViewPassageSummary"
+            app:layout_constraintTop_toBottomOf="@+id/arrivalAddressTextViewPassageSummary" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="10dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/arrivalCityTextViewPassageSummary">
+
+            <android.widget.Button
+                android:id="@+id/goToDepartureButtonPassageSummary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_button"
+                android:text="@string/go_to_departure"
+                android:textColor="@color/white" />
+
+            <android.widget.Button
+                android:id="@+id/showRouteButtonPassageSummary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_button"
+                android:text="@string/route_on_map"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/priceInputLayoutPassageSummary"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.style_input_layout_profile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            app:layout_constraintEnd_toEndOf="@+id/linearLayout2"
+            app:layout_constraintStart_toStartOf="@+id/linearLayout2"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+            app:startIconDrawable="@drawable/ic_round_euro_24">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/priceEditTextPassageSummary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/price_offered"
+                android:inputType="numberDecimal" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <android.widget.Button
+            android:id="@+id/offerPassageButtonPassageSummary"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/rounded_button"
+            android:text="@string/offer_passage"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="@+id/priceInputLayoutPassageSummary"
+            app:layout_constraintStart_toStartOf="@+id/priceInputLayoutPassageSummary"
+            app:layout_constraintTop_toBottomOf="@+id/priceInputLayoutPassageSummary" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

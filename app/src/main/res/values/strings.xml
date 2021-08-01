@@ -123,6 +123,7 @@
     <string name="passage_request">Passage request</string>
     <string name="passage_provide">Passage Provide</string>
     <string name="recent_offerts">Recent Offerts</string>
+    <string name="summary_required_passage">Summary required passage</string>
 
 
     <string name="departure_information">Departure information</string>
@@ -139,4 +140,20 @@
     <string name="error_number_person">Error! Passengers exceed limit</string>
     <string name="passage_created">The passage is created</string>
 
+    <string name="departure_city">Departure city</string>
+    <string name="arrival_city">Arrival city</string>
+    <string name="error_search_passage">Error! Fill at least one field</string>
+    <string name="no_result">No result</string>
+
+    <string name="user_information">User information</string>
+    <string name="age">Age</string>
+    <string name="passage_information">Passage Information</string>
+    <string name="departure">Departure</string>
+    <string name="arrival">Arrival</string>
+    <string name="go_to_departure">Go to departure</string>
+    <string name="route_on_map">Route on map</string>
+    <string name="price_offered">Price offered</string>
+    <string name="offer_passage">Offer passage</string>
+    <string name="passage">Passage</string>
+    
 </resources>

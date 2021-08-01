@@ -24,4 +24,6 @@
     <dimen name="left_right_margin_modify_email">24dp</dimen>
 
     <dimen name="top_margin_request_passage">16dp</dimen>
+
+    <dimen name="top_margin_passage_provide">24dp</dimen>
 </resources>
