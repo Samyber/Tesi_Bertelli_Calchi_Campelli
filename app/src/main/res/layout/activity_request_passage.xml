@@ -64,6 +64,18 @@
                 android:inputType="textPersonName" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <android.widget.Button
+            android:id="@+id/currentLocationPassageButtonRequestPassage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/top_margin_request_passage"
+            android:background="@drawable/rounded_button"
+            android:text="@string/current_location"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="@+id/departureCityInputLayoutRequestPassage"
+            app:layout_constraintStart_toStartOf="@+id/departureCityInputLayoutRequestPassage"
+            app:layout_constraintTop_toBottomOf="@+id/departureCityInputLayoutRequestPassage" />
+
         <TextView
             android:id="@+id/arrivalInformationTextViewRequestPassage"
             android:layout_width="wrap_content"
@@ -72,8 +84,8 @@
             android:text="@string/arrival_information"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@+id/departureInformationTextViewRequestPassage"
-            app:layout_constraintTop_toBottomOf="@+id/departureCityInputLayoutRequestPassage" />
+            app:layout_constraintStart_toStartOf="@+id/currentLocationPassageButtonRequestPassage"
+            app:layout_constraintTop_toBottomOf="@+id/currentLocationPassageButtonRequestPassage" />
 
 
         <com.google.android.material.textfield.TextInputLayout

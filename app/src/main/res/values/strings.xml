@@ -129,6 +129,7 @@
     <string name="departure_information">Departure information</string>
     <string name="address">Address</string>
     <string name="city">City</string>
+    <string name="current_location">Use your current location</string>
     <string name="arrival_information">Arrival information</string>
     <string name="other_informations">Other informations</string>
     <string name="number_person">Number person</string>
@@ -155,5 +156,8 @@
     <string name="offer_price">Offer a price</string>
     <string name="offer_passage">Offer passage</string>
     <string name="passage">Passage</string>
+    <string name="error_location">Error to take your location</string>
+    <string name="offer_created">Offer create</string>
+    <string name="error_create_offer">Error create offer</string>
     
 </resources>

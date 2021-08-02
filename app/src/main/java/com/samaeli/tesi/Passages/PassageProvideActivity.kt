@@ -54,6 +54,7 @@ class PassageProvideActivity : AppCompatActivity() {
             fetchPassage()
         }
 
+        // TODO In onResume?
         fetchPassage()
 
         adapter.setOnItemClickListener { item, view ->

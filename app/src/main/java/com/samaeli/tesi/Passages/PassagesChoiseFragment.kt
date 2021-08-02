@@ -33,7 +33,7 @@ class PassagesChoiseFragment : Fragment() {
         val view = binding.root
 
         // In on resume?
-        //setRequestPassageButtonText()
+        setRequestPassageButtonText()
 
         binding.passageRequestButtonChoisePassages.setOnClickListener {
             val intent = Intent(activity,RequestPassageActivity::class.java)
@@ -48,7 +48,7 @@ class PassagesChoiseFragment : Fragment() {
         return view
     }
 
-    /*private fun setRequestPassageButtonText(){
+    private fun setRequestPassageButtonText(){
         val uid = FirebaseAuth.getInstance().uid
         val ref = FirebaseDatabase.getInstance().getReference("passages/$uid")
         ref.addListenerForSingleValueEvent(object : ValueEventListener{
@@ -64,7 +64,7 @@ class PassagesChoiseFragment : Fragment() {
             }
 
         })
-    }*/
+    }
 
 
 }

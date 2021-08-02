@@ -1,15 +1,21 @@
 package com.samaeli.tesi.Passages
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.location.Address
 import android.location.Geocoder
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.InputType
 import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import com.google.firebase.auth.FirebaseAuth
@@ -25,9 +31,11 @@ import java.util.*
 class RequestPassageActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityRequestPassageBinding
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     companion object{
         val TAG = "Request Passage Activity"
+        private const val MY_PERMISSIONS_REQUEST_LOCATION = 99
     }
 
     private var error : Boolean = false
@@ -91,6 +99,10 @@ class RequestPassageActivity : AppCompatActivity() {
             savePassageToFirebase()
         }
 
+        binding.currentLocationPassageButtonRequestPassage.setOnClickListener {
+            setDepartureFromCurrentLocation()
+        }
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -98,6 +110,69 @@ class RequestPassageActivity : AppCompatActivity() {
             android.R.id.home -> finish()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun setDepartureFromCurrentLocation(){
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+        if (ActivityCompat.checkSelfPermission(
+                        this,
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                        this,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestLocationPermission()
+        }
+        fusedLocationProviderClient.lastLocation
+                .addOnSuccessListener {
+                    val geocoder = Geocoder(this,Locale.getDefault())
+                    try {
+                        val addressList: List<Address> =
+                                geocoder.getFromLocation(it.latitude, it.longitude, 1)
+
+                        if(addressList.size < 1){
+                            Toast.makeText(this,getString(R.string.error_location),Toast.LENGTH_LONG).show()
+                            return@addOnSuccessListener
+                        }
+                        val address : Address = addressList.get(0)
+                        departureLatitude = it.latitude
+                        departureLongitude = it.longitude
+                        binding.departureAddressEditRequestPassage.setText(address.thoroughfare+" "+address.subThoroughfare)
+                        binding.departureCityEditRequestPassage.setText(address.locality)
+                        //TODO Levare queste ultime due righe
+                        departureAddress = address.thoroughfare+" "+address.subThoroughfare
+                        departureCity = address.locality
+                    }catch(e:IOException){
+                        Log.d(TAG, "CIAOOOOOOO" + e.toString())
+                    }
+                }
+    }
+
+    private fun requestLocationPermission(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                    ),
+                    MY_PERMISSIONS_REQUEST_LOCATION
+            )
+        } else {
+            ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                    MY_PERMISSIONS_REQUEST_LOCATION
+            )
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            setDepartureFromCurrentLocation()
+        }
     }
 
     private fun savePassageToFirebase(){
@@ -131,19 +206,20 @@ class RequestPassageActivity : AppCompatActivity() {
         val geocoder = Geocoder(this, Locale.getDefault())
 
         try{
+            if(departureLatitude == null) {
+                val addressListDeparture: List<Address> = geocoder.getFromLocationName(departureAddress + " " + departureCity, 1)
 
-            val addressListDeparture : List<Address> = geocoder.getFromLocationName(departureAddress+" "+departureCity,1)
+                if (addressListDeparture.size < 1) {
+                    Log.d(TAG, "Departure address not found")
+                    Toast.makeText(this, getString(R.string.error_departure_address), Toast.LENGTH_LONG).show()
+                    return
+                }
 
-            if(addressListDeparture.size < 1){
-                Log.d(TAG,"Departure address not found")
-                Toast.makeText(this,getString(R.string.error_departure_address),Toast.LENGTH_LONG).show()
-                return
+                val departureAddressGeocoder = addressListDeparture.get(0)
+                departureLatitude = departureAddressGeocoder.latitude
+                departureLongitude = departureAddressGeocoder.longitude
             }
-
-            val departureAddressGeocoder = addressListDeparture.get(0)
-            departureLatitude = departureAddressGeocoder.latitude
-            departureLongitude = departureAddressGeocoder.longitude
-            Log.d(TAG,"departure latitude and longitude"+departureLatitude.toString()+" "+departureLongitude.toString())
+            Log.d(TAG, "departure latitude and longitude" + departureLatitude.toString() + " " + departureLongitude.toString())
 
             val addressListArrival : List<Address> = geocoder.getFromLocationName(arrivalAddress+" "+arrivalCity,1)
 

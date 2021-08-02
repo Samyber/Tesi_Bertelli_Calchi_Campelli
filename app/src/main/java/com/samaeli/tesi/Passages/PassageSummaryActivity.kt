@@ -1,39 +1,58 @@
 package com.samaeli.tesi.Passages
 
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
+import android.location.Address
+import android.location.Geocoder
+import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.samaeli.tesi.LoadingDialog
 import com.samaeli.tesi.R
 import com.samaeli.tesi.databinding.ActivityPassageSummaryBinding
+import com.samaeli.tesi.models.Offer
 import com.samaeli.tesi.models.Passage
 import com.samaeli.tesi.models.User
 import com.squareup.picasso.Picasso
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.Year
 import java.time.temporal.ChronoUnit
+import java.util.*
 
 class PassageSummaryActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityPassageSummaryBinding
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     companion object{
         val TAG = "Passage Summary Activity"
+        private const val MY_PERMISSIONS_REQUEST_LOCATION = 99
     }
 
     private var passage : Passage? = null
+    private var loadingDialog : LoadingDialog? = null
 
     private var day : String? = null
     private var month : String? = null
     private var year : String? = null
+    private var price : Double? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +60,8 @@ class PassageSummaryActivity : AppCompatActivity() {
         binding = ActivityPassageSummaryBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        loadingDialog = LoadingDialog(this)
 
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
@@ -50,6 +71,28 @@ class PassageSummaryActivity : AppCompatActivity() {
         passage = intent.getParcelableExtra(PassageProvideActivity.PASSAGE_KEY)
         Log.d(TAG,"departure city: ${passage!!.departureCity}")
         Log.d(TAG,"arrival city: ${passage!!.arrivalCity}")
+
+        binding.showRouteButtonPassageSummary.setOnClickListener {
+            val intent = Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("http://maps.google.com/maps?saddr=${passage!!.departureLatitude},${passage!!.departureLongitude}" +
+                            "&daddr=${passage!!.arrivalLatitude},${passage!!.arrivalLongitude}")
+            )
+            startActivity(intent)
+        }
+
+        binding.goToDepartureButtonPassageSummary.setOnClickListener {
+            showRouteToDeparture()
+        }
+
+        binding.offerPassageButtonPassageSummary.setOnClickListener {
+            if(validatePriceField()){
+                Log.d(TAG,"Prezzo ok")
+                uploadOfferToFirebase()
+            }else{
+                Log.d(TAG,"Error price")
+            }
+        }
 
         completeUserFields()
         completePassageFields()
@@ -63,6 +106,84 @@ class PassageSummaryActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    private fun uploadOfferToFirebase(){
+        loadingDialog!!.startLoadingDialog()
+        val uidBidder = FirebaseAuth.getInstance().uid
+        val uidRequester = passage!!.uid
+
+        val offer = Offer(uidBidder!!,uidRequester,price!!,"wait")
+
+        val ref = FirebaseDatabase.getInstance().getReference("made_offers/$uidBidder/$uidRequester")
+        ref.setValue(offer)
+                .addOnSuccessListener {
+                    Log.d(TAG,"Offerta caricata in made_offers/$uidBidder/$uidRequester")
+                    val ref2 = FirebaseDatabase.getInstance().getReference("received_offers/$uidRequester/$uidBidder")
+                    ref2.setValue(offer)
+                            .addOnSuccessListener {
+                                Log.d(TAG,"Offerta caricata in received_offers/$uidRequester/$uidBidder")
+                                loadingDialog!!.dismissLoadingDialog()
+                                Toast.makeText(this,getString(R.string.offer_created),Toast.LENGTH_LONG).show()
+                                finish()
+                            }
+                            .addOnFailureListener {
+                                Toast.makeText(this,getString(R.string.error_create_offer),Toast.LENGTH_LONG).show()
+                            }
+                }
+                .addOnFailureListener {
+                    Toast.makeText(this,getString(R.string.error_create_offer),Toast.LENGTH_LONG).show()
+                }
+    }
+
+    private fun showRouteToDeparture(){
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+
+        if (ActivityCompat.checkSelfPermission(
+                        this,
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                        this,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestLocationPermission()
+        }
+        fusedLocationProviderClient.lastLocation
+                .addOnSuccessListener {
+                    val intent = Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse("http://maps.google.com/maps?saddr=${it.latitude},${it.longitude}" +
+                                    "&daddr=${passage!!.departureLatitude},${passage!!.departureLongitude}")
+                    )
+                    startActivity(intent)
+                }
+    }
+
+    private fun requestLocationPermission(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                    ),
+                    MY_PERMISSIONS_REQUEST_LOCATION
+            )
+        } else {
+            ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                    MY_PERMISSIONS_REQUEST_LOCATION
+            )
+        }
+    }
+
+    // Funzione eseguita quando l'utente da il permesso oppure no all'accesso alla posizione
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            showRouteToDeparture()
+        }
+    }
 
     private fun completeUserFields(){
         val ref = FirebaseDatabase.getInstance().getReference("users/${passage!!.uid}")
@@ -127,6 +248,18 @@ class PassageSummaryActivity : AppCompatActivity() {
 
         //Log.d(TAG,formatter_day.toString()+" "+formatter_month.toString()+" "+formatter_year.toString())
         //return formatter.format(timestamp)
+    }
+
+    private fun validatePriceField():Boolean{
+        val priceString = binding.priceEditTextPassageSummary.text
+        if(priceString == null || priceString.isEmpty() || priceString.isBlank()){
+            binding.priceInputLayoutPassageSummary.error = getString(R.string.field_not_empty)
+            return false
+        }
+        binding.priceInputLayoutPassageSummary.error = ""
+        binding.priceInputLayoutPassageSummary.isErrorEnabled = false
+        price = priceString.toString().toDouble()
+        return true
     }
 
 }
