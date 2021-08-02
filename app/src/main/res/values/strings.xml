@@ -145,14 +145,14 @@
     <string name="error_search_passage">Error! Fill at least one field</string>
     <string name="no_result">No result</string>
 
-    <string name="user_information">User information</string>
+    <string name="user_informations">User informations</string>
     <string name="age">Age</string>
-    <string name="passage_information">Passage Information</string>
+    <string name="passage_informations">Passage Informations</string>
     <string name="departure">Departure</string>
     <string name="arrival">Arrival</string>
     <string name="go_to_departure">Go to departure</string>
     <string name="route_on_map">Route on map</string>
-    <string name="price_offered">Price offered</string>
+    <string name="offer_price">Offer a price</string>
     <string name="offer_passage">Offer passage</string>
     <string name="passage">Passage</string>
     

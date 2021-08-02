@@ -16,8 +16,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="6dp"
-            android:text="@string/user_information"
-            android:textSize="20sp"
+            android:text="@string/user_informations"
+            android:textSize="@dimen/title_size_summary"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -31,27 +31,31 @@
             app:layout_constraintStart_toStartOf="@+id/userInformationTextViewSummaryPassage"
             app:layout_constraintTop_toBottomOf="@+id/userInformationTextViewSummaryPassage">
         </de.hdodenhof.circleimageview.CircleImageView>
-
+<!--
         <TextView
             android:id="@+id/nameUserTextViewPassageSummary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
+            android:maxWidth="200dp"
             android:text="@string/name"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/photoCircleImageViewPassageSummary"
             app:layout_constraintTop_toTopOf="@+id/photoCircleImageViewPassageSummary" />
 
         <TextView
-            android:id="@+id/ageUserTextViewPassageSummary"
+            android:id="@+id/surnameUserTextViewPassageSummary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/age"
-            android:textSize="18sp"
+            android:layout_marginTop="8dp"
+            android:maxWidth="200dp"
+            android:text="@string/name"
+            android:textSize="20sp"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/nameUserTextViewPassageSummary"
             app:layout_constraintTop_toBottomOf="@+id/nameUserTextViewPassageSummary" />
+
 
         <TextView
             android:id="@+id/genderTextViewPassageSummary"
@@ -59,22 +63,88 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="M"
-            android:textSize="20sp"
+            android:textSize="22sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/nameUserTextViewPassageSummary"
             app:layout_constraintStart_toEndOf="@+id/nameUserTextViewPassageSummary"
             app:layout_constraintTop_toTopOf="@+id/nameUserTextViewPassageSummary" />
 
+-->
+        <LinearLayout
+            android:id="@+id/linearLayout3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toEndOf="@+id/photoCircleImageViewPassageSummary"
+            app:layout_constraintTop_toTopOf="@+id/photoCircleImageViewPassageSummary">
+
+            <TextView
+                android:id="@+id/nameUserTextViewPassageSummary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:text="@string/name"
+                android:textSize="@dimen/name_size_summary"
+                android:textStyle="bold"
+                android:maxWidth="200dp"
+                app:layout_constraintStart_toEndOf="@+id/photoCircleImageViewPassageSummary"
+                app:layout_constraintTop_toTopOf="@+id/photoCircleImageViewPassageSummary" />
+
+
+            <TextView
+                android:id="@+id/genderTextViewPassageSummary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="M"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/nameUserTextViewPassageSummary"
+                app:layout_constraintStart_toEndOf="@+id/nameUserTextViewPassageSummary"
+                app:layout_constraintTop_toTopOf="@+id/nameUserTextViewPassageSummary" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/ageUserTextViewPassageSummary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/age"
+            android:textSize="@dimen/other_size_summary"
+            app:layout_constraintStart_toStartOf="@+id/linearLayout3"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
+
         <TextView
             android:id="@+id/passageInformationTextViewSummaryPassage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="@string/passage_information"
-            android:textSize="20sp"
+            android:layout_marginTop="@dimen/title_size_summary"
+            android:text="@string/passage_informations"
+            android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/userInformationTextViewSummaryPassage"
             app:layout_constraintTop_toBottomOf="@+id/photoCircleImageViewPassageSummary" />
+
+        <TextView
+            android:id="@+id/hourTextViewPassageSummary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/hour"
+            android:textSize="@dimen/other_size_summary"
+            app:layout_constraintStart_toStartOf="@+id/departureTextViewPassageSummary"
+            app:layout_constraintTop_toBottomOf="@+id/passageInformationTextViewSummaryPassage" />
+
+        <TextView
+            android:id="@+id/numberPersonTextViewPassageSummary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/number_person"
+            android:textSize="@dimen/other_size_summary"
+            app:layout_constraintStart_toStartOf="@+id/departureTextViewPassageSummary"
+            app:layout_constraintTop_toBottomOf="@+id/hourTextViewPassageSummary" />
 
         <TextView
             android:id="@+id/departureTextViewPassageSummary"
@@ -83,10 +153,10 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="16dp"
             android:text="@string/departure"
-            android:textSize="18sp"
+            android:textSize="@dimen/name_size_summary"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/passageInformationTextViewSummaryPassage"
-            app:layout_constraintTop_toBottomOf="@+id/passageInformationTextViewSummaryPassage" />
+            app:layout_constraintTop_toBottomOf="@+id/numberPersonTextViewPassageSummary" />
 
         <TextView
             android:id="@+id/departureAddressTextViewPassageSummary"
@@ -94,7 +164,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@string/address"
-            android:textSize="16sp"
+            android:textSize="@dimen/other_size_summary"
             app:layout_constraintStart_toStartOf="@+id/departureTextViewPassageSummary"
             app:layout_constraintTop_toBottomOf="@+id/departureTextViewPassageSummary" />
 
@@ -104,7 +174,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="@string/city"
-            android:textSize="16sp"
+            android:textSize="@dimen/other_size_summary"
             app:layout_constraintStart_toStartOf="@+id/departureAddressTextViewPassageSummary"
             app:layout_constraintTop_toBottomOf="@+id/departureAddressTextViewPassageSummary" />
 
@@ -114,7 +184,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@string/arrival"
-            android:textSize="18sp"
+            android:textSize="@dimen/name_size_summary"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/departureTextViewPassageSummary"
             app:layout_constraintTop_toBottomOf="@+id/departureCityTextViewPassageSummary" />
@@ -125,7 +195,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@string/address"
-            android:textSize="16sp"
+            android:textSize="@dimen/other_size_summary"
             app:layout_constraintStart_toStartOf="@+id/departureAddressTextViewPassageSummary"
             app:layout_constraintTop_toBottomOf="@+id/arrivalTextViewPassageSummary" />
 
@@ -135,7 +205,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="@string/city"
-            android:textSize="16sp"
+            android:textSize="@dimen/other_size_summary"
             app:layout_constraintStart_toStartOf="@+id/arrivalAddressTextViewPassageSummary"
             app:layout_constraintTop_toBottomOf="@+id/arrivalAddressTextViewPassageSummary" />
 
@@ -187,7 +257,7 @@
                 android:id="@+id/priceEditTextPassageSummary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/price_offered"
+                android:hint="@string/offer_price"
                 android:inputType="numberDecimal" />
         </com.google.android.material.textfield.TextInputLayout>
 

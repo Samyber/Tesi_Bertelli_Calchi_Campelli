@@ -27,9 +27,9 @@
 
     <dimen name="top_margin_passage_provide">24dp</dimen>
 
-    <dimen name="title_size_summary">24sp</dimen>
-    <dimen name="name_size_summary">20sp</dimen>
-    <dimen name="other_size_summary">16sp</dimen>
-    <dimen name="max_width">200dp</dimen>
+    <dimen name="title_size_summary">20sp</dimen>
+    <dimen name="name_size_summary">16sp</dimen>
+    <dimen name="other_size_summary">12sp</dimen>
+    <dimen name="max_width">150dp</dimen>
 
 </resources>

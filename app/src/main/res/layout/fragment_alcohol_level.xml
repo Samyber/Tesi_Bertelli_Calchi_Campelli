@@ -98,7 +98,6 @@
                 android:text="@string/no"
                 android:textSize="16sp" />
         </RadioGroup>
-
         <TextView
             android:id="@+id/questionFullStomachTextViewAlcoholLevel"
             android:layout_width="wrap_content"
