@@ -20,6 +20,8 @@ class PassagesChoiseFragment : Fragment() {
     private var _binding : FragmentPassagesChoiseBinding? = null
     private val binding get() = _binding!!
 
+    private var typeUser :String = "bidder"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -32,9 +34,6 @@ class PassagesChoiseFragment : Fragment() {
         _binding = FragmentPassagesChoiseBinding.inflate(inflater,container,false)
         val view = binding.root
 
-        // In on resume?
-        setRequestPassageButtonText()
-
         binding.passageRequestButtonChoisePassages.setOnClickListener {
             val intent = Intent(activity,RequestPassageActivity::class.java)
             startActivity(intent)
@@ -45,7 +44,19 @@ class PassagesChoiseFragment : Fragment() {
             startActivity(intent)
         }
 
+        binding.recentOffertsButtonChoisePassages.setOnClickListener {
+            if(typeUser.equals("requester")){
+                val intent = Intent(activity,ReceivedOffersActivity::class.java)
+                startActivity(intent)
+            }
+        }
+
         return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setRequestPassageButtonText()
     }
 
     private fun setRequestPassageButtonText(){
@@ -55,8 +66,10 @@ class PassagesChoiseFragment : Fragment() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(!snapshot.exists()){
                     binding.passageRequestButtonChoisePassages.text = getString(R.string.passage_request)
+                    typeUser = "bidder"
                 }else{
                     binding.passageRequestButtonChoisePassages.text = getString(R.string.summary_required_passage)
+                    typeUser = "requester"
                 }
             }
 

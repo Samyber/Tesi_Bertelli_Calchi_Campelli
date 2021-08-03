@@ -159,5 +159,10 @@
     <string name="error_location">Error to take your location</string>
     <string name="offer_created">Offer create</string>
     <string name="error_create_offer">Error create offer</string>
-    
+
+    <string name="received_offers">Received offers</string>
+    <string name="price">Price</string>
+    <string name="accept">Accept</string>
+    <string name="decline">Decline</string>
+    <string name="decline_future">Decline future</string>
 </resources>

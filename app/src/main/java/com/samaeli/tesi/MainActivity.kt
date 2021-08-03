@@ -134,6 +134,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 // Logout dell'utente da Firebase
                 FirebaseAuth.getInstance().signOut()
+
                 // Si nasconde dal menu la voce di logout e si rendono visibili le voci Login e Register
                 menu!!.findItem(R.id.menuLogout).setVisible(false)
                 menu!!.findItem(R.id.menuLogin).setVisible(true)

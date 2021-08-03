@@ -141,8 +141,8 @@ class RequestPassageActivity : AppCompatActivity() {
                         binding.departureAddressEditRequestPassage.setText(address.thoroughfare+" "+address.subThoroughfare)
                         binding.departureCityEditRequestPassage.setText(address.locality)
                         //TODO Levare queste ultime due righe
-                        departureAddress = address.thoroughfare+" "+address.subThoroughfare
-                        departureCity = address.locality
+                        /*departureAddress = address.thoroughfare+" "+address.subThoroughfare
+                        departureCity = address.locality*/
                     }catch(e:IOException){
                         Log.d(TAG, "CIAOOOOOOO" + e.toString())
                     }
@@ -206,19 +206,18 @@ class RequestPassageActivity : AppCompatActivity() {
         val geocoder = Geocoder(this, Locale.getDefault())
 
         try{
-            if(departureLatitude == null) {
-                val addressListDeparture: List<Address> = geocoder.getFromLocationName(departureAddress + " " + departureCity, 1)
+            val addressListDeparture: List<Address> = geocoder.getFromLocationName(departureAddress + " " + departureCity, 1)
 
-                if (addressListDeparture.size < 1) {
-                    Log.d(TAG, "Departure address not found")
-                    Toast.makeText(this, getString(R.string.error_departure_address), Toast.LENGTH_LONG).show()
-                    return
-                }
-
-                val departureAddressGeocoder = addressListDeparture.get(0)
-                departureLatitude = departureAddressGeocoder.latitude
-                departureLongitude = departureAddressGeocoder.longitude
+            if (addressListDeparture.size < 1) {
+                Log.d(TAG, "Departure address not found")
+                Toast.makeText(this, getString(R.string.error_departure_address), Toast.LENGTH_LONG).show()
+                return
             }
+
+            val departureAddressGeocoder = addressListDeparture.get(0)
+            departureLatitude = departureAddressGeocoder.latitude
+            departureLongitude = departureAddressGeocoder.longitude
+
             Log.d(TAG, "departure latitude and longitude" + departureLatitude.toString() + " " + departureLongitude.toString())
 
             val addressListArrival : List<Address> = geocoder.getFromLocationName(arrivalAddress+" "+arrivalCity,1)
