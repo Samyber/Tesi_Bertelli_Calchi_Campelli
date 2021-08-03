@@ -165,4 +165,12 @@
     <string name="accept">Accept</string>
     <string name="decline">Decline</string>
     <string name="decline_future">Decline future</string>
+    <string name="error_decline_offer">Error during decline offer</string>
+    <string name="declined_offer">Declined offer</string>
+    <string name="error_accept_offer">Error during accept offer</string>
+    <string name="accepted_offer">Accepted offer</string>
+    <string name="error_delete_passage">Error delete passage</string>
+
+    <string name="my_passage_summary">My passage summary</string>
+
 </resources>

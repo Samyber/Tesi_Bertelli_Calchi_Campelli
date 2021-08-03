@@ -95,7 +95,7 @@ class PassageProvideActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 snapshot.children.forEach {
                     val passage = it.getValue(Passage::class.java)
-                    if(passage != null && passage.uid != uid){
+                    if(passage != null && passage.uid != uid && passage.visibility==true){
                         if(!arrivalCity.isNullOrEmpty() && !arrivalCity!!.isBlank()){
                             if(!departureCity.isNullOrEmpty() && !departureCity!!.isBlank()){
                                 // Utente ha inserito entrambe le città

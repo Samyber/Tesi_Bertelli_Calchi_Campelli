@@ -179,7 +179,7 @@ class RequestPassageActivity : AppCompatActivity() {
         val uid = FirebaseAuth.getInstance().uid
         val ref = FirebaseDatabase.getInstance().getReference("passages/$uid")
         val passage = Passage(uid.toString(),departureAddress!!,departureCity!!,arrivalAddress!!,arrivalCity!!,hour!!,minute!!,numberPerson!!,
-        departureLatitude!!,departureLongitude!!,arrivalLatitude!!,arrivalLongitude!!)
+        departureLatitude!!,departureLongitude!!,arrivalLatitude!!,arrivalLongitude!!,true)
         ref.setValue(passage)
                 .addOnSuccessListener {
                     Toast.makeText(this,getString(R.string.passage_created),Toast.LENGTH_LONG).show()

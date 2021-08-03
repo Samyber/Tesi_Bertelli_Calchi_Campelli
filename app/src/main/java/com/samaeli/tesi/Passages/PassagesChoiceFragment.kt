@@ -12,16 +12,15 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.samaeli.tesi.R
-import com.samaeli.tesi.databinding.FragmentPassagesChoiseBinding
+import com.samaeli.tesi.databinding.FragmentPassagesChoiceBinding
 
 
-class PassagesChoiseFragment : Fragment() {
+class PassagesChoiceFragment : Fragment() {
 
-    private var _binding : FragmentPassagesChoiseBinding? = null
+    private var _binding : FragmentPassagesChoiceBinding? = null
     private val binding get() = _binding!!
 
     private var typeUser :String = "bidder"
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -31,12 +30,19 @@ class PassagesChoiseFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         //return inflater.inflate(R.layout.fragment_passages_choise, container, false)
-        _binding = FragmentPassagesChoiseBinding.inflate(inflater,container,false)
+        _binding = FragmentPassagesChoiceBinding.inflate(inflater,container,false)
         val view = binding.root
 
+        setVisibilityRecentOffer()
+
         binding.passageRequestButtonChoisePassages.setOnClickListener {
-            val intent = Intent(activity,RequestPassageActivity::class.java)
-            startActivity(intent)
+            if(typeUser=="requester"){
+                val intent = Intent(activity,MyPassageSummaryActivity::class.java)
+                startActivity(intent)
+            }else{
+                val intent = Intent(activity,RequestPassageActivity::class.java)
+                startActivity(intent)
+            }
         }
 
         binding.passageProvideButtonChoisePassages.setOnClickListener {
@@ -45,10 +51,10 @@ class PassagesChoiseFragment : Fragment() {
         }
 
         binding.recentOffertsButtonChoisePassages.setOnClickListener {
-            if(typeUser.equals("requester")){
+            //if(typeUser.equals("requester")){
                 val intent = Intent(activity,ReceivedOffersActivity::class.java)
                 startActivity(intent)
-            }
+            //}
         }
 
         return view
@@ -70,6 +76,37 @@ class PassagesChoiseFragment : Fragment() {
                 }else{
                     binding.passageRequestButtonChoisePassages.text = getString(R.string.summary_required_passage)
                     typeUser = "requester"
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+        })
+    }
+
+    private fun setVisibilityRecentOffer(){
+        val uid = FirebaseAuth.getInstance().uid
+        val ref = FirebaseDatabase.getInstance().getReference("received_offers/$uid")
+        ref.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot.exists()){
+                    binding.recentOffertsButtonChoisePassages.visibility = View.VISIBLE
+                }else{
+                    val ref2 = FirebaseDatabase.getInstance().getReference("made_offers/$uid")
+                    ref2.addValueEventListener(object:ValueEventListener{
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            if(snapshot.exists()){
+                                binding.recentOffertsButtonChoisePassages.visibility = View.VISIBLE
+                            }else{
+                                binding.recentOffertsButtonChoisePassages.visibility = View.INVISIBLE
+                            }
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+                        }
+
+                    })
                 }
             }
 

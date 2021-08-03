@@ -7,7 +7,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import com.google.firebase.auth.FirebaseAuth
-import com.samaeli.tesi.Passages.PassagesChoiseFragment
+import com.samaeli.tesi.Passages.PassagesChoiceFragment
 import com.samaeli.tesi.calculationBloodAlcohol.AlcoholLevelFragment
 import com.samaeli.tesi.databinding.ActivityMainBinding
 
@@ -50,9 +50,10 @@ class MainActivity : AppCompatActivity() {
                         val intent = Intent(this,LoginActivity::class.java)
                         startActivity(intent)
                     }else{
-                        Log.d(TAG,"Try to show PassagesChoiseFragment")
-                        supportFragmentManager.beginTransaction().replace(R.id.fragmentContainerMainActivity, PassagesChoiseFragment(),
-                        "PassagesChoiseFragment").commit()
+                        Log.d(TAG,"Try to show PassagesChoiceFragment")
+                        supportFragmentManager.beginTransaction().replace(R.id.fragmentContainerMainActivity,
+                            PassagesChoiceFragment(),
+                        "PassagesChoiceFragment").commit()
                     }
                 }
                 R.id.bottomNavigationProfile ->{

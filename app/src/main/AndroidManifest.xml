@@ -15,7 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Tesi_Bertelli_Calchi_Campelli">
-        <activity android:name=".Passages.ReceivedOffersActivity"></activity>
+        <activity android:name=".Passages.MyPassageSummaryActivity"></activity>
+        <activity android:name=".Passages.ReceivedOffersActivity" />
         <activity android:name=".Passages.PassageSummaryActivity" />
         <activity android:name=".Passages.PassageProvideActivity" />
         <!--

@@ -4,11 +4,15 @@ import android.content.Context
 import android.graphics.Color
 import android.os.Build
 import android.util.Log
+import android.view.View
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.ktx.Firebase
+import com.samaeli.tesi.Passages.ReceivedOffersActivity
 import com.samaeli.tesi.R
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.Item
@@ -27,13 +31,20 @@ class ReceivedOfferItem(val offer:Offer, val context:Context):Item<ViewHolder>()
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
         val uidBidder = offer.uidBidder
-        Log.d("ReceivedOfferItem","UID Bidder: $uidBidder")
+
+        viewHolder.itemView.declineButtonReceivedOffer.setOnClickListener {
+            declineOffer()
+        }
+
+        viewHolder.itemView.acceptButtonReceivedOffer.setOnClickListener {
+            acceptOffer()
+        }
+
         val ref = FirebaseDatabase.getInstance().getReference("users/$uidBidder")
         ref.addListenerForSingleValueEvent(object : ValueEventListener{
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onDataChange(snapshot: DataSnapshot) {
                 val user = snapshot.getValue(User::class.java)
-                Log.d("ReceivedOfferItem","${user!!.uid}")
                 viewHolder.itemView.nameTextViewReceivedOffer.text = user!!.name+" "+user!!.surname
 
                 getDate(user!!.birthdayDate)
@@ -50,6 +61,10 @@ class ReceivedOfferItem(val offer:Offer, val context:Context):Item<ViewHolder>()
                 }else{
                     viewHolder.itemView.genderTextViewReceivedOffer.text="F"
                     viewHolder.itemView.genderTextViewReceivedOffer.setTextColor(Color.rgb(255,179,222))
+                }
+
+                if(offer.state.equals("accepted")){
+                    viewHolder.itemView.buttonsLinearLayoutReceivedOffer.visibility = View.INVISIBLE
                 }
 
                 if(user.profileImageUrl!=null) {
@@ -69,6 +84,61 @@ class ReceivedOfferItem(val offer:Offer, val context:Context):Item<ViewHolder>()
         return R.layout.item_received_offer
     }
 
+    private fun declineOffer(){
+        val uidBidder = offer.uidBidder
+        val uidRequester = offer.uidRequester
+        val ref = FirebaseDatabase.getInstance().getReference("received_offers/$uidRequester/$uidBidder")
+        ref.removeValue()
+                .addOnSuccessListener {
+                    val ref2 = FirebaseDatabase.getInstance().getReference("made_offers/$uidBidder/$uidRequester")
+                    ref2.removeValue()
+                            .addOnSuccessListener {
+                                addDeclinedOffer(uidBidder)
+                            }
+                            .addOnFailureListener {
+                                Toast.makeText(context,context.getString(R.string.error_decline_offer),Toast.LENGTH_LONG).show()
+                            }
+                }
+                .addOnFailureListener {
+                    Toast.makeText(context,context.getString(R.string.error_decline_offer),Toast.LENGTH_LONG).show()
+                }
+    }
+
+    private fun acceptOffer(){
+        val uidBidder = offer.uidBidder
+        val uidRequester = offer.uidRequester
+        offer.state="accepted"
+        val ref = FirebaseDatabase.getInstance().getReference("received_offers/$uidRequester/$uidBidder")
+        ref.setValue(offer)
+                .addOnSuccessListener {
+                    val ref2 = FirebaseDatabase.getInstance().getReference("made_offers/$uidBidder/$uidRequester")
+                    ref2.setValue(offer)
+                            .addOnSuccessListener {
+                                ReceivedOffersActivity.declineAllOffers(offer,context)
+                            }
+                            .addOnFailureListener {
+                                Toast.makeText(context,context.getString(R.string.error_accept_offer),Toast.LENGTH_LONG).show()
+                            }
+                }
+                .addOnFailureListener {
+                    Toast.makeText(context,context.getString(R.string.error_accept_offer),Toast.LENGTH_LONG).show()
+                }
+    }
+
+    private fun addDeclinedOffer(uidBidder:String){
+        val ref = FirebaseDatabase.getInstance().getReference("delete_offers/$uidBidder")
+        offer.state = "declined"
+        ref.setValue(offer)
+                .addOnSuccessListener {
+                    Toast.makeText(context,context.getString(R.string.declined_offer),Toast.LENGTH_LONG).show()
+                    ReceivedOffersActivity.displayReceivedOffers(context)
+                }
+                .addOnFailureListener {
+                    Toast.makeText(context,context.getString(R.string.error_decline_offer),Toast.LENGTH_LONG).show()
+                }
+
+    }
+
     private fun getDate(timestamp:Long){
         val formatter_day = SimpleDateFormat("dd")
         val formatter_month = SimpleDateFormat("MM")
@@ -77,8 +147,5 @@ class ReceivedOfferItem(val offer:Offer, val context:Context):Item<ViewHolder>()
         day = formatter_day.format(timestamp)
         month = formatter_month.format(timestamp)
         year = formatter_year.format(timestamp)
-
-        //Log.d(TAG,formatter_day.toString()+" "+formatter_month.toString()+" "+formatter_year.toString())
-        //return formatter.format(timestamp)
     }
 }

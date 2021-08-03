@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Passages.MyPassageSummaryActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="32dp">
+
+        <TextView
+            android:id="@+id/passageInformationTextViewSummaryPassage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/passage_informations"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/hourTextViewMyPassageSummary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/hour"
+            android:textSize="@dimen/other_size_summary"
+            app:layout_constraintStart_toStartOf="@+id/departureTextViewMyPassageSummary"
+            app:layout_constraintTop_toBottomOf="@+id/passageInformationTextViewSummaryPassage" />
+
+        <TextView
+            android:id="@+id/numberPersonTextViewMyPassageSummary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/number_person"
+            android:textSize="@dimen/other_size_summary"
+            app:layout_constraintStart_toStartOf="@+id/departureTextViewMyPassageSummary"
+            app:layout_constraintTop_toBottomOf="@+id/hourTextViewMyPassageSummary" />
+
+        <TextView
+            android:id="@+id/departureTextViewMyPassageSummary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/departure"
+            android:textSize="@dimen/name_size_summary"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/passageInformationTextViewSummaryPassage"
+            app:layout_constraintTop_toBottomOf="@+id/numberPersonTextViewMyPassageSummary" />
+
+        <TextView
+            android:id="@+id/departureAddressTextViewMyPassageSummary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/address"
+            android:textSize="@dimen/other_size_summary"
+            app:layout_constraintStart_toStartOf="@+id/departureTextViewMyPassageSummary"
+            app:layout_constraintTop_toBottomOf="@+id/departureTextViewMyPassageSummary" />
+
+        <TextView
+            android:id="@+id/departureCityTextViewMyPassageSummary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/city"
+            android:textSize="@dimen/other_size_summary"
+            app:layout_constraintStart_toStartOf="@+id/departureAddressTextViewMyPassageSummary"
+            app:layout_constraintTop_toBottomOf="@+id/departureAddressTextViewMyPassageSummary" />
+
+        <TextView
+            android:id="@+id/arrivalTextViewMyPassageSummary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/arrival"
+            android:textSize="@dimen/name_size_summary"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/departureTextViewMyPassageSummary"
+            app:layout_constraintTop_toBottomOf="@+id/departureCityTextViewMyPassageSummary" />
+
+        <TextView
+            android:id="@+id/arrivalAddressTextViewMyPassageSummary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/address"
+            android:textSize="@dimen/other_size_summary"
+            app:layout_constraintStart_toStartOf="@+id/departureAddressTextViewMyPassageSummary"
+            app:layout_constraintTop_toBottomOf="@+id/arrivalTextViewMyPassageSummary" />
+
+        <TextView
+            android:id="@+id/arrivalCityTextViewMyPassageSummary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/city"
+            android:textSize="@dimen/other_size_summary"
+            app:layout_constraintStart_toStartOf="@+id/arrivalAddressTextViewMyPassageSummary"
+            app:layout_constraintTop_toBottomOf="@+id/arrivalAddressTextViewMyPassageSummary" />
+
+        <android.widget.Button
+            android:id="@+id/showRouteButtonMyPassageSummary"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_weight="1"
+            android:background="@drawable/rounded_button"
+            android:text="@string/route_on_map"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/arrivalCityTextViewMyPassageSummary" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
