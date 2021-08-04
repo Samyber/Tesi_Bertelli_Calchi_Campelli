@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
@@ -29,6 +30,7 @@ import com.samaeli.tesi.models.Offer
 import com.samaeli.tesi.models.Passage
 import com.samaeli.tesi.models.User
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.activity_passage_provide.*
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -69,6 +71,11 @@ class PassageSummaryActivity : AppCompatActivity() {
         }
 
         passage = intent.getParcelableExtra(PassageProvideActivity.PASSAGE_KEY)
+
+        if(passage == null){
+            finish()
+        }
+
         Log.d(TAG,"departure city: ${passage!!.departureCity}")
         Log.d(TAG,"arrival city: ${passage!!.arrivalCity}")
 
@@ -96,7 +103,7 @@ class PassageSummaryActivity : AppCompatActivity() {
 
         completeUserFields()
         completePassageFields()
-
+        completeOfferFields()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -235,6 +242,32 @@ class PassageSummaryActivity : AppCompatActivity() {
 
         binding.arrivalAddressTextViewPassageSummary.text = getString(R.string.address)+": "+passage!!.arrivalAddress
         binding.arrivalCityTextViewPassageSummary.text = getString(R.string.city)+": "+passage!!.arrivalCity
+    }
+
+    private fun completeOfferFields(){
+        val uid = FirebaseAuth.getInstance().uid
+        val ref = FirebaseDatabase.getInstance().getReference("made_offers/$uid/${passage!!.uid}")
+        ref.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot.exists()){
+                    val offer = snapshot.getValue(Offer::class.java)
+
+                    if(offer!!.state.equals("accepted")){
+                        binding.priceInputLayoutPassageSummary.visibility = View.INVISIBLE
+                        binding.offerPassageButtonPassageSummary.visibility = View.INVISIBLE
+                        binding.offerLinearLayoutPassageSummary.visibility = View.VISIBLE
+                    }
+
+                    binding.lastPriceTextViewPassageSummary.text = getString(R.string.last_price)+": "+offer.price+"€"
+                    binding.stateTextViewPassageSummary.text = getString(R.string.state)+": "+offer.state
+                    binding.offerLinearLayoutPassageSummary.visibility = View.VISIBLE
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+        })
     }
 
     private fun getDate(timestamp:Long){

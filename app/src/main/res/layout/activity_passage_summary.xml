@@ -251,7 +251,7 @@
             android:layout_marginTop="24dp"
             app:layout_constraintEnd_toEndOf="@+id/linearLayout2"
             app:layout_constraintStart_toStartOf="@+id/linearLayout2"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+            app:layout_constraintTop_toBottomOf="@+id/offerLinearLayoutPassageSummary"
             app:startIconDrawable="@drawable/ic_round_euro_24">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -273,6 +273,34 @@
             app:layout_constraintEnd_toEndOf="@+id/priceInputLayoutPassageSummary"
             app:layout_constraintStart_toStartOf="@+id/priceInputLayoutPassageSummary"
             app:layout_constraintTop_toBottomOf="@+id/priceInputLayoutPassageSummary" />
+
+        <LinearLayout
+            android:id="@+id/offerLinearLayoutPassageSummary"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="24dp"
+            android:orientation="horizontal"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="@+id/priceInputLayoutPassageSummary"
+            app:layout_constraintStart_toStartOf="@+id/priceInputLayoutPassageSummary"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
+
+            <TextView
+                android:id="@+id/stateTextViewPassageSummary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/state"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/lastPriceTextViewPassageSummary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/last_price"
+                android:textSize="16sp" />
+        </LinearLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

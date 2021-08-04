@@ -95,16 +95,17 @@ class DeletePassageAndNotificationService : Service() {
                     val ref2 = FirebaseDatabase.getInstance().getReference("received_offers/$uid/${offer!!.uidBidder}")
                     ref2.removeValue()
                             .addOnSuccessListener {
-                                if(!offer.state.equals("accepted")) {
+                                //if(!offer.state.equals("accepted")) {
                                     val ref3 = FirebaseDatabase.getInstance().getReference("made_offers/${offer!!.uidBidder}/$uid")
                                     ref3.removeValue()
                                             .addOnSuccessListener {
                                                 addDeclinedOffer(offer!!.uidBidder, offer)
                                             }
-                                }
+                                //}
                             }
 
                 }
+                ref.removeEventListener(this)
             }
             override fun onCancelled(error: DatabaseError) {
             }
@@ -112,6 +113,7 @@ class DeletePassageAndNotificationService : Service() {
     }
 
     private fun addDeclinedOffer(uidBidder:String,offer: Offer){
+        Log.d(TAG,"DeclineOffer")
         val ref = FirebaseDatabase.getInstance().getReference("delete_offers/$uidBidder")
         offer.state = "declined"
         ref.setValue(offer)

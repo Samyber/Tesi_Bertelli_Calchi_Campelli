@@ -176,4 +176,8 @@
     <string name="delete_passage_error">Error during delete operation</string>
     <string name="passage_canceled">Passage canceled</string>
 
+    <string name="made_offers">Made offers</string>
+    <string name="state">State offer</string>
+    <string name="last_price">Last price</string>
+    <string name="there_are_not_offers">There are not offers</string>
 </resources>

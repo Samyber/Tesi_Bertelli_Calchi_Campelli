@@ -91,13 +91,32 @@ class ReceivedOfferItem(val offer:Offer, val context:Context):Item<ViewHolder>()
         ref.removeValue()
                 .addOnSuccessListener {
                     val ref2 = FirebaseDatabase.getInstance().getReference("made_offers/$uidBidder/$uidRequester")
-                    ref2.removeValue()
+
+                    //ref2.addValueEventListener(object : ValueEventListener{
+                     //   override fun onDataChange(snapshot: DataSnapshot) {
+                     //       val offer = snapshot.getValue(Offer::class.java)
+                            //offer!!.state = "declined"
+                            val newOffer = Offer(offer!!.uidBidder,offer.uidRequester,offer.price,"declined")
+                            ref2.setValue(newOffer)
+                                    .addOnSuccessListener {
+                                        addDeclinedOffer(uidBidder)
+                                    }
+                                    .addOnFailureListener {
+                                        Toast.makeText(context,context.getString(R.string.error_decline_offer),Toast.LENGTH_LONG).show()
+                                    }
+                       // }
+
+                        //override fun onCancelled(error: DatabaseError) {
+                        //}
+
+                    //})
+                    /*ref2.removeValue()
                             .addOnSuccessListener {
                                 addDeclinedOffer(uidBidder)
                             }
                             .addOnFailureListener {
                                 Toast.makeText(context,context.getString(R.string.error_decline_offer),Toast.LENGTH_LONG).show()
-                            }
+                            }*/
                 }
                 .addOnFailureListener {
                     Toast.makeText(context,context.getString(R.string.error_decline_offer),Toast.LENGTH_LONG).show()
@@ -130,6 +149,7 @@ class ReceivedOfferItem(val offer:Offer, val context:Context):Item<ViewHolder>()
         offer.state = "declined"
         ref.setValue(offer)
                 .addOnSuccessListener {
+                    Log.d("CIAOOOOOOOOOOO","ADD Declined offer")
                     Toast.makeText(context,context.getString(R.string.declined_offer),Toast.LENGTH_LONG).show()
                     ReceivedOffersActivity.displayReceivedOffers(context)
                 }

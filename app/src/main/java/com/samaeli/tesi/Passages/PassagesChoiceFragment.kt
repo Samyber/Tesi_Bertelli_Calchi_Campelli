@@ -35,7 +35,7 @@ class PassagesChoiceFragment : Fragment() {
         val view = binding.root
 
         setVisibilityRecentOffer()
-        setVisibilityRequestNewPassage()
+        //setVisibilityRequestNewPassage()
 
         binding.passageRequestButtonChoisePassages.setOnClickListener {
             if(typeUser=="requester"){
@@ -53,10 +53,13 @@ class PassagesChoiceFragment : Fragment() {
         }
 
         binding.recentOffertsButtonChoisePassages.setOnClickListener {
-            //if(typeUser.equals("requester")){
+            if(typeUser.equals("requester")){
                 val intent = Intent(activity,ReceivedOffersActivity::class.java)
                 startActivity(intent)
-            //}
+            }else{
+                val intent = Intent(activity,MadeOffersActivity::class.java)
+                startActivity(intent)
+            }
         }
 
         return view
@@ -118,7 +121,7 @@ class PassagesChoiceFragment : Fragment() {
         })
     }
 
-    private fun setVisibilityRequestNewPassage(){
+    /*private fun setVisibilityRequestNewPassage(){
         val uid = FirebaseAuth.getInstance().uid
         val ref = FirebaseDatabase.getInstance().getReference("received_offers/$uid")
         ref.addValueEventListener(object : ValueEventListener{
@@ -142,5 +145,5 @@ class PassagesChoiceFragment : Fragment() {
             }
 
         })
-    }
+    }*/
 }
