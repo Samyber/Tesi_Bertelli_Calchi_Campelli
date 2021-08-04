@@ -114,7 +114,7 @@ class ReceivedOfferItem(val offer:Offer, val context:Context):Item<ViewHolder>()
                     val ref2 = FirebaseDatabase.getInstance().getReference("made_offers/$uidBidder/$uidRequester")
                     ref2.setValue(offer)
                             .addOnSuccessListener {
-                                ReceivedOffersActivity.declineAllOffers(offer,context)
+                                ReceivedOffersActivity.declineAllOffers(context)
                             }
                             .addOnFailureListener {
                                 Toast.makeText(context,context.getString(R.string.error_accept_offer),Toast.LENGTH_LONG).show()

@@ -78,12 +78,15 @@ class LoginActivity : AppCompatActivity() {
                     Toast.makeText(this,getString(R.string.error_email_password_incorrect),Toast.LENGTH_LONG).show()
                     return@addOnCompleteListener
                 }*/
-                Log.d(TAG,"Login effettuato con utente ${it.user?.uid}")
+                    Log.d(TAG,"Login effettuato con utente ${it.user?.uid}")
+
+                    val intent = Intent(this,DeletePassageAndNotificationService::class.java)
+                    startService(intent)
 
                 /*val intent = Intent(this,MainActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)*/
-                finish()
+                    finish()
             }
             .addOnFailureListener {
                 if(it is FirebaseAuthInvalidCredentialsException){

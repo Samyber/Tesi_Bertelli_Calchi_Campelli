@@ -121,5 +121,31 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/arrivalCityTextViewMyPassageSummary" />
 
+        <!--
+        <android.widget.Button
+            android:id="@+id/newRequestButtonMyPassageSummary"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/rounded_button"
+            android:text="@string/request_new_passage"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="@+id/showRouteButtonMyPassageSummary"
+            app:layout_constraintStart_toStartOf="@+id/showRouteButtonMyPassageSummary"
+            app:layout_constraintTop_toBottomOf="@+id/showRouteButtonMyPassageSummary" />
+        -->
+
+        <android.widget.Button
+            android:id="@+id/deleteButtonMyPassageSummary"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/rounded_button_red"
+            android:text="@string/delete_passage"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="@+id/showRouteButtonMyPassageSummary"
+            app:layout_constraintStart_toStartOf="@+id/showRouteButtonMyPassageSummary"
+            app:layout_constraintTop_toBottomOf="@+id/showRouteButtonMyPassageSummary" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

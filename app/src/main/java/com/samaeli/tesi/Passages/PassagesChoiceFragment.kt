@@ -13,6 +13,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.samaeli.tesi.R
 import com.samaeli.tesi.databinding.FragmentPassagesChoiceBinding
+import com.samaeli.tesi.models.Offer
 
 
 class PassagesChoiceFragment : Fragment() {
@@ -34,6 +35,7 @@ class PassagesChoiceFragment : Fragment() {
         val view = binding.root
 
         setVisibilityRecentOffer()
+        setVisibilityRequestNewPassage()
 
         binding.passageRequestButtonChoisePassages.setOnClickListener {
             if(typeUser=="requester"){
@@ -116,5 +118,29 @@ class PassagesChoiceFragment : Fragment() {
         })
     }
 
+    private fun setVisibilityRequestNewPassage(){
+        val uid = FirebaseAuth.getInstance().uid
+        val ref = FirebaseDatabase.getInstance().getReference("received_offers/$uid")
+        ref.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(!snapshot.exists()){
+                    binding.newRequestPassageButtonPassageChoice.visibility = View.GONE
+                }else{
+                    snapshot.children.forEach{
+                        val offer = it.getValue(Offer::class.java)
+                        if(offer!!.state.equals("accepted")){
+                            binding.newRequestPassageButtonPassageChoice.visibility = View.VISIBLE
+                        }else{
+                            binding.newRequestPassageButtonPassageChoice.visibility = View.GONE
+                            return
+                        }
+                    }
+                }
+            }
 
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+        })
+    }
 }

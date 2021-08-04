@@ -56,7 +56,7 @@ class ReceivedOffersActivity : AppCompatActivity() {
             })
         }
 
-        fun declineAllOffers(offer:Offer,context:Context){
+        fun declineAllOffers(context:Context){
             val uid = FirebaseAuth.getInstance().uid
             val ref = FirebaseDatabase.getInstance().getReference("received_offers/$uid/")
             ref.addValueEventListener(object:ValueEventListener{

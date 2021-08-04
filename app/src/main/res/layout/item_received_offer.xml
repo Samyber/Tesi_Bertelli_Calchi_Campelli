@@ -96,7 +96,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/rounded_button_red"
-            android:text="@string/decline_future" />
+            android:text="@string/do_not_ask_again" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

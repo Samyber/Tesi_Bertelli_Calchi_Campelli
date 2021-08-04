@@ -157,20 +157,23 @@
     <string name="offer_passage">Offer passage</string>
     <string name="passage">Passage</string>
     <string name="error_location">Error to take your location</string>
-    <string name="offer_created">Offer create</string>
-    <string name="error_create_offer">Error create offer</string>
+    <string name="offer_created">Offer created</string>
+    <string name="error_create_offer">Error during creation operation</string>
 
     <string name="received_offers">Received offers</string>
     <string name="price">Price</string>
     <string name="accept">Accept</string>
     <string name="decline">Decline</string>
-    <string name="decline_future">Decline future</string>
+    <string name="do_not_ask_again">Do not ask again</string>
     <string name="error_decline_offer">Error during decline offer</string>
-    <string name="declined_offer">Declined offer</string>
+    <string name="declined_offer">Offer declined</string>
     <string name="error_accept_offer">Error during accept offer</string>
-    <string name="accepted_offer">Accepted offer</string>
-    <string name="error_delete_passage">Error delete passage</string>
+    <string name="accepted_offer">Offer Accepted</string>
 
     <string name="my_passage_summary">My passage summary</string>
+    <string name="request_new_passage">Request new passage</string>
+    <string name="delete_passage">Delete passage</string>
+    <string name="delete_passage_error">Error during delete operation</string>
+    <string name="passage_canceled">Passage canceled</string>
 
 </resources>

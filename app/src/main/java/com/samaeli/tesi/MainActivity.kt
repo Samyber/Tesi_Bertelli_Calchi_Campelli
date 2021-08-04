@@ -140,6 +140,9 @@ class MainActivity : AppCompatActivity() {
                 menu!!.findItem(R.id.menuLogout).setVisible(false)
                 menu!!.findItem(R.id.menuLogin).setVisible(true)
                 menu!!.findItem(R.id.menuRegister).setVisible(true)
+
+                val intent = Intent(this, DeletePassageAndNotificationService::class.java)
+                stopService(intent)
             }
             R.id.menuLogin -> {
                 // Go to Login Activity
