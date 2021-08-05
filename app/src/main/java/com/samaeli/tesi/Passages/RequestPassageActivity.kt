@@ -20,6 +20,7 @@ import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.samaeli.tesi.DeletePassageAndNotificationService
 import com.samaeli.tesi.R
 import com.samaeli.tesi.calculationBloodAlcohol.DrinkActivity
 import com.samaeli.tesi.databinding.ActivityRequestPassageBinding
@@ -198,6 +199,7 @@ class RequestPassageActivity : AppCompatActivity() {
         validateHour()
         validateNumberPerson()
         validateDepartureArrival()
+        validateTime()
         return !error
     }
 
@@ -315,6 +317,27 @@ class RequestPassageActivity : AppCompatActivity() {
         }
         binding.numberPersonInputLayoutRequestPassage.error = ""
         binding.numberPersonInputLayoutRequestPassage.isErrorEnabled = false
+    }
+
+    private fun validateTime(){
+        if(hour == null || minute == null){
+            return
+        }
+        val timeMinute: Int = hour!! * 60 + minute!!
+        // Ora
+        val nowMinute: Int = Calendar.getInstance().get(Calendar.MINUTE) +
+                (Calendar.getInstance().get(Calendar.HOUR_OF_DAY) * 60)
+        Log.d(DeletePassageAndNotificationService.TAG, "Time minute: $timeMinute ; Now minute: $nowMinute")
+        // Se sono passate le 17 e l'ora del passaggio è entro le 8 si può fare se no no
+        if(!(timeMinute<8*60 && nowMinute>16*60)) {
+            if (nowMinute > timeMinute) {
+                error=true
+                binding.hourInputLayoutRequestPassage.error = getString(R.string.error_time_passage)
+                return
+            }
+        }
+        binding.hourInputLayoutRequestPassage.error = ""
+        binding.hourInputLayoutRequestPassage.isErrorEnabled = false
     }
 
     private fun changeIconColor() {

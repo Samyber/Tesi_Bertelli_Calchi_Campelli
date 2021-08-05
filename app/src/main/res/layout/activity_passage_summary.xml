@@ -243,12 +243,25 @@
                 android:textColor="@color/white" />
         </LinearLayout>
 
+        <android.widget.Button
+            android:id="@+id/withdrawOfferButtonPassageSummary"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/rounded_button_red"
+            android:text="@string/withdraw_offer"
+            android:textColor="@color/white"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="@+id/linearLayout2"
+            app:layout_constraintStart_toStartOf="@+id/linearLayout2"
+            app:layout_constraintTop_toBottomOf="@+id/offerLinearLayoutPassageSummary" />
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/priceInputLayoutPassageSummary"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.style_input_layout_profile"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="@+id/linearLayout2"
             app:layout_constraintStart_toStartOf="@+id/linearLayout2"
             app:layout_constraintTop_toBottomOf="@+id/offerLinearLayoutPassageSummary"
@@ -278,7 +291,7 @@
             android:id="@+id/offerLinearLayoutPassageSummary"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             android:orientation="horizontal"
             android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="@+id/priceInputLayoutPassageSummary"
@@ -301,6 +314,23 @@
                 android:text="@string/last_price"
                 android:textSize="16sp" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/offerBlockedTextViewPassageSummary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="30dp"
+            android:gravity="center_horizontal"
+            android:maxWidth="400dp"
+            android:text="@string/offer_blocked"
+            android:textSize="18sp"
+            android:textStyle="bold|italic"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

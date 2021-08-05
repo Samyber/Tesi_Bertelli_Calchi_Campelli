@@ -55,6 +55,7 @@ class PassageSummaryActivity : AppCompatActivity() {
     private var month : String? = null
     private var year : String? = null
     private var price : Double? = null
+    private var offer : Offer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,8 +77,8 @@ class PassageSummaryActivity : AppCompatActivity() {
             finish()
         }
 
-        Log.d(TAG,"departure city: ${passage!!.departureCity}")
-        Log.d(TAG,"arrival city: ${passage!!.arrivalCity}")
+        /*Log.d(TAG,"departure city: ${passage!!.departureCity}")
+        Log.d(TAG,"arrival city: ${passage!!.arrivalCity}")*/
 
         binding.showRouteButtonPassageSummary.setOnClickListener {
             val intent = Intent(
@@ -101,10 +102,23 @@ class PassageSummaryActivity : AppCompatActivity() {
             }
         }
 
+        binding.withdrawOfferButtonPassageSummary.setOnClickListener {
+            val uidBidder = FirebaseAuth.getInstance().uid
+            val uidRequester = passage!!.uid
+            val ref = FirebaseDatabase.getInstance().getReference("made_offers/$uidBidder/$uidRequester")
+            ref.removeValue()
+            val ref2 = FirebaseDatabase.getInstance().getReference("received_offers/$uidRequester/$uidBidder")
+            ref2.removeValue()
+            val ref3 = FirebaseDatabase.getInstance().getReference("withdraw_offers/$uidRequester")
+            ref3.setValue(offer)
+            finish()
+        }
+
         completeUserFields()
         completePassageFields()
         blockMadeOffer()
         completeOfferFields()
+        checkRequestPassage()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -139,6 +153,11 @@ class PassageSummaryActivity : AppCompatActivity() {
                 }
                 .addOnFailureListener {
                     Toast.makeText(this,getString(R.string.error_create_offer),Toast.LENGTH_LONG).show()
+                }
+        val ref2 = FirebaseDatabase.getInstance().getReference("wait_offers/$uidRequester")
+        ref2.setValue(offer)
+                .addOnSuccessListener {
+                    Log.d(TAG,"Offerta caricata in wait_offers")
                 }
     }
 
@@ -251,7 +270,7 @@ class PassageSummaryActivity : AppCompatActivity() {
         ref.addValueEventListener(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.exists()){
-                    val offer = snapshot.getValue(Offer::class.java)
+                    offer = snapshot.getValue(Offer::class.java)
 
                     if(offer!!.state.equals("accepted")){
                         binding.priceInputLayoutPassageSummary.visibility = View.INVISIBLE
@@ -259,8 +278,14 @@ class PassageSummaryActivity : AppCompatActivity() {
                         binding.offerLinearLayoutPassageSummary.visibility = View.VISIBLE
                     }
 
-                    binding.lastPriceTextViewPassageSummary.text = getString(R.string.last_price)+": "+offer.price+"€"
-                    binding.stateTextViewPassageSummary.text = getString(R.string.state)+": "+offer.state
+                    if(offer!!.state.equals("wait")){
+                        binding.withdrawOfferButtonPassageSummary.visibility = View.VISIBLE
+                    }else{
+                        binding.withdrawOfferButtonPassageSummary.visibility = View.INVISIBLE
+                    }
+
+                    binding.lastPriceTextViewPassageSummary.text = getString(R.string.last_price)+": "+offer!!.price+"€"
+                    binding.stateTextViewPassageSummary.text = getString(R.string.state)+": "+offer!!.state
                     binding.offerLinearLayoutPassageSummary.visibility = View.VISIBLE
                 }
             }
@@ -285,6 +310,25 @@ class PassageSummaryActivity : AppCompatActivity() {
                             return
                         }
                     }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+        })
+    }
+
+    // Se utente ha richiesto passaggio, non può fare un'offerta
+    private fun checkRequestPassage(){
+        val uid = FirebaseAuth.getInstance().uid
+        val ref = FirebaseDatabase.getInstance().getReference("passages/$uid")
+        ref.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot.exists()){
+                    binding.priceInputLayoutPassageSummary.visibility = View.INVISIBLE
+                    binding.offerPassageButtonPassageSummary.visibility = View.INVISIBLE
+                    binding.offerBlockedTextViewPassageSummary.visibility = View.VISIBLE
                 }
             }
 

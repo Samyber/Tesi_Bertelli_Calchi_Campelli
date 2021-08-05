@@ -73,7 +73,9 @@ class ReceivedOffersActivity : AppCompatActivity() {
                                     val ref3 = FirebaseDatabase.getInstance().getReference("made_offers/${offer.uidBidder}/$uid")
                                     ref3.removeValue()
                                         .addOnSuccessListener {
-                                            addDeclinedOffer(offer.uidBidder,offer,context)
+                                            if(offer.state.equals("wait")) {
+                                                addDeclinedOffer(offer.uidBidder, offer, context)
+                                            }
                                         }
                                 }
                         }

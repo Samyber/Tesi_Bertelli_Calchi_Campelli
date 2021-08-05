@@ -42,14 +42,14 @@ class PassagesChoiceFragment : Fragment() {
         binding.passageRequestButtonChoisePassages.setOnClickListener {
             if(offer_wait==true){
                 Toast.makeText(activity,getString(R.string.already_offered),Toast.LENGTH_LONG).show()
-                return@setOnClickListener
-            }
-            if(typeUser=="requester"){
-                val intent = Intent(activity,MyPassageSummaryActivity::class.java)
-                startActivity(intent)
-            }else{
-                val intent = Intent(activity,RequestPassageActivity::class.java)
-                startActivity(intent)
+            }else {
+                if (typeUser == "requester") {
+                    val intent = Intent(activity, MyPassageSummaryActivity::class.java)
+                    startActivity(intent)
+                } else {
+                    val intent = Intent(activity, RequestPassageActivity::class.java)
+                    startActivity(intent)
+                }
             }
         }
 
@@ -96,6 +96,8 @@ class PassagesChoiceFragment : Fragment() {
                     if(control == false) {
                         offer_wait = false
                     }
+                }else{
+                    offer_wait = false
                 }
             }
 

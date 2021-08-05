@@ -25,6 +25,10 @@ import java.time.temporal.ChronoUnit
 
 class ReceivedOfferItem(val offer:Offer, val context:Context):Item<ViewHolder>() {
 
+    companion object{
+        val TAG = "ReceivedOfferItem"
+    }
+
     private var day :String? = null
     private var month:String? = null
     private var year:String? = null
@@ -176,6 +180,12 @@ class ReceivedOfferItem(val offer:Offer, val context:Context):Item<ViewHolder>()
                 .addOnFailureListener {
                     Toast.makeText(context,context.getString(R.string.error_accept_offer),Toast.LENGTH_LONG).show()
                 }
+        val ref3 = FirebaseDatabase.getInstance().getReference("accepted_offers/$uidBidder")
+        ref3.setValue(offer)
+                .addOnSuccessListener {
+                    Log.d(TAG,"Offerta caricata in accepted_offers")
+                }
+
     }
 
     private fun addDeclinedOffer(uidBidder:String){
