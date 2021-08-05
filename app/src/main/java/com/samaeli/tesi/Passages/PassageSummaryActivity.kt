@@ -103,6 +103,7 @@ class PassageSummaryActivity : AppCompatActivity() {
 
         completeUserFields()
         completePassageFields()
+        blockMadeOffer()
         completeOfferFields()
     }
 
@@ -118,7 +119,7 @@ class PassageSummaryActivity : AppCompatActivity() {
         val uidBidder = FirebaseAuth.getInstance().uid
         val uidRequester = passage!!.uid
 
-        val offer = Offer(uidBidder!!,uidRequester,price!!,"wait")
+        val offer = Offer(uidBidder!!,uidRequester,price!!,"wait",true)
 
         val ref = FirebaseDatabase.getInstance().getReference("made_offers/$uidBidder/$uidRequester")
         ref.setValue(offer)
@@ -270,6 +271,29 @@ class PassageSummaryActivity : AppCompatActivity() {
         })
     }
 
+    private fun blockMadeOffer(){
+        val uid = FirebaseAuth.getInstance().uid
+        val ref = FirebaseDatabase.getInstance().getReference("made_offers/$uid/")
+        ref.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot.exists()){
+                    snapshot.children.forEach {
+                        val offer = it.getValue(Offer::class.java)
+                        if(offer!!.state.equals("wait")){
+                            binding.priceInputLayoutPassageSummary.visibility = View.INVISIBLE
+                            binding.offerPassageButtonPassageSummary.visibility = View.INVISIBLE
+                            return
+                        }
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+        })
+    }
+
     private fun getDate(timestamp:Long){
         val formatter_day = SimpleDateFormat("dd")
         val formatter_month = SimpleDateFormat("MM")
@@ -294,5 +318,7 @@ class PassageSummaryActivity : AppCompatActivity() {
         price = priceString.toString().toDouble()
         return true
     }
+
+
 
 }

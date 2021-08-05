@@ -124,6 +124,7 @@
     <string name="passage_provide">Passage Provide</string>
     <string name="recent_offerts">Recent Offerts</string>
     <string name="summary_required_passage">Summary required passage</string>
+    <string name="already_offered">Your offer is still active!</string>
 
 
     <string name="departure_information">Departure information</string>

@@ -133,18 +133,25 @@ class MyPassageSummaryActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 snapshot.children.forEach {
                     val offer = it.getValue(Offer::class.java)
+                    Log.d(TAG,"Try to delete offers")
+                    val ref3 = FirebaseDatabase.getInstance().getReference("made_offers/${offer!!.uidBidder}/$uid")
+                    ref3.removeValue()
+                            .addOnSuccessListener {
+                                Log.d(TAG,"Offer delete from made_offers")
+                                // TODO se l'offerta è in wait
+                                addDeclinedOffer(offer!!.uidBidder,offer)
+                            }
 
                     val ref2 = FirebaseDatabase.getInstance().getReference("received_offers/$uid/${offer!!.uidBidder}")
                     ref2.removeValue()
                             .addOnSuccessListener {
-                                val ref3 = FirebaseDatabase.getInstance().getReference("made_offers/${offer!!.uidBidder}/$uid")
-                                ref3.removeValue()
-                                        .addOnSuccessListener {
-                                            addDeclinedOffer(offer!!.uidBidder,offer)
-                                        }
+                                Log.d(TAG,"Offer delete from receive_offers")
+                                //TODO
                             }
 
+
                 }
+                ref.removeEventListener(this)
             }
             override fun onCancelled(error: DatabaseError) {
             }

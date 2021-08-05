@@ -62,7 +62,7 @@ class DeletePassageAndNotificationService : Service() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.exists()) {
                     val passage = snapshot.getValue(Passage::class.java)
-                    // Quando si è assunto il drink
+                    // Ora passaggio
                     val timeMinute: Int = passage!!.hour * 60 + passage.minute
                     // Ora
                     val nowMinute: Int = Calendar.getInstance().get(Calendar.MINUTE) +
@@ -86,6 +86,7 @@ class DeletePassageAndNotificationService : Service() {
     }
 
     fun declineAllOffers(){
+        Log.d(TAG, "Try to delete offers")
         val uid = FirebaseAuth.getInstance().uid
         val ref = FirebaseDatabase.getInstance().getReference("received_offers/$uid/")
         ref.addValueEventListener(object:ValueEventListener{
@@ -93,17 +94,27 @@ class DeletePassageAndNotificationService : Service() {
                 snapshot.children.forEach {
                     val offer = it.getValue(Offer::class.java)
                     val ref2 = FirebaseDatabase.getInstance().getReference("received_offers/$uid/${offer!!.uidBidder}")
+                    val ref3 = FirebaseDatabase.getInstance().getReference("made_offers/${offer!!.uidBidder}/$uid")
+                    ref3.removeValue()
+                            .addOnSuccessListener {
+                                Log.d(TAG,"Offerta cancellata da made_offers")
+                                // TODO solo se offerta è in wait
+                                addDeclinedOffer(offer!!.uidBidder, offer)
+                            }
                     ref2.removeValue()
                             .addOnSuccessListener {
+                                Log.d(TAG,"Offerta cancellata da receive_offers")
                                 //if(!offer.state.equals("accepted")) {
-                                    val ref3 = FirebaseDatabase.getInstance().getReference("made_offers/${offer!!.uidBidder}/$uid")
+                                    /*val ref3 = FirebaseDatabase.getInstance().getReference("made_offers/${offer!!.uidBidder}/$uid")
                                     ref3.removeValue()
                                             .addOnSuccessListener {
+                                                // TODO solo se offerta è in wait
                                                 addDeclinedOffer(offer!!.uidBidder, offer)
                                             }
+
+                                     */
                                 //}
                             }
-
                 }
                 ref.removeEventListener(this)
             }

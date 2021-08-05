@@ -97,6 +97,9 @@ class MadeOffersActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
+                // Prova
+                Toast.makeText(applicationContext,getString(R.string.there_are_not_offers),Toast.LENGTH_LONG).show()
+                finish()
             }
 
         })

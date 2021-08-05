@@ -84,7 +84,7 @@ class ReceivedOfferItem(val offer:Offer, val context:Context):Item<ViewHolder>()
         return R.layout.item_received_offer
     }
 
-    private fun declineOffer(){
+    /*private fun declineOffer(){
         val uidBidder = offer.uidBidder
         val uidRequester = offer.uidRequester
         val ref = FirebaseDatabase.getInstance().getReference("received_offers/$uidRequester/$uidBidder")
@@ -92,35 +92,69 @@ class ReceivedOfferItem(val offer:Offer, val context:Context):Item<ViewHolder>()
                 .addOnSuccessListener {
                     val ref2 = FirebaseDatabase.getInstance().getReference("made_offers/$uidBidder/$uidRequester")
 
-                    //ref2.addValueEventListener(object : ValueEventListener{
-                     //   override fun onDataChange(snapshot: DataSnapshot) {
-                     //       val offer = snapshot.getValue(Offer::class.java)
-                            //offer!!.state = "declined"
-                            val newOffer = Offer(offer!!.uidBidder,offer.uidRequester,offer.price,"declined")
-                            ref2.setValue(newOffer)
-                                    .addOnSuccessListener {
-                                        addDeclinedOffer(uidBidder)
-                                    }
-                                    .addOnFailureListener {
-                                        Toast.makeText(context,context.getString(R.string.error_decline_offer),Toast.LENGTH_LONG).show()
-                                    }
-                       // }
-
-                        //override fun onCancelled(error: DatabaseError) {
-                        //}
-
-                    //})
-                    /*ref2.removeValue()
+                    val newOffer = Offer(offer!!.uidBidder,offer.uidRequester,offer.price,"declined",true)
+                    ref2.setValue(newOffer)
                             .addOnSuccessListener {
                                 addDeclinedOffer(uidBidder)
                             }
                             .addOnFailureListener {
                                 Toast.makeText(context,context.getString(R.string.error_decline_offer),Toast.LENGTH_LONG).show()
-                            }*/
+                            }
+
                 }
                 .addOnFailureListener {
                     Toast.makeText(context,context.getString(R.string.error_decline_offer),Toast.LENGTH_LONG).show()
                 }
+    }*/
+
+    private fun declineOffer(){
+        val uidBidder = offer.uidBidder
+        val uidRequester = offer.uidRequester
+        val ref = FirebaseDatabase.getInstance().getReference("received_offers/$uidRequester/$uidBidder")
+        ref.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val offerReceived = snapshot.getValue(Offer::class.java)
+                offerReceived!!.visibility = false
+                ref.setValue(offerReceived)
+                        .addOnSuccessListener {
+                            val ref2 = FirebaseDatabase.getInstance().getReference("made_offers/$uidBidder/$uidRequester")
+
+                            val newOffer = Offer(offer!!.uidBidder,offer.uidRequester,offer.price,"declined",true)
+                            ref2.setValue(newOffer)
+                                    .addOnSuccessListener {
+                                        addDeclinedOffer(uidBidder)
+                                        ref.removeEventListener(this)
+                                    }
+                                    .addOnFailureListener {
+                                        Toast.makeText(context,context.getString(R.string.error_decline_offer),Toast.LENGTH_LONG).show()
+                                    }
+                        }
+                        .addOnFailureListener {
+                            Toast.makeText(context,context.getString(R.string.error_decline_offer),Toast.LENGTH_LONG).show()
+                        }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+        })
+        /*ref.removeValue()
+                .addOnSuccessListener {
+                    val ref2 = FirebaseDatabase.getInstance().getReference("made_offers/$uidBidder/$uidRequester")
+
+                    val newOffer = Offer(offer!!.uidBidder,offer.uidRequester,offer.price,"declined",true)
+                    ref2.setValue(newOffer)
+                            .addOnSuccessListener {
+                                addDeclinedOffer(uidBidder)
+                            }
+                            .addOnFailureListener {
+                                Toast.makeText(context,context.getString(R.string.error_decline_offer),Toast.LENGTH_LONG).show()
+                            }
+
+                }
+                .addOnFailureListener {
+                    Toast.makeText(context,context.getString(R.string.error_decline_offer),Toast.LENGTH_LONG).show()
+                }*/
     }
 
     private fun acceptOffer(){

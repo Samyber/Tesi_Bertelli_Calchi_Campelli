@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -24,8 +25,9 @@ class PassagesChoiceFragment : Fragment() {
     private var typeUser :String = "bidder"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
+
+    private var offer_wait = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -34,10 +36,14 @@ class PassagesChoiceFragment : Fragment() {
         _binding = FragmentPassagesChoiceBinding.inflate(inflater,container,false)
         val view = binding.root
 
-        setVisibilityRecentOffer()
+        //setVisibilityRecentOffer()
         //setVisibilityRequestNewPassage()
 
         binding.passageRequestButtonChoisePassages.setOnClickListener {
+            if(offer_wait==true){
+                Toast.makeText(activity,getString(R.string.already_offered),Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
             if(typeUser=="requester"){
                 val intent = Intent(activity,MyPassageSummaryActivity::class.java)
                 startActivity(intent)
@@ -67,7 +73,36 @@ class PassagesChoiceFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        setVisibilityRecentOffer()
         setRequestPassageButtonText()
+        disableRequestPassageButton()
+    }
+
+    private fun disableRequestPassageButton(){
+        val uid = FirebaseAuth.getInstance().uid
+        val ref = FirebaseDatabase.getInstance().getReference("made_offers/$uid")
+        ref.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot.exists()){
+                    var control = false
+                    snapshot.children.forEach {
+                        val offer = it.getValue(Offer::class.java)
+                        if(offer!!.state.equals("wait")){
+                            offer_wait = true
+                            control = true
+                            return
+                        }
+                    }
+                    if(control == false) {
+                        offer_wait = false
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+        })
     }
 
     private fun setRequestPassageButtonText(){
@@ -91,13 +126,22 @@ class PassagesChoiceFragment : Fragment() {
     }
 
     private fun setVisibilityRecentOffer(){
+        var offer_exist = false
         val uid = FirebaseAuth.getInstance().uid
         val ref = FirebaseDatabase.getInstance().getReference("received_offers/$uid")
         ref.addValueEventListener(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.exists()){
-                    binding.recentOffertsButtonChoisePassages.visibility = View.VISIBLE
-                }else{
+                    snapshot.children.forEach {
+                        val offer = it.getValue(Offer::class.java)
+                        if(offer!!.visibility==true){
+                            binding.recentOffertsButtonChoisePassages.visibility = View.VISIBLE
+                            offer_exist = true
+                            return
+                        }
+                    }
+                }
+                if(offer_exist==false){
                     val ref2 = FirebaseDatabase.getInstance().getReference("made_offers/$uid")
                     ref2.addValueEventListener(object:ValueEventListener{
                         override fun onDataChange(snapshot: DataSnapshot) {
