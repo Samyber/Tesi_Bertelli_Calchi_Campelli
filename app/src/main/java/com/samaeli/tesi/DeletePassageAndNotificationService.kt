@@ -58,6 +58,7 @@ class DeletePassageAndNotificationService : Service() {
         timerDeletePassage = Timer(true)
         timerDeletePassage!!.schedule(object : TimerTask(){
             override fun run() {
+                Log.d(TAG,"RUN")
                 checkPassage()
             }
         },0,1000 * 60 *5)

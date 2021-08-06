@@ -96,7 +96,7 @@ class PassageSummaryActivity : AppCompatActivity() {
         binding.offerPassageButtonPassageSummary.setOnClickListener {
             if(validatePriceField()){
                 Log.d(TAG,"Prezzo ok")
-                uploadOfferToFirebase()
+                checkIfPassageExist()
             }else{
                 Log.d(TAG,"Error price")
             }
@@ -128,6 +128,33 @@ class PassageSummaryActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    // Metodo che controlla se il passaggio è ancora presente oppure se è stato eliminato
+    private fun checkIfPassageExist(){
+        val ref = FirebaseDatabase.getInstance().getReference("passages/${passage!!.uid}")
+        ref.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot.exists()){
+                    val passage = snapshot.getValue(Passage::class.java)
+                    if(passage!!.visibility == false){
+                        Toast.makeText(applicationContext,getString(R.string.error_passage_removed),Toast.LENGTH_LONG).show()
+                        finish()
+                    }
+                    // Offerta caricata su firebase solo se il passaggio esiste ed è visibile
+                    uploadOfferToFirebase()
+                }else{
+                    Toast.makeText(applicationContext,getString(R.string.error_passage_removed),Toast.LENGTH_LONG).show()
+                    finish()
+                }
+                ref.removeEventListener(this)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+        })
+    }
+
+    // Metodo che permette di caricare l'offerta fatta su firebase
     private fun uploadOfferToFirebase(){
         loadingDialog!!.startLoadingDialog()
         val uidBidder = FirebaseAuth.getInstance().uid
@@ -282,6 +309,11 @@ class PassageSummaryActivity : AppCompatActivity() {
                         binding.withdrawOfferButtonPassageSummary.visibility = View.VISIBLE
                     }else{
                         binding.withdrawOfferButtonPassageSummary.visibility = View.INVISIBLE
+                    }
+
+                    if(offer!!.state.equals("declined")){
+                        binding.priceInputLayoutPassageSummary.visibility = View.VISIBLE
+                        binding.offerPassageButtonPassageSummary.visibility = View.VISIBLE
                     }
 
                     binding.lastPriceTextViewPassageSummary.text = getString(R.string.last_price)+": "+offer!!.price+"€"

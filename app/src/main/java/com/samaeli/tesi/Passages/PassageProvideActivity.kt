@@ -8,10 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.samaeli.tesi.R
 import com.samaeli.tesi.databinding.ActivityPassageProvideBinding
 import com.samaeli.tesi.models.Passage
@@ -29,6 +26,7 @@ class PassageProvideActivity : AppCompatActivity() {
     }
 
     private val adapter = GroupAdapter<ViewHolder>()
+    private val passagesMap = HashMap<String, Passage>()
 
     private var departureCity : String? = null
     private var arrivalCity : String? = null
@@ -88,6 +86,100 @@ class PassageProvideActivity : AppCompatActivity() {
     }*/
 
     private fun fetchPassage(){
+        val ref = FirebaseDatabase.getInstance().getReference("passages/")
+        ref.addChildEventListener(object : ChildEventListener{
+            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                val passage = snapshot.getValue(Passage::class.java) ?: return
+                //passagesMap[snapshot.key!!] = passage
+                insertPassage(passage,snapshot)
+                refreshRecyclerView()
+            }
+
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+                val passage = snapshot.getValue(Passage::class.java) ?: return
+                //passagesMap[snapshot.key!!] = passage
+                insertPassage(passage,snapshot)
+                refreshRecyclerView()
+            }
+
+            override fun onChildRemoved(snapshot: DataSnapshot) {
+                //passagesMap.remove(snapshot.key!!)
+                if(passagesMap.containsKey(snapshot.key!!)){
+                    passagesMap.remove(snapshot.key!!)
+                }
+                refreshRecyclerView()
+            }
+
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+        })
+    }
+
+    private fun insertPassage(passage:Passage,snapshot: DataSnapshot){
+        val uid = FirebaseAuth.getInstance().uid
+        if (passage != null && passage.uid != uid && passage.visibility == true) {
+            if (!arrivalCity.isNullOrEmpty() && !arrivalCity!!.isBlank()) {
+                if (!departureCity.isNullOrEmpty() && !departureCity!!.isBlank()) {
+                    // Utente ha inserito entrambe le città
+                    addPassageItemArrivalDeparture(passage, arrivalCity!!, departureCity!!,snapshot)
+                } else {
+                    // Utente ha inserito solo arrival city
+                    addPassageItemArrival(passage, arrivalCity!!,snapshot)
+                }
+            } else {
+                if (!departureCity.isNullOrEmpty() && !departureCity!!.isBlank()) {
+                    // Utente ha inserito solo departure city
+                    addPassageItemDeparture(passage, departureCity!!,snapshot)
+                } else {
+                    // utente non ha inserito nulla
+                    addPassageItem(passage,snapshot)
+                }
+            }
+        }
+    }
+
+    private fun refreshRecyclerView(){
+        adapter.clear()
+        passagesMap.values.forEach {
+            adapter.add(PassageItem(it))
+        }
+        showHideNoResult()
+    }
+
+    /*private fun displayPassages(snapshot: DataSnapshot){
+        val uid = FirebaseAuth.getInstance().uid
+        if(snapshot!=null) {
+            snapshot.children.forEach {
+                val passage = it.getValue(Passage::class.java)
+                if (passage != null && passage.uid != uid && passage.visibility == true) {
+                    if (!arrivalCity.isNullOrEmpty() && !arrivalCity!!.isBlank()) {
+                        if (!departureCity.isNullOrEmpty() && !departureCity!!.isBlank()) {
+                            // Utente ha inserito entrambe le città
+                            addPassageItemArrivalDeparture(passage, arrivalCity!!, departureCity!!)
+                        } else {
+                            // Utente ha inserito solo arrival city
+                            addPassageItemArrival(passage, arrivalCity!!)
+                        }
+                    } else {
+                        if (!departureCity.isNullOrEmpty() && !departureCity!!.isBlank()) {
+                            // Utente ha inserito solo departure city
+                            addPassageItemDeparture(passage, departureCity!!)
+                        } else {
+                            // utente non ha inserito nulla
+                            addPassageItem(passage)
+                        }
+                    }
+                }
+            }
+        }
+        showHideNoResult()
+    }*/
+
+    /*private fun fetchPassage(){
         adapter.clear()
         val uid = FirebaseAuth.getInstance().uid
         val ref = FirebaseDatabase.getInstance().getReference("passages/")
@@ -119,12 +211,11 @@ class PassageProvideActivity : AppCompatActivity() {
                 }
                 showHideNoResult()
             }
-
             override fun onCancelled(error: DatabaseError) {
             }
 
         })
-    }
+    }*/
 
     private fun showHideNoResult(){
         if(adapter.itemCount==0){
@@ -136,7 +227,34 @@ class PassageProvideActivity : AppCompatActivity() {
         }
     }
 
-    private fun addPassageItem(passage: Passage){
+    private fun addPassageItem(passage: Passage,snapshot: DataSnapshot){
+        Log.d(TAG,"UID Passage: ${passage.uid}")
+        passagesMap[snapshot.key!!] = passage
+    }
+
+    private fun addPassageItemArrival(passage: Passage,arrivalCity:String,snapshot: DataSnapshot){
+        if(passage.arrivalCity.contains(arrivalCity,true)){
+            Log.d(TAG,"UID Passage: ${passage.uid}")
+            passagesMap[snapshot.key!!] = passage
+        }
+    }
+
+    private fun addPassageItemDeparture(passage: Passage,departureCity:String,snapshot: DataSnapshot){
+        if(passage.departureCity.contains(departureCity,true)){
+            Log.d(TAG,"UID Passage: ${passage.uid}")
+            passagesMap[snapshot.key!!] = passage
+        }
+    }
+
+    private fun addPassageItemArrivalDeparture(passage: Passage,arrivalCity:String,departureCity: String,snapshot: DataSnapshot){
+        if(passage.arrivalCity.contains(arrivalCity,true) &&
+                passage.departureCity.contains(departureCity,true)){
+            Log.d(TAG,"UID Passage: ${passage.uid}")
+            passagesMap[snapshot.key!!] = passage
+        }
+    }
+
+    /*private fun addPassageItem(passage: Passage){
         Log.d(TAG,"UID Passage: ${passage.uid}")
         adapter.add(PassageItem(passage))
     }
@@ -161,6 +279,6 @@ class PassageProvideActivity : AppCompatActivity() {
             Log.d(TAG,"UID Passage: ${passage.uid}")
             adapter.add(PassageItem(passage))
         }
-    }
+    }*/
 
 }

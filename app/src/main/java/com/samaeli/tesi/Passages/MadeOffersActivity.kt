@@ -51,10 +51,16 @@ class MadeOffersActivity : AppCompatActivity() {
             val ref = FirebaseDatabase.getInstance().getReference("passages/${offer.uidRequester}")
             ref.addValueEventListener(object : ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    val passage = snapshot.getValue(Passage::class.java)
-                    val intent = Intent(applicationContext,PassageSummaryActivity::class.java)
-                    intent.putExtra(PassageProvideActivity.PASSAGE_KEY,passage)
-                    startActivity(intent)
+                    if(!snapshot.exists()) {
+                        Toast.makeText(applicationContext,getString(R.string.error_passage_removed),Toast.LENGTH_LONG).show()
+                        finish()
+                    }else{
+                        val passage = snapshot.getValue(Passage::class.java)
+                        val intent = Intent(applicationContext, PassageSummaryActivity::class.java)
+                        intent.putExtra(PassageProvideActivity.PASSAGE_KEY, passage)
+                        startActivity(intent)
+                    }
+                    ref.removeEventListener(this)
                 }
 
                 override fun onCancelled(error: DatabaseError) {
@@ -94,12 +100,13 @@ class MadeOffersActivity : AppCompatActivity() {
                     Toast.makeText(applicationContext,getString(R.string.there_are_not_offers),Toast.LENGTH_LONG).show()
                     finish()
                 }
+                //ref.removeEventListener(this)
             }
 
             override fun onCancelled(error: DatabaseError) {
                 // Prova
-                Toast.makeText(applicationContext,getString(R.string.there_are_not_offers),Toast.LENGTH_LONG).show()
-                finish()
+                /*Toast.makeText(applicationContext,getString(R.string.there_are_not_offers),Toast.LENGTH_LONG).show()
+                finish()*/
             }
 
         })

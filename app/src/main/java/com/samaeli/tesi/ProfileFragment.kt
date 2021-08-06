@@ -31,6 +31,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.samaeli.tesi.databinding.FragmentProfileBinding
+import com.samaeli.tesi.models.Offer
 import com.samaeli.tesi.models.User
 import com.squareup.picasso.Picasso
 import java.io.ByteArrayOutputStream
@@ -168,7 +169,44 @@ class ProfileFragment : Fragment() {
 
         // Show dialog box
         binding.deleteAccountButtonProfile.setOnClickListener {
-            showDialogBox()
+            val ref = FirebaseDatabase.getInstance().getReference("passages/${user!!.uid}")
+            ref.addValueEventListener(object : ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if(snapshot.exists()){
+                        Toast.makeText(activity,getString(R.string.passage_offer_exist),Toast.LENGTH_LONG).show()
+                    }else{
+                        val ref2 = FirebaseDatabase.getInstance().getReference("made_offers/${user!!.uid}")
+                        ref2.addValueEventListener(object : ValueEventListener{
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                if(!snapshot.exists()){
+                                    //Toast.makeText(activity,getString(R.string.passage_offer_exist),Toast.LENGTH_LONG).show()
+                                    showDialogBox()
+                                }else{
+                                    snapshot.children.forEach{
+                                        val offer = it.getValue(Offer::class.java)
+                                        if(!offer!!.state.equals("declined")){
+                                            Toast.makeText(activity,getString(R.string.passage_offer_exist),Toast.LENGTH_LONG).show()
+                                            return
+                                        }
+                                    }
+                                    showDialogBox()
+                                }
+                                ref2.removeEventListener(this)
+                            }
+
+                            override fun onCancelled(error: DatabaseError) {
+                            }
+
+                        })
+                    }
+                    ref.removeEventListener(this)
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                }
+
+            })
+            //showDialogBox()
         }
 
         return view

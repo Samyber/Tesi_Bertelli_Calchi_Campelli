@@ -2,16 +2,14 @@ package com.samaeli.tesi.Passages
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.samaeli.tesi.R
 import com.samaeli.tesi.databinding.FragmentPassagesChoiceBinding
 import com.samaeli.tesi.models.Offer
@@ -67,6 +65,9 @@ class PassagesChoiceFragment : Fragment() {
                 startActivity(intent)
             }
         }
+
+        // Controlla se il passaggio è stato cancellato dal servizio in background
+        checkPassageDelete()
 
         return view
     }
@@ -138,6 +139,7 @@ class PassagesChoiceFragment : Fragment() {
                         val offer = it.getValue(Offer::class.java)
                         if(offer!!.visibility==true){
                             binding.recentOffertsButtonChoisePassages.visibility = View.VISIBLE
+                            Log.d("Fragment choice","Recent Offers visible1")
                             offer_exist = true
                             return
                         }
@@ -149,8 +151,10 @@ class PassagesChoiceFragment : Fragment() {
                         override fun onDataChange(snapshot: DataSnapshot) {
                             if(snapshot.exists()){
                                 binding.recentOffertsButtonChoisePassages.visibility = View.VISIBLE
+                                Log.d("Fragment choice","Recent Offers visible")
                             }else{
                                 binding.recentOffertsButtonChoisePassages.visibility = View.INVISIBLE
+                                Log.d("Fragment choice","Recent Offers invisible")
                             }
                         }
 
@@ -159,6 +163,31 @@ class PassagesChoiceFragment : Fragment() {
 
                     })
                 }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+        })
+    }
+
+    private fun checkPassageDelete(){
+        val uid = FirebaseAuth.getInstance().uid
+        val ref = FirebaseDatabase.getInstance().getReference("passages/$uid")
+        ref.addChildEventListener(object : ChildEventListener{
+            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+            }
+
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+            }
+
+            override fun onChildRemoved(snapshot: DataSnapshot) {
+                //binding.passageRequestButtonChoisePassages.text = activity!!.getString(R.string.passage_request)
+                typeUser="bidder"
+                binding.recentOffertsButtonChoisePassages.visibility = View.INVISIBLE
+            }
+
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
             }
 
             override fun onCancelled(error: DatabaseError) {

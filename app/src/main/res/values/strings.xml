@@ -163,6 +163,7 @@
     <string name="error_create_offer">Error during creation operation</string>
     <string name="withdraw_offer">Withdraw the offer</string>
     <string name="offer_blocked">You can not make an offer since you are requesting a passage</string>
+    <string name="error_passage_removed">Error! the passage was removed</string>
 
     <string name="received_offers">Received offers</string>
     <string name="price">Price</string>
@@ -189,4 +190,6 @@
     <string name="offer_accepted_notification">Your offer has been accepted</string>
     <string name="offer_wait_notification">You have a new offer</string>
     <string name="offer_withdraw_notification">One of your offers has been withdrawn</string>
+
+    <string name="passage_offer_exist">You have a passage or offer active</string>
 </resources>
