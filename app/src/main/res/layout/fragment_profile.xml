@@ -40,13 +40,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/left_right_margin_profile"
-            android:layout_marginTop="@dimen/top_margin_profile"
+            android:layout_marginTop="16dp"
             android:layout_marginRight="@dimen/left_right_margin_profile"
             android:hint="@string/name"
-            app:startIconDrawable="@drawable/ic_round_person_24"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/circleImageProfile">
+            app:layout_constraintTop_toBottomOf="@+id/fidelityPointsTextViewProfile"
+            app:startIconDrawable="@drawable/ic_round_person_24">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/nameEditTextProfile"
@@ -114,6 +114,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_weight="1"
                 android:text="@string/select_gender"
+                android:textColor="@color/black"
                 android:textSize="16sp" />
 
             <RadioButton
@@ -122,14 +123,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="18dp"
                 android:layout_marginRight="18dp"
-                android:text="@string/male" />
+                android:text="@string/male"
+                android:textColor="@color/black" />
 
             <RadioButton
                 android:id="@+id/femaleRadioButtonProfile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="16dp"
-                android:text="@string/female" />
+                android:text="@string/female"
+                android:textColor="@color/black" />
         </RadioGroup>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -218,6 +221,18 @@
             app:layout_constraintEnd_toEndOf="@+id/updatePasswordButtonProfile"
             app:layout_constraintStart_toStartOf="@+id/updatePasswordButtonProfile"
             app:layout_constraintTop_toBottomOf="@+id/updatePasswordButtonProfile" />
+
+        <TextView
+            android:id="@+id/fidelityPointsTextViewProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/fidelity_points_profile"
+            android:textSize="18sp"
+            android:textStyle="bold|italic"
+            app:layout_constraintEnd_toEndOf="@+id/nameInputLayoutProfile"
+            app:layout_constraintStart_toStartOf="@+id/nameInputLayoutProfile"
+            app:layout_constraintTop_toBottomOf="@+id/selectPhotoButtonProfile" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

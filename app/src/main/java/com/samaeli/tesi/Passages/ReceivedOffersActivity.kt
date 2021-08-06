@@ -8,10 +8,7 @@ import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.google.firebase.ktx.Firebase
 import com.samaeli.tesi.R
 import com.samaeli.tesi.databinding.ActivityReceivedOffersBinding
@@ -30,12 +27,60 @@ class ReceivedOffersActivity : AppCompatActivity() {
         val TAG = "Received offers activity"
         var adapter = GroupAdapter<ViewHolder>()
         var act : Activity? = null
+        var offersMap = HashMap<String,Offer>()
 
         fun setActivity(a:Activity){
             act = a
         }
 
-        fun displayReceivedOffers(context: Context){
+        fun displayReceivedOffers(context:Context){
+            val uid = FirebaseAuth.getInstance().uid
+            val ref = FirebaseDatabase.getInstance().getReference("received_offers/$uid/")
+            ref.addChildEventListener(object : ChildEventListener{
+                override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                    val offer = snapshot.getValue(Offer::class.java)
+                    if(offer!!.visibility!=false){
+                        offersMap[snapshot.key!!] = offer
+                    }
+                    refreshRecyclerView(context)
+                }
+
+                override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+                    val offer = snapshot.getValue(Offer::class.java)
+                    if(offer!!.visibility==false && offersMap.containsKey(snapshot.key!!)){
+                        offersMap.remove(snapshot.key!!)
+                    }
+                    refreshRecyclerView(context)
+                }
+
+                override fun onChildRemoved(snapshot: DataSnapshot) {
+                    //val offer = snapshot.getValue(Offer::class.java)
+                    if(offersMap.containsKey(snapshot.key!!)){
+                        offersMap.remove(snapshot.key!!)
+                    }
+                    refreshRecyclerView(context)
+                }
+
+                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                }
+
+            })
+        }
+
+        private fun refreshRecyclerView(context : Context){
+            adapter.clear()
+            offersMap.values.forEach {
+                adapter.add(ReceivedOfferItem(it,context))
+            }
+            if(adapter.itemCount == 0){
+                act!!.finish()
+            }
+        }
+
+        /*fun displayReceivedOffers(context: Context){
             //adapter.clear()
             val uid = FirebaseAuth.getInstance().uid
             val ref = FirebaseDatabase.getInstance().getReference("received_offers/$uid/")
@@ -57,7 +102,7 @@ class ReceivedOffersActivity : AppCompatActivity() {
                 override fun onCancelled(error: DatabaseError) {
                 }
             })
-        }
+        }*/
 
         fun declineAllOffers(context:Context){
             val uid = FirebaseAuth.getInstance().uid
@@ -66,14 +111,14 @@ class ReceivedOffersActivity : AppCompatActivity() {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     snapshot.children.forEach {
                         val offer = it.getValue(Offer::class.java)
-                        if(!offer!!.state.equals("accepted")){
+                        if(!offer!!.state.equals(Offer.ACCEPTED)){
                             val ref2 = FirebaseDatabase.getInstance().getReference("received_offers/$uid/${offer.uidBidder}")
                             ref2.removeValue()
                                 .addOnSuccessListener {
                                     val ref3 = FirebaseDatabase.getInstance().getReference("made_offers/${offer.uidBidder}/$uid")
                                     ref3.removeValue()
                                         .addOnSuccessListener {
-                                            if(offer.state.equals("wait")) {
+                                            if(offer.state.equals(Offer.WAIT)) {
                                                 addDeclinedOffer(offer.uidBidder, offer, context)
                                             }
                                         }
@@ -149,7 +194,7 @@ class ReceivedOffersActivity : AppCompatActivity() {
 
         private fun addDeclinedOffer(uidBidder:String,offer:Offer,context: Context){
             val ref = FirebaseDatabase.getInstance().getReference("delete_offers/$uidBidder")
-            offer.state = "declined"
+            offer.state = Offer.DECLINED
             //val newOffer = Offer(offer.uidBidder,offer.uidRequester,offer.price,"declined")
             ref.setValue(offer)
                     .addOnSuccessListener {
@@ -178,16 +223,18 @@ class ReceivedOffersActivity : AppCompatActivity() {
             val ref = FirebaseDatabase.getInstance().getReference("passages/$uid")
             ref.addValueEventListener(object:ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    val passage = snapshot.getValue(Passage::class.java)
-                    passage!!.visibility=false
-                    ref.setValue(passage)
-                            .addOnSuccessListener {
-                                Log.d(TAG,"TUTTO OK!!!!")
-                                act!!.finish()
-                            }
-                            .addOnFailureListener {
-                                Log.d(TAG,"Error change passage visibility")
-                            }
+                    if(snapshot.exists()) {
+                        val passage = snapshot.getValue(Passage::class.java)
+                        passage!!.visibility = false
+                        ref.setValue(passage)
+                                .addOnSuccessListener {
+                                    Log.d(TAG, "TUTTO OK!!!!")
+                                    act!!.finish()
+                                }
+                                .addOnFailureListener {
+                                    Log.d(TAG, "Error change passage visibility")
+                                }
+                    }
                 }
 
                 override fun onCancelled(error: DatabaseError) {

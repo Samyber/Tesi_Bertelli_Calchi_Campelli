@@ -232,7 +232,7 @@ class RegisterActivity : AppCompatActivity() {
         // si viene rimandata nell'altra activity) ridurre valore di quality in compress
         val bitmap = MediaStore.Images.Media.getBitmap(contentResolver,selectPhotoUri)
         val baos = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG,15,baos)
+        bitmap.compress(Bitmap.CompressFormat.JPEG,10,baos)
         val data = baos.toByteArray()
 
         //ref.putFile(selectPhotoUri!!)
@@ -256,7 +256,7 @@ class RegisterActivity : AppCompatActivity() {
             gender = "female"
         }
 
-        val user = User(uid,email!!,name!!,surname!!,birthdayDate!!,licenseDate!!,gender!!,profileImageUrl,weight!!)
+        val user = User(uid,email!!,name!!,surname!!,birthdayDate!!,licenseDate!!,gender!!,profileImageUrl,weight!!,0)
         ref.setValue(user)
             .addOnSuccessListener {
                 Log.d(TAG,"User saved in db")

@@ -11,21 +11,22 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
         android:src="@drawable/ic_round_person_24"
+        app:layout_constraintBottom_toBottomOf="@+id/fidelityPointsTextViewReceivedOffer"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></de.hdodenhof.circleimageview.CircleImageView>
+        app:layout_constraintTop_toTopOf="@+id/nameTextViewReceivedOffer"></de.hdodenhof.circleimageview.CircleImageView>
 
     <TextView
         android:id="@+id/nameTextViewReceivedOffer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
         android:text="@string/name"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/photoImaveViewReceivedOffer"
-        app:layout_constraintTop_toTopOf="@+id/photoImaveViewReceivedOffer" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/genderTextViewReceivedOffer"
@@ -43,7 +44,7 @@
         android:id="@+id/ageTextViewReceivedOffer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:text="@string/age"
         android:textSize="16dp"
         app:layout_constraintStart_toStartOf="@+id/nameTextViewReceivedOffer"
@@ -53,7 +54,7 @@
         android:id="@+id/PriceTextViewReceivedOffer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:text="@string/price"
         android:textSize="16sp"
         android:textStyle="italic"
@@ -70,7 +71,7 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/photoImaveViewReceivedOffer">
+        app:layout_constraintTop_toBottomOf="@+id/fidelityPointsTextViewReceivedOffer">
 
         <android.widget.Button
             android:id="@+id/acceptButtonReceivedOffer"
@@ -90,13 +91,16 @@
             android:background="@drawable/rounded_button_red"
             android:text="@string/decline" />
 
-        <android.widget.Button
-            android:id="@+id/declineFutureButtonReceivedOffer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/rounded_button_red"
-            android:text="@string/do_not_ask_again" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/fidelityPointsTextViewReceivedOffer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/fidelity_points"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/PriceTextViewReceivedOffer"
+        app:layout_constraintTop_toBottomOf="@+id/PriceTextViewReceivedOffer" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

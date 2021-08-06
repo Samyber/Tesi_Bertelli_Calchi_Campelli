@@ -88,7 +88,7 @@ class PassagesChoiceFragment : Fragment() {
                     var control = false
                     snapshot.children.forEach {
                         val offer = it.getValue(Offer::class.java)
-                        if(offer!!.state.equals("wait")){
+                        if(offer!!.state.equals(Offer.WAIT)){
                             offer_wait = true
                             control = true
                             return
@@ -183,6 +183,7 @@ class PassagesChoiceFragment : Fragment() {
 
             override fun onChildRemoved(snapshot: DataSnapshot) {
                 //binding.passageRequestButtonChoisePassages.text = activity!!.getString(R.string.passage_request)
+                //binding.passageRequestButtonChoisePassages.text = context!!.getString(R.string.passage_request)
                 typeUser="bidder"
                 binding.recentOffertsButtonChoisePassages.visibility = View.INVISIBLE
             }

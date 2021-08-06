@@ -57,6 +57,8 @@ class ReceivedOfferItem(val offer:Offer, val context:Context):Item<ViewHolder>()
                 val age = ChronoUnit.YEARS.between(birthday,now)
                 viewHolder.itemView.ageTextViewReceivedOffer.text = context.getString(R.string.age)+": "+age
 
+                viewHolder.itemView.fidelityPointsTextViewReceivedOffer.text = context.getString(R.string.fidelity_points)+": "+user.points
+
                 viewHolder.itemView.PriceTextViewReceivedOffer.text = context.getString(R.string.price)+": "+offer.price.toString()+"€"
 
                 if(user!!.gender.equals("male")){
@@ -67,7 +69,7 @@ class ReceivedOfferItem(val offer:Offer, val context:Context):Item<ViewHolder>()
                     viewHolder.itemView.genderTextViewReceivedOffer.setTextColor(Color.rgb(255,179,222))
                 }
 
-                if(offer.state.equals("accepted")){
+                if(offer.state.equals(Offer.ACCEPTED)){
                     viewHolder.itemView.buttonsLinearLayoutReceivedOffer.visibility = View.INVISIBLE
                 }
 
@@ -164,7 +166,7 @@ class ReceivedOfferItem(val offer:Offer, val context:Context):Item<ViewHolder>()
     private fun acceptOffer(){
         val uidBidder = offer.uidBidder
         val uidRequester = offer.uidRequester
-        offer.state="accepted"
+        offer.state=Offer.ACCEPTED
         val ref = FirebaseDatabase.getInstance().getReference("received_offers/$uidRequester/$uidBidder")
         ref.setValue(offer)
                 .addOnSuccessListener {
@@ -185,12 +187,28 @@ class ReceivedOfferItem(val offer:Offer, val context:Context):Item<ViewHolder>()
                 .addOnSuccessListener {
                     Log.d(TAG,"Offerta caricata in accepted_offers")
                 }
+        val ref4 = FirebaseDatabase.getInstance().getReference("users/$uidBidder")
+        ref4.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val user = snapshot.getValue(User::class.java)
+                user!!.points = user.points + 1
+                ref4.setValue(user)
+                        .addOnSuccessListener {
+                            Log.d(TAG,"Punteggio incrementato correttamente: ${user.points}")
+                        }
+                ref4.removeEventListener(this)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+        })
 
     }
 
     private fun addDeclinedOffer(uidBidder:String){
         val ref = FirebaseDatabase.getInstance().getReference("delete_offers/$uidBidder")
-        offer.state = "declined"
+        offer.state = Offer.DECLINED
         ref.setValue(offer)
                 .addOnSuccessListener {
                     Log.d("CIAOOOOOOOOOOO","ADD Declined offer")

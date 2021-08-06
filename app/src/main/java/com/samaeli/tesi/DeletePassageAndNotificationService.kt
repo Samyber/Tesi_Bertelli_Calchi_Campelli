@@ -61,7 +61,7 @@ class DeletePassageAndNotificationService : Service() {
                 Log.d(TAG,"RUN")
                 checkPassage()
             }
-        },0,1000 * 60 *5)
+        },0,1000 * 60 *2)
     }
 
     private fun stopTimerDeletePassage(){
@@ -270,7 +270,7 @@ class DeletePassageAndNotificationService : Service() {
                             .addOnSuccessListener {
                                 Log.d(TAG,"Offerta cancellata da made_offers")
                                 // TODO solo se offerta è in wait
-                                if(offer.state.equals("wait")) {
+                                if(offer.state.equals(Offer.WAIT)) {
                                     addDeclinedOffer(offer!!.uidBidder, offer)
                                 }
                             }
@@ -299,7 +299,7 @@ class DeletePassageAndNotificationService : Service() {
     private fun addDeclinedOffer(uidBidder:String,offer: Offer){
         Log.d(TAG,"DeclineOffer")
         val ref = FirebaseDatabase.getInstance().getReference("delete_offers/$uidBidder")
-        offer.state = "declined"
+        offer.state = Offer.DECLINED
         ref.setValue(offer)
                 .addOnFailureListener {
                     Log.d(MyPassageSummaryActivity.TAG,"Error during decline offer")

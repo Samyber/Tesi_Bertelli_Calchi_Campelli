@@ -83,7 +83,7 @@ class MyPassageSummaryActivity : AppCompatActivity() {
                 }else {
                     snapshot.children.forEach {
                         val offer = it.getValue(Offer::class.java)
-                        if(offer!!.state.equals("accepted")){
+                        if(offer!!.state.equals(Offer.ACCEPTED)){
                             //displayNewRequestPassageButton()
                             binding.deleteButtonMyPassageSummary.visibility = View.GONE
                         }else{
@@ -160,7 +160,7 @@ class MyPassageSummaryActivity : AppCompatActivity() {
 
     private fun addDeclinedOffer(uidBidder:String,offer:Offer){
         val ref = FirebaseDatabase.getInstance().getReference("delete_offers/$uidBidder")
-        offer.state = "declined"
+        offer.state = Offer.DECLINED
         ref.setValue(offer)
                 .addOnFailureListener {
                     Log.d(TAG,"Error during decline offer")

@@ -27,6 +27,9 @@
 
     <dimen name="top_margin_passage_provide">24dp</dimen>
 
+    <dimen name="top_margin_fragment_choice">60dp</dimen>
+    <dimen name="height_button_fragment_choice">120dp</dimen>
+
     <dimen name="title_size_summary">24sp</dimen>
     <dimen name="name_size_summary">20sp</dimen>
     <dimen name="other_size_summary">16sp</dimen>

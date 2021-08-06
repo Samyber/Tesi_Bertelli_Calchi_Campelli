@@ -184,7 +184,7 @@ class ProfileFragment : Fragment() {
                                 }else{
                                     snapshot.children.forEach{
                                         val offer = it.getValue(Offer::class.java)
-                                        if(!offer!!.state.equals("declined")){
+                                        if(!offer!!.state.equals(Offer.DECLINED)){
                                             Toast.makeText(activity,getString(R.string.passage_offer_exist),Toast.LENGTH_LONG).show()
                                             return
                                         }
@@ -298,6 +298,7 @@ class ProfileFragment : Fragment() {
         ref.addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 user = snapshot.getValue(User::class.java)
+                binding.fidelityPointsTextViewProfile.text = getString(R.string.fidelity_points_profile)+" "+ user!!.points
                 binding.nameEditTextProfile.setText(user!!.name)
                 binding.surnameEditTextProfile.setText(user!!.surname)
                 binding.birthdayDateEditTextProfile.setText(getDate(user!!.birthdayDate))

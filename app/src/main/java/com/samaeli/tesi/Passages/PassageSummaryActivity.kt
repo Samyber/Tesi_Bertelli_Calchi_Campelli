@@ -160,7 +160,7 @@ class PassageSummaryActivity : AppCompatActivity() {
         val uidBidder = FirebaseAuth.getInstance().uid
         val uidRequester = passage!!.uid
 
-        val offer = Offer(uidBidder!!,uidRequester,price!!,"wait",true)
+        val offer = Offer(uidBidder!!,uidRequester,price!!,Offer.WAIT,true)
 
         val ref = FirebaseDatabase.getInstance().getReference("made_offers/$uidBidder/$uidRequester")
         ref.setValue(offer)
@@ -255,6 +255,8 @@ class PassageSummaryActivity : AppCompatActivity() {
                 Log.d(TAG,"The age is $age")
                 binding.ageUserTextViewPassageSummary.text = getString(R.string.age)+": "+age.toString()
 
+                binding.fidelityPointsTextViewPassageSummary.text = getString(R.string.fidelity_points)+": "+user.points
+
                 if(user.gender.equals("male")){
                     binding.genderTextViewPassageSummary.text = "M"
                     binding.genderTextViewPassageSummary.setTextColor(Color.BLUE)
@@ -299,19 +301,19 @@ class PassageSummaryActivity : AppCompatActivity() {
                 if(snapshot.exists()){
                     offer = snapshot.getValue(Offer::class.java)
 
-                    if(offer!!.state.equals("accepted")){
+                    if(offer!!.state.equals(Offer.ACCEPTED)){
                         binding.priceInputLayoutPassageSummary.visibility = View.INVISIBLE
                         binding.offerPassageButtonPassageSummary.visibility = View.INVISIBLE
                         binding.offerLinearLayoutPassageSummary.visibility = View.VISIBLE
                     }
 
-                    if(offer!!.state.equals("wait")){
+                    if(offer!!.state.equals(Offer.WAIT)){
                         binding.withdrawOfferButtonPassageSummary.visibility = View.VISIBLE
                     }else{
                         binding.withdrawOfferButtonPassageSummary.visibility = View.INVISIBLE
                     }
 
-                    if(offer!!.state.equals("declined")){
+                    if(offer!!.state.equals(Offer.DECLINED)){
                         binding.priceInputLayoutPassageSummary.visibility = View.VISIBLE
                         binding.offerPassageButtonPassageSummary.visibility = View.VISIBLE
                     }
@@ -336,7 +338,7 @@ class PassageSummaryActivity : AppCompatActivity() {
                 if(snapshot.exists()){
                     snapshot.children.forEach {
                         val offer = it.getValue(Offer::class.java)
-                        if(offer!!.state.equals("wait")){
+                        if(offer!!.state.equals(Offer.WAIT)){
                             binding.priceInputLayoutPassageSummary.visibility = View.INVISIBLE
                             binding.offerPassageButtonPassageSummary.visibility = View.INVISIBLE
                             return

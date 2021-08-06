@@ -332,6 +332,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
+        <TextView
+            android:id="@+id/fidelityPointsTextViewPassageSummary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/fidelity_points"
+            android:textSize="@dimen/other_size_summary"
+            app:layout_constraintStart_toStartOf="@+id/ageUserTextViewPassageSummary"
+            app:layout_constraintTop_toBottomOf="@+id/ageUserTextViewPassageSummary" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
