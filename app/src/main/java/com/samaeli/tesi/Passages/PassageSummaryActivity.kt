@@ -71,15 +71,14 @@ class PassageSummaryActivity : AppCompatActivity() {
             title = getString(R.string.passage)
         }
 
+        // Si preleva il passaggio dall'intent
         passage = intent.getParcelableExtra(PassageProvideActivity.PASSAGE_KEY)
 
         if(passage == null){
             finish()
         }
 
-        /*Log.d(TAG,"departure city: ${passage!!.departureCity}")
-        Log.d(TAG,"arrival city: ${passage!!.arrivalCity}")*/
-
+        // Si mostra su Google Maps navigazione tra punto di partenza e punto di arrivo
         binding.showRouteButtonPassageSummary.setOnClickListener {
             val intent = Intent(
                     Intent.ACTION_VIEW,
@@ -102,6 +101,7 @@ class PassageSummaryActivity : AppCompatActivity() {
             }
         }
 
+        // Quuando l'utente clicca questo bottone bisogna rimuovere l'offerta che ha fatto
         binding.withdrawOfferButtonPassageSummary.setOnClickListener {
             val uidBidder = FirebaseAuth.getInstance().uid
             val uidRequester = passage!!.uid
@@ -160,6 +160,7 @@ class PassageSummaryActivity : AppCompatActivity() {
         val uidBidder = FirebaseAuth.getInstance().uid
         val uidRequester = passage!!.uid
 
+        // Creazione dell'offerta
         val offer = Offer(uidBidder!!,uidRequester,price!!,Offer.WAIT,true)
 
         val ref = FirebaseDatabase.getInstance().getReference("made_offers/$uidBidder/$uidRequester")
@@ -188,9 +189,12 @@ class PassageSummaryActivity : AppCompatActivity() {
                 }
     }
 
+    //Metodo che ha il compito di visualizzare su Google maps l anavigazione dal punto in cui si trova
+    // l'utente al punto di partenza del passaggio
     private fun showRouteToDeparture(){
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
+        // if che viene eseguito se l'app non ha il permesso di accedere alla location del dispositivo
         if (ActivityCompat.checkSelfPermission(
                         this,
                         Manifest.permission.ACCESS_FINE_LOCATION
@@ -201,6 +205,7 @@ class PassageSummaryActivity : AppCompatActivity() {
         ) {
             requestLocationPermission()
         }
+        // Si preleva la location del dispositivo
         fusedLocationProviderClient.lastLocation
                 .addOnSuccessListener {
                     val intent = Intent(
@@ -212,6 +217,7 @@ class PassageSummaryActivity : AppCompatActivity() {
                 }
     }
 
+    // Metodo che ha il compito di richiedere all'utente il permesso per poter accedere alla location
     private fun requestLocationPermission(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             ActivityCompat.requestPermissions(
@@ -239,6 +245,7 @@ class PassageSummaryActivity : AppCompatActivity() {
         }
     }
 
+    // Metodo che ha il compito di riempire i campi con le informazioni dell'utente che ha richiesto il passaggio
     private fun completeUserFields(){
         val ref = FirebaseDatabase.getInstance().getReference("users/${passage!!.uid}")
         ref.addListenerForSingleValueEvent(object : ValueEventListener{
@@ -247,8 +254,8 @@ class PassageSummaryActivity : AppCompatActivity() {
                 val user = snapshot.getValue(User::class.java)
                 binding.nameUserTextViewPassageSummary.text = user!!.name+" "+user!!.surname
 
+                // Calcolo dell'età dell'utente
                 getDate(user.birthdayDate)
-
                 val now : LocalDate = LocalDate.now()
                 val birthday = LocalDate.of(year!!.toInt() ,month!!.toInt(),day!!.toInt())
                 val age = ChronoUnit.YEARS.between(birthday,now)
@@ -278,6 +285,7 @@ class PassageSummaryActivity : AppCompatActivity() {
         })
     }
 
+    // Metodo che ha il compito di riempire i campi con i dati del passaggio
     private fun completePassageFields(){
         var minuteString = passage!!.minute.toString()
         if(minuteString.length == 1){
@@ -293,6 +301,7 @@ class PassageSummaryActivity : AppCompatActivity() {
         binding.arrivalCityTextViewPassageSummary.text = getString(R.string.city)+": "+passage!!.arrivalCity
     }
 
+    // Metodo che ha il compito di riempire i campi con i dati dell'ultima offerta fatta (se presente)
     private fun completeOfferFields(){
         val uid = FirebaseAuth.getInstance().uid
         val ref = FirebaseDatabase.getInstance().getReference("made_offers/$uid/${passage!!.uid}")
@@ -301,6 +310,7 @@ class PassageSummaryActivity : AppCompatActivity() {
                 if(snapshot.exists()){
                     offer = snapshot.getValue(Offer::class.java)
 
+                    // In base allo stato dell'ooferta di decidono quali elementi devono essere visibili e quali no
                     if(offer!!.state.equals(Offer.ACCEPTED)){
                         binding.priceInputLayoutPassageSummary.visibility = View.INVISIBLE
                         binding.offerPassageButtonPassageSummary.visibility = View.INVISIBLE
@@ -330,6 +340,8 @@ class PassageSummaryActivity : AppCompatActivity() {
         })
     }
 
+    // Metodo che ha il compito di controllare che l'utente non possa fare un'offerta per un passaggio
+    // se ha già fatto un'offerta per un altro passaggio che è nello stato di wait
     private fun blockMadeOffer(){
         val uid = FirebaseAuth.getInstance().uid
         val ref = FirebaseDatabase.getInstance().getReference("made_offers/$uid/")
@@ -385,6 +397,7 @@ class PassageSummaryActivity : AppCompatActivity() {
         //return formatter.format(timestamp)
     }
 
+    // Metodo che ha il compito di controllare che l'utente abbia inserito il prezzo per l'offerta che sta facendo
     private fun validatePriceField():Boolean{
         val priceString = binding.priceEditTextPassageSummary.text
         if(priceString == null || priceString.isEmpty() || priceString.isBlank()){

@@ -68,6 +68,7 @@ class RequestPassageActivity : AppCompatActivity() {
             title = getString(R.string.insert_ride_informations)
         }
 
+        // Mostro DataPicker quando utente clicca su editText dell'ora
         binding.hourEditRequestPassage.inputType = InputType.TYPE_NULL
         binding.hourEditRequestPassage.setOnClickListener {
             Log.d(DrinkActivity.TAG, "Try to show timePicker")
@@ -113,8 +114,10 @@ class RequestPassageActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    // Metodo che setta come partenza la posizione attuale in cui si trova l'utente
     private fun setDepartureFromCurrentLocation(){
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+        // if che viene eseguito se l'app non ha il permesso di accedere alla location del dispositivo
         if (ActivityCompat.checkSelfPermission(
                         this,
                         Manifest.permission.ACCESS_FINE_LOCATION
@@ -125,13 +128,16 @@ class RequestPassageActivity : AppCompatActivity() {
         ) {
             requestLocationPermission()
         }
+        // Si preleva la location del dispositivo
         fusedLocationProviderClient.lastLocation
                 .addOnSuccessListener {
                     val geocoder = Geocoder(this,Locale.getDefault())
                     try {
+                        // Si preleva l'indirizzo corrispondente alle coordinate a cui si trova il dispositivo
                         val addressList: List<Address> =
                                 geocoder.getFromLocation(it.latitude, it.longitude, 1)
 
+                        // Se non è stato trovato un indirizzo si stampa un messaggio di errore
                         if(addressList.size < 1){
                             Toast.makeText(this,getString(R.string.error_location),Toast.LENGTH_LONG).show()
                             return@addOnSuccessListener
@@ -145,11 +151,12 @@ class RequestPassageActivity : AppCompatActivity() {
                         /*departureAddress = address.thoroughfare+" "+address.subThoroughfare
                         departureCity = address.locality*/
                     }catch(e:IOException){
-                        Log.d(TAG, "CIAOOOOOOO" + e.toString())
+                        Log.d(TAG, "Error: " + e.toString())
                     }
                 }
     }
 
+    // Metodo che ha il compito di richiedere all'utente il permesso per poter accedere alla location
     private fun requestLocationPermission(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             ActivityCompat.requestPermissions(
@@ -169,6 +176,7 @@ class RequestPassageActivity : AppCompatActivity() {
         }
     }
 
+    // Metodo che viene eseguitoquando l'utente ha selezionato se dare il permesso oppure no per accedere alla location
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
@@ -203,7 +211,7 @@ class RequestPassageActivity : AppCompatActivity() {
         return !error
     }
 
-
+    // Metodo che ha il compito di prelevare le coordinate degli indirizzi che sono stati inseriti
     private fun validateDepartureArrival(){
         val geocoder = Geocoder(this, Locale.getDefault())
 
@@ -239,7 +247,8 @@ class RequestPassageActivity : AppCompatActivity() {
             Log.d(TAG,"Error Geocoder")
         }
     }
-    
+
+    // Metodo che controlla che sia stato inserito l'indirizzo di partenza
     private fun validateDepartureAddress(){
         departureAddress = binding.departureAddressEditRequestPassage.text.toString()
 
@@ -252,6 +261,7 @@ class RequestPassageActivity : AppCompatActivity() {
         binding.departureAddressInputLayoutRequestPassage.isErrorEnabled = false
     }
 
+    // Metodo che controlla che sia stata inserita la città di partenza
     private fun validateDepartureCity(){
         departureCity = binding.departureCityEditRequestPassage.text.toString()
 
@@ -264,7 +274,7 @@ class RequestPassageActivity : AppCompatActivity() {
         binding.departureCityInputLayoutRequestPassage.isErrorEnabled = false
     }
 
-
+    // Metodo che controlla che sia stato inserito l'indirizzo di arrivo
     private fun validateArrivalAddress(){
         arrivalAddress = binding.arrivalAddressEditRequestPassage.text.toString()
 
@@ -277,6 +287,7 @@ class RequestPassageActivity : AppCompatActivity() {
         binding.arrivalAddressInputLayoutRequestPassage.isErrorEnabled = false
     }
 
+    // Metodo che controlla che sia stata inserita la città di arrivo
     private fun validateArrivalCity(){
         arrivalCity = binding.arrivalCityEditRequestPassage.text.toString()
 
@@ -289,6 +300,7 @@ class RequestPassageActivity : AppCompatActivity() {
         binding.arrivalCityInputLayoutRequestPassage.isErrorEnabled = false
     }
 
+    // Metodo che controlla che sia stata inserita l'ora
     private fun validateHour(){
         var hour = binding.hourEditRequestPassage.text.toString()
 
@@ -301,6 +313,7 @@ class RequestPassageActivity : AppCompatActivity() {
         binding.hourInputLayoutRequestPassage.isErrorEnabled = false
     }
 
+    // Metodo che controlla che sia stato inserito il numero di persone e che questo si <= 4
     private fun validateNumberPerson(){
         var numberPersonString = binding.numberPersonEditRequestPassage.text.toString()
 
@@ -319,17 +332,19 @@ class RequestPassageActivity : AppCompatActivity() {
         binding.numberPersonInputLayoutRequestPassage.isErrorEnabled = false
     }
 
+    // Controllo che l'utente non possa chiedere un passaggio per un'ora antecedente a quella attule
     private fun validateTime(){
         if(hour == null || minute == null){
             return
         }
+        // Ora del passaggio in minuti
         val timeMinute: Int = hour!! * 60 + minute!!
-        // Ora
+        // Ora Attuale in minuti
         val nowMinute: Int = Calendar.getInstance().get(Calendar.MINUTE) +
                 (Calendar.getInstance().get(Calendar.HOUR_OF_DAY) * 60)
         Log.d(DeletePassageAndNotificationService.TAG, "Time minute: $timeMinute ; Now minute: $nowMinute")
-        // Se sono passate le 17 e l'ora del passaggio è entro le 8 si può fare se no no
-        if(!(timeMinute<8*60 && nowMinute>16*60)) {
+        // Se sono passate le 17 e l'ora del passaggio è entro le 8 lo si puòrichiedere, se no no
+        if(!(timeMinute<8*60 && nowMinute>17*60)) {
             if (nowMinute > timeMinute) {
                 error=true
                 binding.hourInputLayoutRequestPassage.error = getString(R.string.error_time_passage)
@@ -340,6 +355,7 @@ class RequestPassageActivity : AppCompatActivity() {
         binding.hourInputLayoutRequestPassage.isErrorEnabled = false
     }
 
+    // Metodo che cambia colore alla startIcon del TextInputLayout quando è evidenziato
     private fun changeIconColor() {
         binding.departureAddressEditRequestPassage.setOnFocusChangeListener { v, hasFocus ->
             val color = if (hasFocus) Color.rgb(249, 170, 51) else Color.rgb(52, 73, 85)

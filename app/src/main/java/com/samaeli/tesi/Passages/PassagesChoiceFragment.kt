@@ -21,6 +21,7 @@ class PassagesChoiceFragment : Fragment() {
     private val binding get() = _binding!!
 
     private var typeUser :String = "bidder"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -29,8 +30,6 @@ class PassagesChoiceFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        //return inflater.inflate(R.layout.fragment_passages_choise, container, false)
         _binding = FragmentPassagesChoiceBinding.inflate(inflater,container,false)
         val view = binding.root
 
@@ -38,9 +37,12 @@ class PassagesChoiceFragment : Fragment() {
         //setVisibilityRequestNewPassage()
 
         binding.passageRequestButtonChoisePassages.setOnClickListener {
+            // Se l'utente ha fatto un'offerta che è nello stato di wait non può richiedere un passaggio
             if(offer_wait==true){
                 Toast.makeText(activity,getString(R.string.already_offered),Toast.LENGTH_LONG).show()
             }else {
+                // Se l'utente ha richiesto un passaggio si apre la schermata del resoconto altrimenti
+                    // quella per poter richiedere un nuovo passaggio
                 if (typeUser == "requester") {
                     val intent = Intent(activity, MyPassageSummaryActivity::class.java)
                     startActivity(intent)
@@ -51,11 +53,13 @@ class PassagesChoiceFragment : Fragment() {
             }
         }
 
+        // Si apre schermata con lista dei passaggi richiesti dagli altri utenti
         binding.passageProvideButtonChoisePassages.setOnClickListener {
             val intent = Intent(activity,PassageProvideActivity::class.java)
             startActivity(intent)
         }
 
+        // Si apre schermata delle offerte recenti
         binding.recentOffertsButtonChoisePassages.setOnClickListener {
             if(typeUser.equals("requester")){
                 val intent = Intent(activity,ReceivedOffersActivity::class.java)
@@ -79,6 +83,8 @@ class PassagesChoiceFragment : Fragment() {
         disableRequestPassageButton()
     }
 
+    // Metodo che ha il compito di impostare offer_wait a true se l'utente ha fatto un'offerta
+    // che è nello stato di wait (In questo caso non deve poter richiedere un passaggio)
     private fun disableRequestPassageButton(){
         val uid = FirebaseAuth.getInstance().uid
         val ref = FirebaseDatabase.getInstance().getReference("made_offers/$uid")
@@ -108,6 +114,8 @@ class PassagesChoiceFragment : Fragment() {
         })
     }
 
+    // Metodo che cambia il testo del primo bottono in base a se l'utente ha già chiesto un passaggio
+    // oppure no
     private fun setRequestPassageButtonText(){
         val uid = FirebaseAuth.getInstance().uid
         val ref = FirebaseDatabase.getInstance().getReference("passages/$uid")
@@ -128,6 +136,9 @@ class PassagesChoiceFragment : Fragment() {
         })
     }
 
+    // Metodo che ha il compito di cambiare la visibilità del bottone delle offerti recenti.
+    // Se c'è anche solo una offerta ricevuta o fatta il bottone deve essere visibile, altrimenti
+    // viene nascosto
     private fun setVisibilityRecentOffer(){
         var offer_exist = false
         val uid = FirebaseAuth.getInstance().uid
@@ -171,6 +182,7 @@ class PassagesChoiceFragment : Fragment() {
         })
     }
 
+    // Controlla se il passaggio è stato cancellato dal servizio in background
     private fun checkPassageDelete(){
         val uid = FirebaseAuth.getInstance().uid
         val ref = FirebaseDatabase.getInstance().getReference("passages/$uid")

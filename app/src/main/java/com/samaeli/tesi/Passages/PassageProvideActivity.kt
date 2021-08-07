@@ -26,6 +26,7 @@ class PassageProvideActivity : AppCompatActivity() {
     }
 
     private val adapter = GroupAdapter<ViewHolder>()
+    // HasMap che contiene tutti i passaggi che devono essere visualizzati
     private val passagesMap = HashMap<String, Passage>()
 
     private var departureCity : String? = null
@@ -44,15 +45,11 @@ class PassageProvideActivity : AppCompatActivity() {
         }
 
         binding.searchButtonPassageProvide.setOnClickListener {
-            /*if(!validateFields()){
-                return@setOnClickListener
-            }*/
             departureCity = binding.departureCityEditProvidePassage.text.toString()
             arrivalCity = binding.arrivalCityEditProvidePassage.text.toString()
             fetchPassage()
         }
 
-        // TODO In onResume?
         fetchPassage()
 
         adapter.setOnItemClickListener { item, view ->
@@ -85,6 +82,7 @@ class PassageProvideActivity : AppCompatActivity() {
         return true
     }*/
 
+    //Metodo che ha il compito di prelevare i passaggi da firebase che devono essere visualizzati
     private fun fetchPassage(){
         val ref = FirebaseDatabase.getInstance().getReference("passages/")
         ref.addChildEventListener(object : ChildEventListener{
@@ -119,6 +117,7 @@ class PassageProvideActivity : AppCompatActivity() {
         })
     }
 
+    // Metodo che inserisce il passaggio, se rispetta i vincoli di ricerca, dentro l'HashMap
     private fun insertPassage(passage:Passage,snapshot: DataSnapshot){
         val uid = FirebaseAuth.getInstance().uid
         if (passage != null && passage.uid != uid && passage.visibility == true) {
@@ -142,6 +141,7 @@ class PassageProvideActivity : AppCompatActivity() {
         }
     }
 
+    // Metodo che ha il compito di aggiornare il recyclerView
     private fun refreshRecyclerView(){
         adapter.clear()
         passagesMap.values.forEach {
@@ -217,6 +217,7 @@ class PassageProvideActivity : AppCompatActivity() {
         })
     }*/
 
+    // Se il numero di passaggi da visualizzare è zero si stampa la sctitta "No result"
     private fun showHideNoResult(){
         if(adapter.itemCount==0){
             binding.noResultTextViewPassageProvide.alpha = 1f
@@ -227,11 +228,13 @@ class PassageProvideActivity : AppCompatActivity() {
         }
     }
 
+    // Metodo che ha il compito di agguingere un passaggio se non è stata fatta nessun tipo di ricerca
     private fun addPassageItem(passage: Passage,snapshot: DataSnapshot){
         Log.d(TAG,"UID Passage: ${passage.uid}")
         passagesMap[snapshot.key!!] = passage
     }
 
+    // Metodo che ha il compito di aggiungere un passaggio se è stata ricercata la città di arrivo
     private fun addPassageItemArrival(passage: Passage,arrivalCity:String,snapshot: DataSnapshot){
         if(passage.arrivalCity.contains(arrivalCity,true)){
             Log.d(TAG,"UID Passage: ${passage.uid}")
@@ -239,6 +242,7 @@ class PassageProvideActivity : AppCompatActivity() {
         }
     }
 
+    // Metodo che ha il compito di aggiungere un passaggio se è stata ricercata la città di partenza
     private fun addPassageItemDeparture(passage: Passage,departureCity:String,snapshot: DataSnapshot){
         if(passage.departureCity.contains(departureCity,true)){
             Log.d(TAG,"UID Passage: ${passage.uid}")
@@ -246,6 +250,7 @@ class PassageProvideActivity : AppCompatActivity() {
         }
     }
 
+    // Metodo che ha il compito di aggiungere un passaggio se è stata ricercata sia la città di arrivo sia quella di partenza
     private fun addPassageItemArrivalDeparture(passage: Passage,arrivalCity:String,departureCity: String,snapshot: DataSnapshot){
         if(passage.arrivalCity.contains(arrivalCity,true) &&
                 passage.departureCity.contains(departureCity,true)){
