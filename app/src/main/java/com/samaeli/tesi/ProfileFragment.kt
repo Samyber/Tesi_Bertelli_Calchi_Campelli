@@ -297,26 +297,27 @@ class ProfileFragment : Fragment() {
         val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
         ref.addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
-                user = snapshot.getValue(User::class.java)
-                binding.fidelityPointsTextViewProfile.text = getString(R.string.fidelity_points_profile)+" "+ user!!.points
-                binding.nameEditTextProfile.setText(user!!.name)
-                binding.surnameEditTextProfile.setText(user!!.surname)
-                binding.birthdayDateEditTextProfile.setText(getDate(user!!.birthdayDate))
-                if(user!!.gender.equals("male")){
-                    binding.genderRadioGroupProfile.check(R.id.maleRadioButtonProfile)
-                }else{
-                    binding.genderRadioGroupProfile.check(R.id.femaleRadioButtonProfile)
-                }
-                binding.weightEditTextProfile.setText(user!!.weight.toString())
-                binding.drivingLicenseEditTextProfile.setText(getDate(user!!.licenseDate))
-                if(user!!.profileImageUrl == null){
-                    binding.circleImageProfile.alpha = 0f
-                }else{
-                    binding.selectPhotoButtonProfile.alpha = 0f
-                    val url = user!!.profileImageUrl
-                    val targetImageView = binding.circleImageProfile
-                    Picasso.get().load(url).into(targetImageView)
-                }
+                    user = snapshot.getValue(User::class.java)
+                    //binding.fidelityPointsTextViewProfile.text = getString(R.string.fidelity_points_profile) + " " + user!!.points
+                    binding.pointsTextViewProfile.text = " "+user!!.points
+                    binding.nameEditTextProfile.setText(user!!.name)
+                    binding.surnameEditTextProfile.setText(user!!.surname)
+                    binding.birthdayDateEditTextProfile.setText(getDate(user!!.birthdayDate))
+                    if (user!!.gender.equals("male")) {
+                        binding.genderRadioGroupProfile.check(R.id.maleRadioButtonProfile)
+                    } else {
+                        binding.genderRadioGroupProfile.check(R.id.femaleRadioButtonProfile)
+                    }
+                    binding.weightEditTextProfile.setText(user!!.weight.toString())
+                    binding.drivingLicenseEditTextProfile.setText(getDate(user!!.licenseDate))
+                    if (user!!.profileImageUrl == null) {
+                        binding.circleImageProfile.alpha = 0f
+                    } else {
+                        binding.selectPhotoButtonProfile.alpha = 0f
+                        val url = user!!.profileImageUrl
+                        val targetImageView = binding.circleImageProfile
+                        Picasso.get().load(url).into(targetImageView)
+                    }
             }
 
             override fun onCancelled(error: DatabaseError) {

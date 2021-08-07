@@ -44,6 +44,8 @@ class MadeOffersActivity : AppCompatActivity() {
 
         binding.recyclerViewMadeOffers.adapter = adapter
 
+        // Quando si clicca su un elemnto dell'adapter si apre la schermata del reseconto del passaggio a
+        // cui si riferisce quell'offerta
         adapter!!.setOnItemClickListener { item, view ->
             val madeOfferItem = item as MadeOfferItem
             val offer = madeOfferItem.offer
@@ -85,6 +87,7 @@ class MadeOffersActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    // Metodo che ha il compito di mostrare tutte le offerte che sono state fatte
     private fun displayMadeOffers(){
         //adapter!!.clear()
         val uid = FirebaseAuth.getInstance().uid
@@ -100,13 +103,9 @@ class MadeOffersActivity : AppCompatActivity() {
                     Toast.makeText(applicationContext,getString(R.string.there_are_not_offers),Toast.LENGTH_LONG).show()
                     finish()
                 }
-                //ref.removeEventListener(this)
             }
 
             override fun onCancelled(error: DatabaseError) {
-                // Prova
-                /*Toast.makeText(applicationContext,getString(R.string.there_are_not_offers),Toast.LENGTH_LONG).show()
-                finish()*/
             }
 
         })

@@ -41,6 +41,7 @@ class MyPassageSummaryActivity : AppCompatActivity() {
             title = getString(R.string.my_passage_summary)
         }
 
+        // Si mostra su Google Maps navigazione tra punto di partenza e punto di arrivo
         binding.showRouteButtonMyPassageSummary.setOnClickListener {
             val intent = Intent(
                 Intent.ACTION_VIEW,
@@ -72,6 +73,8 @@ class MyPassageSummaryActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    // Metedo che nasconde il bottone di cancellazione del passaggio se l'utente ha accettato un'offerta
+    // per quel passaggio
     private fun displayCorrectButton(){
         val uid = FirebaseAuth.getInstance().uid
         val ref = FirebaseDatabase.getInstance().getReference("received_offers/$uid")
@@ -84,10 +87,8 @@ class MyPassageSummaryActivity : AppCompatActivity() {
                     snapshot.children.forEach {
                         val offer = it.getValue(Offer::class.java)
                         if(offer!!.state.equals(Offer.ACCEPTED)){
-                            //displayNewRequestPassageButton()
                             binding.deleteButtonMyPassageSummary.visibility = View.GONE
                         }else{
-                            //displayDeletePassageButton()
                             binding.deleteButtonMyPassageSummary.visibility = View.VISIBLE
                             return
                         }
@@ -101,16 +102,7 @@ class MyPassageSummaryActivity : AppCompatActivity() {
         })
     }
 
-    /*private fun displayDeletePassageButton(){
-        binding.deleteButtonMyPassageSummary.visibility = View.VISIBLE
-        binding.newRequestButtonMyPassageSummary.visibility = View.GONE
-    }
-
-    private fun displayNewRequestPassageButton(){
-        binding.deleteButtonMyPassageSummary.visibility = View.GONE
-        binding.newRequestButtonMyPassageSummary.visibility = View.VISIBLE
-    }*/
-
+    // Metodo che cancella il passaggio richiesto dall'utente
     private fun deletePassage(){
         declineAllOffers()
         val uid = FirebaseAuth.getInstance().uid
@@ -126,6 +118,7 @@ class MyPassageSummaryActivity : AppCompatActivity() {
                 }
     }
 
+    // Metodo che declina tutte le offerte che sono arrivate
     fun declineAllOffers(){
         val uid = FirebaseAuth.getInstance().uid
         val ref = FirebaseDatabase.getInstance().getReference("received_offers/$uid/")
@@ -158,6 +151,8 @@ class MyPassageSummaryActivity : AppCompatActivity() {
         })
     }
 
+    // Metodo che ha il compito di aggiungere le offerte declinate in "delete_offers/" su firebase,
+    // sezione che viene controllata dal servizio in background per stampare le notifiche
     private fun addDeclinedOffer(uidBidder:String,offer:Offer){
         val ref = FirebaseDatabase.getInstance().getReference("delete_offers/$uidBidder")
         offer.state = Offer.DECLINED
@@ -168,6 +163,7 @@ class MyPassageSummaryActivity : AppCompatActivity() {
 
     }
 
+    // Metodo che ha il compito di completare i campi con i dati del passaggio richiesto
     private fun completeFields(){
         val uid = FirebaseAuth.getInstance().uid
         val ref = FirebaseDatabase.getInstance().getReference("passages/$uid")

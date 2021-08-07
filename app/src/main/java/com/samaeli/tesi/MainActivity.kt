@@ -79,6 +79,8 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         val alcoholLevelFragment = supportFragmentManager.findFragmentByTag("AlcoholLevelFragment")
+        val passageChoiceFragment = supportFragmentManager.findFragmentByTag("PassagesChoiceFragment")
+        val profileFragment = supportFragmentManager.findFragmentByTag("ProfileFragment")
         // Se l'AlcoholLevelFragment è visibile ma il bottone selezionato nella BottomNavigationView è diverso si seleziona quello dell'AlcoholLevel
         // Serve quando l'utente clicca ilbottone MyProfile o Passages senza essere loggato
         if(alcoholLevelFragment != null && alcoholLevelFragment.isVisible && binding.bottomNavigationView.selectedItemId != R.id.bottomNavigationAlcoholLevel){
@@ -87,6 +89,18 @@ class MainActivity : AppCompatActivity() {
         // Metodo che viene choamato in onResume in modo tale che dopo che l'utente si è loggato o registrato e viene
         // fatto il resume della MainActivity il menu cambi mostrando solo le voci opportune
         displayCorrectItemsMenu()
+
+        // Visualizzazione del fragment corretto se l'utente ruota il dispositivo
+        if(binding.bottomNavigationView.selectedItemId == R.id.bottomNavigationPassages && (passageChoiceFragment==null || !passageChoiceFragment.isVisible)){
+            Log.d(TAG,"Try to show PassagesChoiceFragment")
+            supportFragmentManager.beginTransaction().replace(R.id.fragmentContainerMainActivity,
+                    PassagesChoiceFragment(),
+                    "PassagesChoiceFragment").commit()
+        }else if(binding.bottomNavigationView.selectedItemId == R.id.bottomNavigationProfile && (profileFragment==null || !profileFragment.isVisible)){
+            Log.d(TAG, "Try to show ProfileFragment")
+            supportFragmentManager.beginTransaction().replace(R.id.fragmentContainerMainActivity, ProfileFragment(),
+                    "ProfileFragment").commit()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

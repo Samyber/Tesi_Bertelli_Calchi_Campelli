@@ -45,7 +45,7 @@
             android:hint="@string/name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fidelityPointsTextViewProfile"
+            app:layout_constraintTop_toBottomOf="@+id/fidelityPointsLinearLayoutProfile"
             app:startIconDrawable="@drawable/ic_round_person_24">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -222,18 +222,33 @@
             app:layout_constraintStart_toStartOf="@+id/updatePasswordButtonProfile"
             app:layout_constraintTop_toBottomOf="@+id/updatePasswordButtonProfile" />
 
-        <TextView
-            android:id="@+id/fidelityPointsTextViewProfile"
+        <LinearLayout
+            android:id="@+id/fidelityPointsLinearLayoutProfile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/fidelity_points_profile"
-            android:textSize="18sp"
-            android:textStyle="bold|italic"
             app:layout_constraintEnd_toEndOf="@+id/nameInputLayoutProfile"
             app:layout_constraintStart_toStartOf="@+id/nameInputLayoutProfile"
-            app:layout_constraintTop_toBottomOf="@+id/selectPhotoButtonProfile" />
+            app:layout_constraintTop_toBottomOf="@+id/selectPhotoButtonProfile">
 
+            <TextView
+                android:id="@+id/fidelityPointsTextViewProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fidelity_points_profile"
+                android:textSize="18sp"
+                android:textStyle="bold|italic" />
+
+            <TextView
+                android:id="@+id/pointsTextViewProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text=" 0"
+                android:textSize="18sp"
+                android:textStyle="bold|italic" />
+
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
