@@ -61,6 +61,7 @@ class ModifyEmailActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
             Log.d(TAG, "Campi ok")
+            // Start schermata di caricamento
             loadingDialog!!.startLoadingDialog()
             updateEmail()
         }
@@ -74,17 +75,21 @@ class ModifyEmailActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    // Metodo che modifica la mail dell'utente su FirebaseAuth
     private fun updateEmail(){
         val credential = EmailAuthProvider.getCredential(oldEmail!!,password!!)
         val currentUser = FirebaseAuth.getInstance().currentUser
+        // Reautenticazione dell'utente
         currentUser!!.reauthenticate(credential)
                 .addOnSuccessListener {
+                    // Modifica della mail
                     FirebaseAuth.getInstance().currentUser!!.updateEmail(newEmail!!)
                             .addOnSuccessListener {
                                 user!!.email = newEmail!!
                                 updateDatabase()
                             }
                             .addOnFailureListener {
+                                // Stop schermata di caricamento
                                 loadingDialog!!.dismissLoadingDialog()
                                 // If che viene eseguito se la nuova mail inserita dall'utente esiste gia
                                 if(it is FirebaseAuthUserCollisionException){
@@ -98,6 +103,7 @@ class ModifyEmailActivity : AppCompatActivity() {
                             }
                 }
                 .addOnFailureListener {
+                    // Stop schermata di caricamento
                     loadingDialog!!.dismissLoadingDialog()
                     // If che viene eseguito se l'utente ha sbagliato la password
                     if(it is FirebaseAuthInvalidCredentialsException) {
@@ -110,6 +116,7 @@ class ModifyEmailActivity : AppCompatActivity() {
                 }
     }
 
+    // Modifica della mail dell'utente su FirebaseDatabase
     private fun updateDatabase(){
         val uid = FirebaseAuth.getInstance().uid
         val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
@@ -119,10 +126,12 @@ class ModifyEmailActivity : AppCompatActivity() {
                     Toast.makeText(this,getString(R.string.email_changed),Toast.LENGTH_LONG).show()
                     // Modifico mail di user in ProfileFragment prima che venga visualizzato
                     ProfileFragment.user!!.email = newEmail!!
+                    // Stop schermata di caricamento
                     loadingDialog!!.dismissLoadingDialog()
                     finish()
                 }
                 .addOnFailureListener {
+                    // Stop schermata di caricamento
                     loadingDialog!!.dismissLoadingDialog()
                     Log.d(TAG,"Impossibile modificare l'utente nel db: ${it.message}")
                     Toast.makeText(this,getString(R.string.error_update_email)+": ${it.message}",Toast.LENGTH_LONG).show()
@@ -136,6 +145,7 @@ class ModifyEmailActivity : AppCompatActivity() {
         return !error
     }
 
+    // Controllo che l'utente abbia inserito la vecchia mail e che sia corretta
     private fun validateOldEmail(){
         oldEmail = binding.oldEmailEditTextModifyEmail.text.toString()
 
@@ -158,6 +168,7 @@ class ModifyEmailActivity : AppCompatActivity() {
         binding.oldEmailInputLayoutModifyEmail.isErrorEnabled = false
     }
 
+    // Controllo che l'utente abbia inserito la password
     private fun validatePassword(){
         password = binding.passwordEditTextModifyEmail.text.toString()
 
@@ -170,6 +181,7 @@ class ModifyEmailActivity : AppCompatActivity() {
         binding.passwordInputLayoutModifyEmail.isErrorEnabled = false
     }
 
+    // Controllo che l'utente abbi inserito la nuova mail e sia corretta
     private fun validateNewEmail(){
         newEmail = binding.newEmailEditTextModifyEmail.text.toString()
 
@@ -187,6 +199,7 @@ class ModifyEmailActivity : AppCompatActivity() {
         binding.newEmailInputLayoutModifyEmail.isErrorEnabled = false
     }
 
+    // Metodo che cambia colore alla startIcon del TextInputLayout quando è evidenziato
     private fun changeIconColor(){
         binding.oldEmailEditTextModifyEmail.setOnFocusChangeListener { v, hasFocus ->
             val color = if(hasFocus) Color.rgb(249,170,51) else Color.rgb(52,73,85)

@@ -27,12 +27,14 @@ class ReceivedOffersActivity : AppCompatActivity() {
         val TAG = "Received offers activity"
         var adapter = GroupAdapter<ViewHolder>()
         var act : Activity? = null
+        // HashMap che contiene le offerte che sono state ricevute
         var offersMap = HashMap<String,Offer>()
 
         fun setActivity(a:Activity){
             act = a
         }
 
+        // Metodo che ha il compito di visualizzare le offerte che sono state ricevute
         fun displayReceivedOffers(context:Context){
             val uid = FirebaseAuth.getInstance().uid
             val ref = FirebaseDatabase.getInstance().getReference("received_offers/$uid/")
@@ -70,6 +72,8 @@ class ReceivedOffersActivity : AppCompatActivity() {
             })
         }
 
+        // Metodo che ha il compito di aggiornare il recyclerView con le offerte che ci sono in
+        // offersMap
         private fun refreshRecyclerView(context : Context){
             adapter.clear()
             offersMap.values.forEach {
@@ -104,6 +108,7 @@ class ReceivedOffersActivity : AppCompatActivity() {
             })
         }*/
 
+        // Metodo che ha il compito di declinare tutte le offerte che sono arrivate
         fun declineAllOffers(context:Context){
             val uid = FirebaseAuth.getInstance().uid
             val ref = FirebaseDatabase.getInstance().getReference("received_offers/$uid/")
@@ -192,6 +197,7 @@ class ReceivedOffersActivity : AppCompatActivity() {
             ref.addValueEventListener(listener)
         }*/
 
+        // Metodo che aggiunge l'offerta declinata in "delete_offers"
         private fun addDeclinedOffer(uidBidder:String,offer:Offer,context: Context){
             val ref = FirebaseDatabase.getInstance().getReference("delete_offers/$uidBidder")
             offer.state = Offer.DECLINED
@@ -218,6 +224,7 @@ class ReceivedOffersActivity : AppCompatActivity() {
                     }
         }*/
 
+        // Metodo che ha il compito di rendere il passaggio invisibile se viene accettata un'offerta per quel passaggio
         private fun setPassageInvisible(context: Context){
             val uid = FirebaseAuth.getInstance().uid
             val ref = FirebaseDatabase.getInstance().getReference("passages/$uid")

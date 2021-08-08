@@ -48,6 +48,7 @@ class ModifyPasswordActivity : AppCompatActivity() {
                 Toast.makeText(this,getString(R.string.error_update_password),Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
+            // Start schermata di caricamento
             loadingDialog!!.startLoadingDialog()
             updatePassword()
         }
@@ -60,19 +61,23 @@ class ModifyPasswordActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    // Metodo che ha il compito di modificare la password dell'utente su FirebaseAuth
     private fun updatePassword(){
         val user = FirebaseAuth.getInstance().currentUser
         val credential = EmailAuthProvider.getCredential(user!!.email.toString(),oldPassword.toString())
+        // Reautenticazione dell'utente
         user.reauthenticate(credential)
                 .addOnSuccessListener {
                     /*binding.oldPasswordInputLayoutModifyPassword.error = ""
                     binding.oldPasswordInputLayoutModifyPassword.isErrorEnabled = false*/
                     user.updatePassword(newPassword.toString())
+                    // Stop schermata di caricamento
                     loadingDialog!!.dismissLoadingDialog()
                     Toast.makeText(this,getString(R.string.password_changed),Toast.LENGTH_LONG).show()
                     finish()
                 }
                 .addOnFailureListener {
+                    // Stop schermata di caricamento
                     loadingDialog!!.dismissLoadingDialog()
                     // If che viene eseguito se l'utente ha sbagliato la vecchia password
                     if(it is FirebaseAuthInvalidCredentialsException) {
@@ -91,6 +96,7 @@ class ModifyPasswordActivity : AppCompatActivity() {
         return !error
     }
 
+    // Controllo che l'utente abbia inserito la vecchia password
     private fun validateOldPassword(){
         oldPassword = binding.oldPasswordEditTextModifyPassword.text.toString()
 
@@ -103,6 +109,7 @@ class ModifyPasswordActivity : AppCompatActivity() {
         binding.oldPasswordInputLayoutModifyPassword.isErrorEnabled = false
     }
 
+    // Controllo che l'utente abbia inserito la nuova password
     private fun validateNewPassword(){
         newPassword = binding.newPasswordEditTextModifyPassword.text.toString()
 
@@ -120,6 +127,7 @@ class ModifyPasswordActivity : AppCompatActivity() {
         binding.newPasswordInputLayoutModifyPassword.isErrorEnabled = false
     }
 
+    // Controllo che l'utente abbia confermato la nuova password
     private fun validateConfirmNewPassword(){
         val confirmPassword = binding.confirmNewPasswordEditTextModifyPassword.text.toString()
 
@@ -137,6 +145,7 @@ class ModifyPasswordActivity : AppCompatActivity() {
         binding.confirmNewPasswordInputLayoutModifyPassword.isErrorEnabled = false
     }
 
+    // Metodo che cambia colore alla startIcon del TextInputLayout quando è evidenziato
     private fun changeIconColor(){
         binding.oldPasswordEditTextModifyPassword.setOnFocusChangeListener { v, hasFocus ->
             val color = if(hasFocus) Color.rgb(249,170,51) else Color.rgb(52,73,85)

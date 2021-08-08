@@ -146,6 +146,7 @@ class ProfileFragment : Fragment() {
                 return@setOnClickListener
             }
             Log.d(TAG,"Campi ok")
+            // Start schermata di caricamento
             loadingDialog!!.startLoadingDialog()
             if(changePhoto == true){
                 uploadImageToFirebase()
@@ -228,8 +229,8 @@ class ProfileFragment : Fragment() {
         }
     }
 
+    // Metodo che ha il compito di caricare l'immagine su firebase
     private fun uploadImageToFirebase(){
-        //val fileName = UUID.randomUUID().toString
         val fileName = FirebaseAuth.getInstance().uid
         val ref = FirebaseStorage.getInstance().getReference("/images/$fileName")
 
@@ -252,6 +253,7 @@ class ProfileFragment : Fragment() {
                 }
     }
 
+    // Metodo che ha il compito di modificare i dati dell'utente
     private fun modifyUserToFirebaseDatabase(newProfileImageUrl : String?){
         if(newProfileImageUrl != null){
             user!!.profileImageUrl = newProfileImageUrl
@@ -270,12 +272,14 @@ class ProfileFragment : Fragment() {
         updateDatabase()
     }
 
+    // Metodo che il compito di caricare i nuovi dati dell'utente su Firebase
     private fun updateDatabase(){
         val uid = FirebaseAuth.getInstance().uid
         val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
         ref.setValue(user)
                 .addOnSuccessListener {
                     Log.d(TAG,"User saved in db")
+                    // Stop schermata di caricamento
                     loadingDialog!!.dismissLoadingDialog()
                     Toast.makeText(activity,getString(R.string.ok_update_profile),Toast.LENGTH_LONG).show()
                 }
@@ -292,6 +296,7 @@ class ProfileFragment : Fragment() {
         return !error
     }
 
+    // Metodo che ha il compito di completare i vari campi con i dati dell'utente
     private fun completeFields(){
         val uid = FirebaseAuth.getInstance().uid
         val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
@@ -326,6 +331,8 @@ class ProfileFragment : Fragment() {
         })
     }
 
+    // Metodo che ha il compito di far comparire la DIalogBox se l'utente clicca sul bottone
+    // di cancellazione del profilo
     private fun showDialogBox(){
         AlertDialog.Builder(activity)
                 .setMessage(R.string.message_dialog_box_delete)
@@ -356,6 +363,7 @@ class ProfileFragment : Fragment() {
                 .show()
     }
 
+    // Metodo che ha il compito di cancellare la foto dell'utente da Firebase
     private fun deleteImage(uid:String?){
         val ref = FirebaseStorage.getInstance().getReference("/images/$uid")
         ref.delete()
@@ -375,6 +383,7 @@ class ProfileFragment : Fragment() {
                 }
     }
 
+    // Metodo che ha il compito di cancellare l'account dell'utente
     private fun deleteAccount(uid:String?){
         FirebaseAuth.getInstance().currentUser!!.delete()
                 .addOnSuccessListener {
@@ -460,6 +469,7 @@ class ProfileFragment : Fragment() {
         binding.licenseDateInputLayoutProfile.isErrorEnabled = false
     }
 
+    // Metodo che cambia colore alla startIcon del TextInputLayout quando è evidenziato
     private fun changeIconColor(){
         binding.nameEditTextProfile.setOnFocusChangeListener { v, hasFocus ->
             val color = if(hasFocus) Color.rgb(249,170,51) else Color.rgb(52,73,85)
@@ -469,10 +479,6 @@ class ProfileFragment : Fragment() {
             val color = if(hasFocus) Color.rgb(249,170,51) else Color.rgb(52,73,85)
             binding.surnameInputLayoutProfile.setStartIconTintList(ColorStateList.valueOf(color))
         }
-        /*binding.emailEditTextProfile.setOnFocusChangeListener { v, hasFocus ->
-            val color = if(hasFocus) Color.rgb(249,170,51) else Color.rgb(52,73,85)
-            binding.emailInputLayoutProfile.setStartIconTintList(ColorStateList.valueOf(color))
-        }*/
         binding.weightEditTextProfile.setOnFocusChangeListener { v, hasFocus ->
             val color = if(hasFocus) Color.rgb(249,170,51) else Color.rgb(52,73,85)
             binding.weightInputLayoutProfile.setStartIconTintList(ColorStateList.valueOf(color))

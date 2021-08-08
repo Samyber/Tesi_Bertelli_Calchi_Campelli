@@ -19,6 +19,7 @@ import com.samaeli.tesi.models.Offer
 import com.samaeli.tesi.models.Passage
 import java.util.*
 
+// Servizio in background che ha il compito di cancellare un passaggio se l'ora attuale supera l'ora in cui è stato richiesto
 class DeletePassageAndNotificationService : Service() {
 
     var timerDeletePassage : Timer? = null

@@ -44,6 +44,7 @@ class ReceivedOfferItem(val offer:Offer, val context:Context):Item<ViewHolder>()
             acceptOffer()
         }
 
+        // Compilazione campi in base ai dati dell'offerta e dell'utente che l'ha fatta
         val ref = FirebaseDatabase.getInstance().getReference("users/$uidBidder")
         ref.addListenerForSingleValueEvent(object : ValueEventListener{
             @RequiresApi(Build.VERSION_CODES.O)
@@ -113,6 +114,7 @@ class ReceivedOfferItem(val offer:Offer, val context:Context):Item<ViewHolder>()
                 }
     }*/
 
+    // Metodo che ha il compito di declinare un'offerta
     private fun declineOffer(){
         val uidBidder = offer.uidBidder
         val uidRequester = offer.uidRequester
@@ -163,10 +165,13 @@ class ReceivedOfferItem(val offer:Offer, val context:Context):Item<ViewHolder>()
                 }*/
     }
 
+    // Metodo che ha il compito di accettare un'offerta
     private fun acceptOffer(){
         val uidBidder = offer.uidBidder
         val uidRequester = offer.uidRequester
+        // Si imposta lo stato dell'offerta ad "accepted"
         offer.state=Offer.ACCEPTED
+        // Caricamento dell'offerta accetta
         val ref = FirebaseDatabase.getInstance().getReference("received_offers/$uidRequester/$uidBidder")
         ref.setValue(offer)
                 .addOnSuccessListener {
@@ -187,6 +192,7 @@ class ReceivedOfferItem(val offer:Offer, val context:Context):Item<ViewHolder>()
                 .addOnSuccessListener {
                     Log.d(TAG,"Offerta caricata in accepted_offers")
                 }
+        // Si incrementa il punteggio dell'utente a cui è stata accettata l'offerta
         val ref4 = FirebaseDatabase.getInstance().getReference("users/$uidBidder")
         ref4.addValueEventListener(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -206,6 +212,7 @@ class ReceivedOfferItem(val offer:Offer, val context:Context):Item<ViewHolder>()
 
     }
 
+    // Metodo che ha il compito di caricare l'offerta declinata in "delete_offers"
     private fun addDeclinedOffer(uidBidder:String){
         val ref = FirebaseDatabase.getInstance().getReference("delete_offers/$uidBidder")
         offer.state = Offer.DECLINED
