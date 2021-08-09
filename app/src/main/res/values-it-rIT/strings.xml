@@ -1,26 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Tesi_Bertelli_Calchi_Campelli</string>
-
-    <!-- RegisterActivity/LoginActivity -->
-    <string name="name">Name</string>
-    <string name="surname">Surname</string>
+    <string name="name">Nome</string>
+    <string name="surname">Cognome</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
-    <string name="confirm_password">Confirm Password</string>
-    <string name="gender">Gender</string>
-    <string name="birthday_date">Birthday Date</string>
-    <string name="driving_license_issue_date">Driving license issue date</string>
-    <string name="weight">Weight</string>
-    <string name="register">Register</string>
-    <string name="already_register">Already have an account? Go to Login</string>
+    <string name="confirm_password">Conferma Password</string>
+    <string name="gender">Genere</string>
+    <string name="birthday_date">Data di nascita</string>
+    <string name="driving_license_issue_date">Data in cui si è preso patente</string>
+    <string name="weight">Peso</string>
+    <string name="register">Registrati</string>
+    <string name="already_register">Hai già un account? Vai al Login</string>
     <string name="login">Login</string>
-    <string name="go_to_registration">Go to Registration</string>
-    <string name="select_image">Select Image</string>
-    <string name="male">Male</string>
-    <string name="female">Female</string>
-    <string name="select_gender">Select your gender:</string>
-    <string name="alcohol_level_calculator_login">Go to alcohol level calculator without login</string>
-    <string name="alcohol_level_calculator_register">Go to alcohol level calculator without register</string>
+    <string name="go_to_registration">Vai alla Registrazione</string>
+    <string name="select_image">Seleziona Immagine</string>
+    <string name="male">Maschio</string>
+    <string name="female">Femmina</string>
+    <string name="select_gender">Seleziona il tuo genere:</string>
+    <string name="alcohol_level_calculator_login">Vai al calcolo del tasso alcolemico senza login</string>
+    <string name="alcohol_level_calculator_register">Vai al calcolo del tasso alcolemico senza registrazione</string>
 
     <string name="field_not_empty">Field cannot be empty</string>
     <string name="error_email">Error! Invalid Email</string>

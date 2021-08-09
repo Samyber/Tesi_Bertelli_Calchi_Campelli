@@ -19,7 +19,8 @@ import com.samaeli.tesi.models.Offer
 import com.samaeli.tesi.models.Passage
 import java.util.*
 
-// Servizio in background che ha il compito di cancellare un passaggio se l'ora attuale supera l'ora in cui è stato richiesto
+// Servizio in background che ha il compito di cancellare un passaggio se l'ora attuale supera l'ora a cui è stato richiesto
+// Il servizio inoltre ha il compito di inviare le notifiche
 class DeletePassageAndNotificationService : Service() {
 
     var timerDeletePassage : Timer? = null
@@ -80,6 +81,9 @@ class DeletePassageAndNotificationService : Service() {
         },0,1000 * 10)
     }*/
 
+    // Metodo che ha il compito di controllare se ci sono delle offerte in "delete_offers/uid_utente".
+    // Se ci sono si manda la notifica che una sua offerta è stata declinata e si cancellano le offerte presenti
+    // in quella sezione del db
     private fun checkDeleteOffers(){
         val uid = FirebaseAuth.getInstance().uid
         val ref = FirebaseDatabase.getInstance().getReference("delete_offers/$uid")
@@ -104,6 +108,7 @@ class DeletePassageAndNotificationService : Service() {
         })
     }
 
+    // Metodo che ha il compito di inviare la notifica
     private fun sendNotification(type:String){
         val notificationIntent = Intent(applicationContext,MainActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -144,6 +149,9 @@ class DeletePassageAndNotificationService : Service() {
         Log.d(TAG,"Notifica inviata")
     }
 
+    // Metodo che ha il compito di controllare se ci sono delle offerte in "accepted_offers/uid_utente".
+    // Se ci sono si manda la notifica che una sua offerta è stata accettata e si cancella l'offerta presenti
+    // in quella sezione del db
     private fun checkAcceptedOffers(){
         val uid = FirebaseAuth.getInstance().uid
         val ref = FirebaseDatabase.getInstance().getReference("accepted_offers/$uid")
@@ -168,6 +176,9 @@ class DeletePassageAndNotificationService : Service() {
         })
     }
 
+    // Metodo che ha il compito di controllare se ci sono delle offerte in "wait_offers/uid_utente".
+    // Se ci sono si manda la notifica che una sua offerta è stata declinata e si cancellano le offerte presenti
+    // in quella sezione del db
     private fun checkWaitOffers(){
         val uid = FirebaseAuth.getInstance().uid
         val ref = FirebaseDatabase.getInstance().getReference("wait_offers/$uid")
@@ -192,6 +203,9 @@ class DeletePassageAndNotificationService : Service() {
         })
     }
 
+    // Metodo che ha il compito di controllare se ci sono delle offerte in "withdraw_offers/uid_utente"
+    // Se ci sono si manda la notifica un'offerta fatta è stata ritirata e si cancellano le offerte presenti
+    // in quella sezione del db
     private fun checkWithdrawOffers(){
         val uid = FirebaseAuth.getInstance().uid
         val ref = FirebaseDatabase.getInstance().getReference("withdraw_offers/$uid")
@@ -216,6 +230,7 @@ class DeletePassageAndNotificationService : Service() {
         })
     }
 
+    // Metodo che ha il compito di creare il canale per le notifiche
     private fun createNotificationChannel(){
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             val importance = NotificationManager.IMPORTANCE_DEFAULT
@@ -227,6 +242,8 @@ class DeletePassageAndNotificationService : Service() {
         }
     }
 
+    // Metodo che ha il compito di controllare che il passaggio richiesto dall'utente abbia un orario che
+    // non superi l'ora attuale. Se così fosse il passaggio viene cancellato
     private fun checkPassage(){
         val uid = FirebaseAuth.getInstance().uid
         val ref = FirebaseDatabase.getInstance().getReference("passages/$uid")
@@ -245,7 +262,6 @@ class DeletePassageAndNotificationService : Service() {
                         if (nowMinute > timeMinute) {
                             ref.removeValue()
                             declineAllOffers()
-                            // TODO USE BROADCAST RECEIVER TO UPDATE UI
                         }
                     }
                 }
@@ -257,6 +273,8 @@ class DeletePassageAndNotificationService : Service() {
         })
     }
 
+    // Metodo che ha il compito di declinare tutte le offerte arrivate per un passaggio che viene
+    // cancellato
     fun declineAllOffers(){
         Log.d(TAG, "Try to delete offers")
         val uid = FirebaseAuth.getInstance().uid
@@ -270,7 +288,6 @@ class DeletePassageAndNotificationService : Service() {
                     ref3.removeValue()
                             .addOnSuccessListener {
                                 Log.d(TAG,"Offerta cancellata da made_offers")
-                                // TODO solo se offerta è in wait
                                 if(offer.state.equals(Offer.WAIT)) {
                                     addDeclinedOffer(offer!!.uidBidder, offer)
                                 }
@@ -297,6 +314,7 @@ class DeletePassageAndNotificationService : Service() {
         })
     }
 
+    // Metodo che ha il compito di aggiungere l'offerta declinata in "delete_offers"
     private fun addDeclinedOffer(uidBidder:String,offer: Offer){
         Log.d(TAG,"DeclineOffer")
         val ref = FirebaseDatabase.getInstance().getReference("delete_offers/$uidBidder")
