@@ -55,7 +55,6 @@ class RequestPassageActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //setContentView(R.layout.activity_request_passage)
 
         binding = ActivityRequestPassageBinding.inflate(layoutInflater)
         val view = binding.root
@@ -79,6 +78,7 @@ class RequestPassageActivity : AppCompatActivity() {
 
             picker.show(supportFragmentManager, "")
 
+            // Se l'utente decide di cliccare su ok l'ora inserita viene visualizzata nell'editText
             picker.addOnPositiveButtonClickListener {
                 hour = picker.hour
                 minute = picker.minute
@@ -92,12 +92,12 @@ class RequestPassageActivity : AppCompatActivity() {
         }
 
         binding.requirePassageButtonRequestPassage.setOnClickListener{
-            error = false
+            error = false // variabile che vale true se si è verificato almeno un errore nei valori inseriti dall'utente
             if(!validateRequest()){
                 Log.d(TAG,"ERROR")
                 return@setOnClickListener
             }
-            Log.d(TAG,"Fields ok")
+            Log.d(TAG,"Fields are ok")
             savePassageToFirebase()
         }
 
@@ -147,9 +147,6 @@ class RequestPassageActivity : AppCompatActivity() {
                         departureLongitude = it.longitude
                         binding.departureAddressEditRequestPassage.setText(address.thoroughfare+" "+address.subThoroughfare)
                         binding.departureCityEditRequestPassage.setText(address.locality)
-                        //TODO Levare queste ultime due righe
-                        /*departureAddress = address.thoroughfare+" "+address.subThoroughfare
-                        departureCity = address.locality*/
                     }catch(e:IOException){
                         Log.d(TAG, "Error: " + e.toString())
                     }
@@ -184,6 +181,7 @@ class RequestPassageActivity : AppCompatActivity() {
         }
     }
 
+    // Metodo che ha il compito di salvare il passaggio su FirebaseDatabase
     private fun savePassageToFirebase(){
         val uid = FirebaseAuth.getInstance().uid
         val ref = FirebaseDatabase.getInstance().getReference("passages/$uid")
@@ -342,8 +340,8 @@ class RequestPassageActivity : AppCompatActivity() {
         // Ora Attuale in minuti
         val nowMinute: Int = Calendar.getInstance().get(Calendar.MINUTE) +
                 (Calendar.getInstance().get(Calendar.HOUR_OF_DAY) * 60)
-        Log.d(DeletePassageAndNotificationService.TAG, "Time minute: $timeMinute ; Now minute: $nowMinute")
-        // Se sono passate le 17 e l'ora del passaggio è entro le 8 lo si puòrichiedere, se no no
+        Log.d(TAG, "Time minute: $timeMinute ; Now minute: $nowMinute")
+        // Se sono passate le 17 e l'ora del passaggio è entro le 8 lo si può richiedere, se no no
         if(!(timeMinute<8*60 && nowMinute>17*60)) {
             if (nowMinute > timeMinute) {
                 error=true

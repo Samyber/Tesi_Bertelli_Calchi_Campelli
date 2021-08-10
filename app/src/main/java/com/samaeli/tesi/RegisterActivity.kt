@@ -252,6 +252,10 @@ class RegisterActivity : AppCompatActivity() {
         ref.setValue(user)
             .addOnSuccessListener {
                 Log.d(TAG,"User saved in db")
+                // Viene fatto partire il servizio in background
+                val intent = Intent(this,DeletePassageAndNotificationService::class.java)
+                startService(intent)
+
                 // Si termina il dialog del loading
                 loadingDialog.dismissLoadingDialog()
                 // Return to MainActivity

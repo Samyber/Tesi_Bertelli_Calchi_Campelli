@@ -34,7 +34,6 @@ class PassageProvideActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //setContentView(R.layout.activity_passage_provide)
         binding = ActivityPassageProvideBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
@@ -47,7 +46,6 @@ class PassageProvideActivity : AppCompatActivity() {
         binding.searchButtonPassageProvide.setOnClickListener {
             departureCity = binding.departureCityEditProvidePassage.text.toString()
             arrivalCity = binding.arrivalCityEditProvidePassage.text.toString()
-            //fetchPassage()
             refreshRecyclerView()
         }
 
@@ -55,7 +53,7 @@ class PassageProvideActivity : AppCompatActivity() {
 
         adapter.setOnItemClickListener { item, view ->
             val passageItem = item as PassageItem
-
+            // Go to PassageSummaryActivity
             val intent = Intent(this,PassageSummaryActivity::class.java)
             intent.putExtra(PASSAGE_KEY,passageItem.passage)
             startActivity(intent)
@@ -71,37 +69,24 @@ class PassageProvideActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    /*private fun validateFields():Boolean{
-        departureCity = binding.departureCityEditProvidePassage.text.toString()
-        arrivalCity = binding.arrivalCityEditProvidePassage.text.toString()
-
-        if((departureCity.isNullOrEmpty() || departureCity!!.isBlank()) &&
-            (arrivalCity.isNullOrEmpty() || departureCity!!.isBlank())){
-            Toast.makeText(this,getString(R.string.error_search_passage),Toast.LENGTH_LONG).show()
-            return false
-        }
-        return true
-    }*/
-
+    // Metodo che ha il compito di prelevare i passaggi da firebase che devono essere visualizzati
     private fun fetchPassage(){
         val ref = FirebaseDatabase.getInstance().getReference("passages/")
         ref.addChildEventListener(object : ChildEventListener{
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 val passage = snapshot.getValue(Passage::class.java) ?: return
                 passagesMap[snapshot.key!!] = passage
-                //insertPassage(passage,snapshot)
                 refreshRecyclerView()
             }
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
                 val passage = snapshot.getValue(Passage::class.java) ?: return
-                //insertPassage(passage,snapshot)
                 passagesMap[snapshot.key!!] = passage
                 refreshRecyclerView()
             }
 
             override fun onChildRemoved(snapshot: DataSnapshot) {
-                //passagesMap.remove(snapshot.key!!)
+                // Se il passaggio era presente nell'HashMap, viene cancellato
                 if(passagesMap.containsKey(snapshot.key!!)){
                     passagesMap.remove(snapshot.key!!)
                 }
@@ -117,24 +102,24 @@ class PassageProvideActivity : AppCompatActivity() {
         })
     }
 
-    // Metodo che ha il compito di verificare che un rispetti i vincoli di ricerca
+    // Metodo che ha il compito di verificare che un passaggio rispetti i vincoli di ricerca
     private fun checkPassage(passage:Passage){
         val uid = FirebaseAuth.getInstance().uid
         if (passage != null && passage.uid != uid && passage.visibility == true) {
             if (!arrivalCity.isNullOrEmpty() && !arrivalCity!!.isBlank()) {
                 if (!departureCity.isNullOrEmpty() && !departureCity!!.isBlank()) {
-                    // Utente ha inserito entrambe le città
+                    // Utente ha inserito nella ricerca entrambe le città
                     showPassageItemArrivalDeparture(passage, arrivalCity!!, departureCity!!)
                 } else {
-                    // Utente ha inserito solo arrival city
+                    // Utente ha inserito nella ricerca solo arrival city
                     showPassageItemArrival(passage, arrivalCity!!)
                 }
             } else {
                 if (!departureCity.isNullOrEmpty() && !departureCity!!.isBlank()) {
-                    // Utente ha inserito solo departure city
+                    // Utente ha inserito nella ricerca solo departure city
                     showPassageItemDeparture(passage, departureCity!!)
                 } else {
-                    // utente non ha inserito nulla
+                    // utente non ha inserito nessuna città nella ricerca
                     showPassageItem(passage)
                 }
             }
@@ -149,141 +134,6 @@ class PassageProvideActivity : AppCompatActivity() {
         }
         showHideNoResult()
     }
-
-    //Metodo che ha il compito di prelevare i passaggi da firebase che devono essere visualizzati
-    /*private fun fetchPassage(){
-        val ref = FirebaseDatabase.getInstance().getReference("passages/")
-        ref.addChildEventListener(object : ChildEventListener{
-            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                val passage = snapshot.getValue(Passage::class.java) ?: return
-                //passagesMap[snapshot.key!!] = passage
-                insertPassage(passage,snapshot)
-                refreshRecyclerView()
-            }
-
-            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-                val passage = snapshot.getValue(Passage::class.java) ?: return
-                //passagesMap[snapshot.key!!] = passage
-                insertPassage(passage,snapshot)
-                refreshRecyclerView()
-            }
-
-            override fun onChildRemoved(snapshot: DataSnapshot) {
-                //passagesMap.remove(snapshot.key!!)
-                if(passagesMap.containsKey(snapshot.key!!)){
-                    passagesMap.remove(snapshot.key!!)
-                }
-                refreshRecyclerView()
-            }
-
-            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-            }
-
-        })
-    }
-
-    // Metodo che inserisce il passaggio, se rispetta i vincoli di ricerca, dentro l'HashMap
-    private fun insertPassage(passage:Passage,snapshot: DataSnapshot){
-        val uid = FirebaseAuth.getInstance().uid
-        if (passage != null && passage.uid != uid && passage.visibility == true) {
-            if (!arrivalCity.isNullOrEmpty() && !arrivalCity!!.isBlank()) {
-                if (!departureCity.isNullOrEmpty() && !departureCity!!.isBlank()) {
-                    // Utente ha inserito entrambe le città
-                    addPassageItemArrivalDeparture(passage, arrivalCity!!, departureCity!!,snapshot)
-                } else {
-                    // Utente ha inserito solo arrival city
-                    addPassageItemArrival(passage, arrivalCity!!,snapshot)
-                }
-            } else {
-                if (!departureCity.isNullOrEmpty() && !departureCity!!.isBlank()) {
-                    // Utente ha inserito solo departure city
-                    addPassageItemDeparture(passage, departureCity!!,snapshot)
-                } else {
-                    // utente non ha inserito nulla
-                    addPassageItem(passage,snapshot)
-                }
-            }
-        }
-    }
-
-    // Metodo che ha il compito di aggiornare il recyclerView
-    private fun refreshRecyclerView(){
-        adapter.clear()
-        passagesMap.values.forEach {
-            adapter.add(PassageItem(it))
-        }
-        showHideNoResult()
-    }*/
-
-    /*private fun displayPassages(snapshot: DataSnapshot){
-        val uid = FirebaseAuth.getInstance().uid
-        if(snapshot!=null) {
-            snapshot.children.forEach {
-                val passage = it.getValue(Passage::class.java)
-                if (passage != null && passage.uid != uid && passage.visibility == true) {
-                    if (!arrivalCity.isNullOrEmpty() && !arrivalCity!!.isBlank()) {
-                        if (!departureCity.isNullOrEmpty() && !departureCity!!.isBlank()) {
-                            // Utente ha inserito entrambe le città
-                            addPassageItemArrivalDeparture(passage, arrivalCity!!, departureCity!!)
-                        } else {
-                            // Utente ha inserito solo arrival city
-                            addPassageItemArrival(passage, arrivalCity!!)
-                        }
-                    } else {
-                        if (!departureCity.isNullOrEmpty() && !departureCity!!.isBlank()) {
-                            // Utente ha inserito solo departure city
-                            addPassageItemDeparture(passage, departureCity!!)
-                        } else {
-                            // utente non ha inserito nulla
-                            addPassageItem(passage)
-                        }
-                    }
-                }
-            }
-        }
-        showHideNoResult()
-    }*/
-
-    /*private fun fetchPassage(){
-        adapter.clear()
-        val uid = FirebaseAuth.getInstance().uid
-        val ref = FirebaseDatabase.getInstance().getReference("passages/")
-        ref.addListenerForSingleValueEvent(object : ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
-                snapshot.children.forEach {
-                    val passage = it.getValue(Passage::class.java)
-                    if(passage != null && passage.uid != uid && passage.visibility==true){
-                        if(!arrivalCity.isNullOrEmpty() && !arrivalCity!!.isBlank()){
-                            if(!departureCity.isNullOrEmpty() && !departureCity!!.isBlank()){
-                                // Utente ha inserito entrambe le città
-                                addPassageItemArrivalDeparture(passage,arrivalCity!!,departureCity!!)
-                            }else{
-                                // Utente ha inserito solo arrival city
-                                addPassageItemArrival(passage, arrivalCity!!)
-                            }
-                        }else {
-                            if (!departureCity.isNullOrEmpty() && !departureCity!!.isBlank()) {
-                                // Utente ha inserito solo departure city
-                                addPassageItemDeparture(passage, departureCity!!)
-                            } else {
-                                // utente non ha inserito nulla
-                                addPassageItem(passage)
-                            }
-                        }
-                        /*Log.d(TAG,"UID Passage: ${passage.uid}")
-                        adapter.add(PassageItem(passage))*/
-                    }
-                }
-                showHideNoResult()
-            }
-            override fun onCancelled(error: DatabaseError) {
-            }
-
-        })
-    }*/
 
     // Se il numero di passaggi da visualizzare è zero si stampa la sctitta "No result"
     private fun showHideNoResult(){
@@ -326,63 +176,5 @@ class PassageProvideActivity : AppCompatActivity() {
             adapter.add(PassageItem(passage))
         }
     }
-
-    // Metodo che ha il compito di agguingere un passaggio se non è stata fatta nessun tipo di ricerca
-    /*private fun addPassageItem(passage: Passage,snapshot: DataSnapshot){
-        Log.d(TAG,"UID Passage: ${passage.uid}")
-        passagesMap[snapshot.key!!] = passage
-    }
-
-    // Metodo che ha il compito di aggiungere un passaggio se è stata ricercata la città di arrivo
-    private fun addPassageItemArrival(passage: Passage,arrivalCity:String,snapshot: DataSnapshot){
-        if(passage.arrivalCity.contains(arrivalCity,true)){
-            Log.d(TAG,"UID Passage: ${passage.uid}")
-            passagesMap[snapshot.key!!] = passage
-        }
-    }
-
-    // Metodo che ha il compito di aggiungere un passaggio se è stata ricercata la città di partenza
-    private fun addPassageItemDeparture(passage: Passage,departureCity:String,snapshot: DataSnapshot){
-        if(passage.departureCity.contains(departureCity,true)){
-            Log.d(TAG,"UID Passage: ${passage.uid}")
-            passagesMap[snapshot.key!!] = passage
-        }
-    }
-
-    // Metodo che ha il compito di aggiungere un passaggio se è stata ricercata sia la città di arrivo sia quella di partenza
-    private fun addPassageItemArrivalDeparture(passage: Passage,arrivalCity:String,departureCity: String,snapshot: DataSnapshot){
-        if(passage.arrivalCity.contains(arrivalCity,true) &&
-                passage.departureCity.contains(departureCity,true)){
-            Log.d(TAG,"UID Passage: ${passage.uid}")
-            passagesMap[snapshot.key!!] = passage
-        }
-    }*/
-
-    /*private fun addPassageItem(passage: Passage){
-        Log.d(TAG,"UID Passage: ${passage.uid}")
-        adapter.add(PassageItem(passage))
-    }
-
-    private fun addPassageItemArrival(passage: Passage,arrivalCity:String){
-        if(passage.arrivalCity.contains(arrivalCity,true)){
-            Log.d(TAG,"UID Passage: ${passage.uid}")
-            adapter.add(PassageItem(passage))
-        }
-    }
-
-    private fun addPassageItemDeparture(passage: Passage,departureCity:String){
-        if(passage.departureCity.contains(departureCity,true)){
-            Log.d(TAG,"UID Passage: ${passage.uid}")
-            adapter.add(PassageItem(passage))
-        }
-    }
-
-    private fun addPassageItemArrivalDeparture(passage: Passage,arrivalCity:String,departureCity: String){
-        if(passage.arrivalCity.contains(arrivalCity,true) &&
-                passage.departureCity.contains(departureCity,true)){
-            Log.d(TAG,"UID Passage: ${passage.uid}")
-            adapter.add(PassageItem(passage))
-        }
-    }*/
 
 }

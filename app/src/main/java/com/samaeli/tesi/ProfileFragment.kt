@@ -58,24 +58,14 @@ class ProfileFragment : Fragment() {
     private var weight : Double? = null
     private var changePhoto : Boolean = false
 
-    //private var user : User? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        /*if(FirebaseAuth.getInstance().uid == null){
-            val intent = Intent(activity,LoginActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
-        }*/ // Spostato in MainActivity
-
         loadingDialog = LoadingDialog(requireActivity())
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        //return inflater.inflate(R.layout.fragment_profile, container, false)
         _binding = FragmentProfileBinding.inflate(inflater,container,false)
         val view = binding.root
 
@@ -98,7 +88,7 @@ class ProfileFragment : Fragment() {
 
             datePicker.show(parentFragmentManager,"")
 
-            // Se l'utente decidedi clicca su ok la data inserita viene visualizzata neel'editText
+            // Se l'utente decide di cliccare su ok la data inserita viene visualizzata nell'editText
             datePicker.addOnPositiveButtonClickListener {
                 val date = getDate(it)
                 Log.d(RegisterActivity.TAG,"Birthday date insert: $date")
@@ -121,7 +111,7 @@ class ProfileFragment : Fragment() {
 
             datePicker.show(parentFragmentManager,"")
 
-            // Se l'utente decidedi clicca su ok la data inserita viene visualizzata neel'editText
+            // Se l'utente decide di cliccare su ok la data inserita viene visualizzata nell'editText
             datePicker.addOnPositiveButtonClickListener {
                 val date = getDate(it)
                 Log.d(RegisterActivity.TAG,"License date insert: $date")
@@ -138,16 +128,17 @@ class ProfileFragment : Fragment() {
         }
 
         binding.saveDataButtonProfile.setOnClickListener {
-            error = false
+            error = false // variabile che vale true se si è verificato almeno un errore nei valori inseriti dall'utente
             if(!validateSaveData()){
                 Log.d(TAG,getString(R.string.error_update_profile))
                 binding.scrollViewProfile.scrollTo(0,0)
                 Toast.makeText(activity,getString(R.string.error_update_profile),Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
-            Log.d(TAG,"Campi ok")
+            Log.d(TAG,"Fields are ok")
             // Start schermata di caricamento
             loadingDialog!!.startLoadingDialog()
+            // Se l'utente ha cambiato la foto viene caricata se no si passa subito alla modifica dell'utente in FirebaseDatabase
             if(changePhoto == true){
                 uploadImageToFirebase()
             }else{
@@ -173,14 +164,15 @@ class ProfileFragment : Fragment() {
             val ref = FirebaseDatabase.getInstance().getReference("passages/${user!!.uid}")
             ref.addValueEventListener(object : ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
+                    // Se l'utente ha richiesto un passaggio non può cancellare il suo account
                     if(snapshot.exists()){
                         Toast.makeText(activity,getString(R.string.passage_offer_exist),Toast.LENGTH_LONG).show()
                     }else{
                         val ref2 = FirebaseDatabase.getInstance().getReference("made_offers/${user!!.uid}")
                         ref2.addValueEventListener(object : ValueEventListener{
                             override fun onDataChange(snapshot: DataSnapshot) {
+                                // Se l'utente ha fatto un'offerta che è nello stato di wait non può cancellare il suo account
                                 if(!snapshot.exists()){
-                                    //Toast.makeText(activity,getString(R.string.passage_offer_exist),Toast.LENGTH_LONG).show()
                                     showDialogBox()
                                 }else{
                                     snapshot.children.forEach{
@@ -194,10 +186,8 @@ class ProfileFragment : Fragment() {
                                 }
                                 ref2.removeEventListener(this)
                             }
-
                             override fun onCancelled(error: DatabaseError) {
                             }
-
                         })
                     }
                     ref.removeEventListener(this)
@@ -207,12 +197,11 @@ class ProfileFragment : Fragment() {
                 }
 
             })
-            //showDialogBox()
         }
-
         return view
     }
 
+    // Codice che viene eseguito dopo che l'utente ha scelto la foto
     var startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
         result: ActivityResult ->
         if(result.resultCode == Activity.RESULT_OK){
@@ -242,7 +231,6 @@ class ProfileFragment : Fragment() {
         bitmap.compress(Bitmap.CompressFormat.JPEG,15,baos)
         val data = baos.toByteArray()
 
-        //ref.putFile(selectPhotoUri!!)
         ref.putBytes(data)
                 .addOnSuccessListener {
                     Log.d(RegisterActivity.TAG,"Image uploaded successfully")
@@ -268,7 +256,6 @@ class ProfileFragment : Fragment() {
         }else{
             user!!.gender = "female"
         }
-
         updateDatabase()
     }
 
@@ -303,7 +290,7 @@ class ProfileFragment : Fragment() {
         ref.addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                     user = snapshot.getValue(User::class.java)
-                    //binding.fidelityPointsTextViewProfile.text = getString(R.string.fidelity_points_profile) + " " + user!!.points
+
                     binding.pointsTextViewProfile.text = " "+user!!.points
                     binding.nameEditTextProfile.setText(user!!.name)
                     binding.surnameEditTextProfile.setText(user!!.surname)
@@ -327,11 +314,10 @@ class ProfileFragment : Fragment() {
 
             override fun onCancelled(error: DatabaseError) {
             }
-
         })
     }
 
-    // Metodo che ha il compito di far comparire la DIalogBox se l'utente clicca sul bottone
+    // Metodo che ha il compito di far comparire la DialogBox se l'utente clicca sul bottone
     // di cancellazione del profilo
     private fun showDialogBox(){
         AlertDialog.Builder(activity)
@@ -339,6 +325,7 @@ class ProfileFragment : Fragment() {
                 .setPositiveButton(R.string.yes,DialogInterface.OnClickListener { dialog, which ->
                     val uid = FirebaseAuth.getInstance().uid
                     val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
+                    // Rimozione dell'utente da FirebaseDatabase
                     ref.removeValue()
                             .addOnCompleteListener {
                                 if(!it.isSuccessful){
@@ -437,7 +424,7 @@ class ProfileFragment : Fragment() {
         binding.birthdayDateInputLayoutProfile.isErrorEnabled = false
     }
 
-    // Controllo che l'utente abbia inserito il peso
+    // Controllo che l'utente abbia inserito il peso e che sia maggiore di 0
     private fun validateWeight(){
         val stringWeight = binding.weightEditTextProfile.text.toString()
 

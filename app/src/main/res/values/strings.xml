@@ -91,7 +91,7 @@
 
 
     <!-- Settings -->
-    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_settings">Settings</string>
     <string name="alcohol_level_calculation_category">Alcohol level calculation</string>
     <string name="limit_for_drive">Limit of blood alcohol content for drive</string>
     <string name="limit_for_new_driver">Limit of blood alcohol content for new driver</string>

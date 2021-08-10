@@ -24,13 +24,17 @@ import java.util.*
 class DeletePassageAndNotificationService : Service() {
 
     var timerDeletePassage : Timer? = null
-    var timerNotification : Timer? = null
 
     companion object{
         val TAG = "DeletePassageAndNotificationService"
         val nameChannel = "Notification Title"
         val descriptionTextChannel = "NotificationDescription"
         val channelId = "ChannelId"
+
+        const val ACCEPT = "accept"
+        const val DELETE = "delete"
+        const val WAIT = "wait"
+        const val WITHDRAW = "withdraw"
     }
 
     override fun onBind(intent: Intent): IBinder? {
@@ -43,7 +47,7 @@ class DeletePassageAndNotificationService : Service() {
         Log.d(TAG,"Service created")
         createNotificationChannel()
         startTimerDeletePassage()
-        //startTimerNotification()
+
         checkDeleteOffers()
         checkAcceptedOffers()
         checkWaitOffers()
@@ -56,6 +60,8 @@ class DeletePassageAndNotificationService : Service() {
         super.onDestroy()
     }
 
+    // Metodo che ha il compito di far partire il timer per la cancellazione dei passaggi che hanno
+    // un'ora che supera l'ora attuale
     private fun startTimerDeletePassage(){
         timerDeletePassage = Timer(true)
         timerDeletePassage!!.schedule(object : TimerTask(){
@@ -63,7 +69,7 @@ class DeletePassageAndNotificationService : Service() {
                 Log.d(TAG,"RUN")
                 checkPassage()
             }
-        },0,1000 * 60 *3)
+        },0,1000 * 60 *3) // Ogni 3 minuti
     }
 
     private fun stopTimerDeletePassage(){
@@ -71,15 +77,6 @@ class DeletePassageAndNotificationService : Service() {
             timerDeletePassage!!.cancel()
         }
     }
-
-    /*private fun startTimerNotification(){
-        timerNotification = Timer(true)
-        timerNotification!!.schedule(object : TimerTask(){
-            override fun run() {
-                checkDeleteOffers()
-            }
-        },0,1000 * 10)
-    }*/
 
     // Metodo che ha il compito di controllare se ci sono delle offerte in "delete_offers/uid_utente".
     // Se ci sono si manda la notifica che una sua offerta è stata declinata e si cancellano le offerte presenti
@@ -89,7 +86,7 @@ class DeletePassageAndNotificationService : Service() {
         val ref = FirebaseDatabase.getInstance().getReference("delete_offers/$uid")
         ref.addChildEventListener(object : ChildEventListener{
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                sendNotification("delete")
+                sendNotification(DELETE)
                 ref.removeValue()
             }
 
@@ -116,18 +113,17 @@ class DeletePassageAndNotificationService : Service() {
         val flags = PendingIntent.FLAG_UPDATE_CURRENT
         val pendingIntent = PendingIntent.getActivity(applicationContext,0,notificationIntent,flags)
         val icon = R.drawable.ic_launcher_foreground
-        //val tickerText = "Decline Offer"
         val contentTitle = getString(R.string.app_name)
 
         var contextText = ""
-        if(type.equals("delete")) {
+        if(type.equals(DELETE)) {
             contextText = getString(R.string.offer_declined_notification)
         }else{
-            if(type.equals("accept")){
+            if(type.equals(ACCEPT)){
                 contextText = getString(R.string.offer_accepted_notification)
             }else
             {
-                if(type.equals("wait")) {
+                if(type.equals(WAIT)) {
                     contextText = getString(R.string.offer_wait_notification)
                 }else{
                     contextText = getString(R.string.offer_withdraw_notification)
@@ -137,7 +133,6 @@ class DeletePassageAndNotificationService : Service() {
 
         val notification = NotificationCompat.Builder(applicationContext, channelId)
                 .setSmallIcon(icon)
-                //.setTicker(tickerText)
                 .setContentTitle(contentTitle)
                 .setContentText(contextText)
                 .setContentIntent(pendingIntent)
@@ -157,7 +152,7 @@ class DeletePassageAndNotificationService : Service() {
         val ref = FirebaseDatabase.getInstance().getReference("accepted_offers/$uid")
         ref.addChildEventListener(object : ChildEventListener{
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                sendNotification("accept")
+                sendNotification(ACCEPT)
                 ref.removeValue()
             }
 
@@ -184,7 +179,7 @@ class DeletePassageAndNotificationService : Service() {
         val ref = FirebaseDatabase.getInstance().getReference("wait_offers/$uid")
         ref.addChildEventListener(object : ChildEventListener{
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                sendNotification("wait")
+                sendNotification(WAIT)
                 ref.removeValue()
             }
 
@@ -211,7 +206,7 @@ class DeletePassageAndNotificationService : Service() {
         val ref = FirebaseDatabase.getInstance().getReference("withdraw_offers/$uid")
         ref.addChildEventListener(object : ChildEventListener{
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                sendNotification("withdraw")
+                sendNotification(WITHDRAW)
                 ref.removeValue()
             }
 
@@ -253,7 +248,7 @@ class DeletePassageAndNotificationService : Service() {
                     val passage = snapshot.getValue(Passage::class.java)
                     // Ora passaggio
                     val timeMinute: Int = passage!!.hour * 60 + passage.minute
-                    // Ora
+                    // Ora attuale
                     val nowMinute: Int = Calendar.getInstance().get(Calendar.MINUTE) +
                             (Calendar.getInstance().get(Calendar.HOUR_OF_DAY) * 60)
                     Log.d(TAG, "Time minute: $timeMinute ; Now minute: $nowMinute")
@@ -295,16 +290,6 @@ class DeletePassageAndNotificationService : Service() {
                     ref2.removeValue()
                             .addOnSuccessListener {
                                 Log.d(TAG,"Offerta cancellata da receive_offers")
-                                //if(!offer.state.equals("accepted")) {
-                                    /*val ref3 = FirebaseDatabase.getInstance().getReference("made_offers/${offer!!.uidBidder}/$uid")
-                                    ref3.removeValue()
-                                            .addOnSuccessListener {
-                                                // TODO solo se offerta è in wait
-                                                addDeclinedOffer(offer!!.uidBidder, offer)
-                                            }
-
-                                     */
-                                //}
                             }
                 }
                 ref.removeEventListener(this)
@@ -325,5 +310,4 @@ class DeletePassageAndNotificationService : Service() {
                 }
 
     }
-
 }

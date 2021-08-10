@@ -32,7 +32,6 @@ class SelectDrinkActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //setContentView(R.layout.activity_select_drink)
         binding = ActivitySelectDrinkBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
@@ -49,8 +48,6 @@ class SelectDrinkActivity : AppCompatActivity() {
         binding.recyclerViewSelectDrink.adapter = adapter
 
         fetchDrinks(null)
-
-
     }
 
     // Metodo che gestisce la barra di ricerca dei drink
@@ -83,10 +80,8 @@ class SelectDrinkActivity : AppCompatActivity() {
         val ref = FirebaseDatabase.getInstance().getReference("/drinks")
         ref.addListenerForSingleValueEvent(object: ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
-                //adapter.clear()
                 snapshot.children.forEach {
                     val drink = it.getValue(Drink::class.java)
-                    //Log.d(TAG,it.toString())
                     if(drink != null && (search==null || drink.name.contains(search,true))){
                         Log.d(TAG,"Drink name: "+drink.name)
                         Log.d(TAG,"Image url: "+drink.imageUrl)

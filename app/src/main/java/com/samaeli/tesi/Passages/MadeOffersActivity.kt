@@ -6,10 +6,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.samaeli.tesi.R
 import com.samaeli.tesi.databinding.ActivityMadeOffersBinding
 import com.samaeli.tesi.databinding.ActivityMainBinding
@@ -26,11 +23,12 @@ class MadeOffersActivity : AppCompatActivity() {
     }
 
     private lateinit var binding : ActivityMadeOffersBinding
-    var adapter : GroupAdapter<ViewHolder>? = null
+    private var adapter : GroupAdapter<ViewHolder>? = null
+
+    private var madeOffersMap = HashMap<String,Offer>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //setContentView
         binding = ActivityMadeOffersBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
@@ -53,6 +51,7 @@ class MadeOffersActivity : AppCompatActivity() {
             val ref = FirebaseDatabase.getInstance().getReference("passages/${offer.uidRequester}")
             ref.addValueEventListener(object : ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
+                    // Si controlla che il passaggio sia ancora presente
                     if(!snapshot.exists()) {
                         Toast.makeText(applicationContext,getString(R.string.error_passage_removed),Toast.LENGTH_LONG).show()
                         finish()
@@ -71,8 +70,6 @@ class MadeOffersActivity : AppCompatActivity() {
             })
         }
 
-        //displayMadeOffers()
-
     }
 
     override fun onResume() {
@@ -88,8 +85,7 @@ class MadeOffersActivity : AppCompatActivity() {
     }
 
     // Metodo che ha il compito di mostrare tutte le offerte che sono state fatte
-    private fun displayMadeOffers(){
-        //adapter!!.clear()
+    /*private fun displayMadeOffers(){
         val uid = FirebaseAuth.getInstance().uid
         val ref = FirebaseDatabase.getInstance().getReference("made_offers/$uid/")
         ref.addValueEventListener(object : ValueEventListener{
@@ -99,7 +95,8 @@ class MadeOffersActivity : AppCompatActivity() {
                     val offer = it.getValue(Offer::class.java)
                     adapter!!.add(MadeOfferItem(offer!!,applicationContext))
                 }
-                if (adapter!!.itemCount==0){
+                // Se non ci sono offerte si termina l'activity
+                if (adapter!!.itemCount==0 && applicationContext == MadeOffersActivity.javaClass){
                     Toast.makeText(applicationContext,getString(R.string.there_are_not_offers),Toast.LENGTH_LONG).show()
                     finish()
                 }
@@ -109,5 +106,48 @@ class MadeOffersActivity : AppCompatActivity() {
             }
 
         })
+    }*/
+
+    private fun displayMadeOffers(){
+        val uid = FirebaseAuth.getInstance().uid
+        val ref = FirebaseDatabase.getInstance().getReference("made_offers/$uid")
+        ref.addChildEventListener(object : ChildEventListener{
+            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                val offer = snapshot.getValue(Offer::class.java) ?: return
+                madeOffersMap[snapshot.key!!] = offer
+                refreshRecyclerView()
+            }
+
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+                val offer = snapshot.getValue(Offer::class.java) ?: return
+                madeOffersMap[snapshot.key!!] = offer
+                refreshRecyclerView()
+            }
+
+            override fun onChildRemoved(snapshot: DataSnapshot) {
+                if(madeOffersMap.containsKey(snapshot.key!!)){
+                    madeOffersMap.remove(snapshot.key)
+                }
+                refreshRecyclerView()
+            }
+
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+        })
+    }
+
+    private fun refreshRecyclerView(){
+        adapter!!.clear()
+        madeOffersMap.values.forEach {
+            adapter!!.add(MadeOfferItem(it,applicationContext))
+        }
+        if(adapter!!.itemCount==0){
+            Toast.makeText(applicationContext,getString(R.string.there_are_not_offers),Toast.LENGTH_LONG).show()
+            finish()
+        }
     }
 }

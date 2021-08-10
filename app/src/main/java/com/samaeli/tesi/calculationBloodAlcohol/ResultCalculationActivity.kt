@@ -22,7 +22,6 @@ class ResultCalculationActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //setContentView(R.layout.activity_result_calculation)
         binding = ActivityResultCalculationBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
@@ -33,7 +32,7 @@ class ResultCalculationActivity : AppCompatActivity() {
         Log.d(TAG,alcoholLevel.toString())
         Log.d(TAG,timeBeforeDriving.toString())
 
-        // Arritondamento del tasso alcolemico alla seconda cifra decimale
+        // Arrotondamento del tasso alcolemico alla seconda cifra decimale
         val alcoholLevelTwoDecimal = alcoholLevel.toBigDecimal().setScale(2,RoundingMode.HALF_EVEN)
 
         binding.alcoholContentTextViewResultCalculation.text = getString(R.string.your_alcohol_content)+" "+alcoholLevelTwoDecimal+" mg/l"
@@ -47,12 +46,14 @@ class ResultCalculationActivity : AppCompatActivity() {
         }
     }
 
+    // Metodo che permette di visualizzare la schemata che indica che il test è stato passato
     private fun displaySuccess(){
         binding.resultTextViewResultCalculation.text = getString(R.string.passed)
         binding.timeTextViewAlcoholContent.alpha = 0f
         binding.timeStringTextViewAlcoholContent.alpha = 0f
     }
 
+    // Metodo che permette di visualizzare la schemata che indica che il test non è stato passato
     private fun displayNotSuccess(timeBeforeDriving : Int){
         binding.resultTextViewResultCalculation.text = getString(R.string.not_passed)
         constraintLayoutResultCalculation.setBackgroundColor(Color.RED)

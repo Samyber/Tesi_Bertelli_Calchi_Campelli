@@ -21,187 +21,185 @@
     <string name="alcohol_level_calculator_login">Vai al calcolo del tasso alcolemico senza login</string>
     <string name="alcohol_level_calculator_register">Vai al calcolo del tasso alcolemico senza registrazione</string>
 
-    <string name="field_not_empty">Field cannot be empty</string>
-    <string name="error_email">Error! Invalid Email</string>
-    <string name="error_password_too_short">Error! Password must have 8 characters</string>
-    <string name="error_password_not_match">Error! Password don\'t match</string>
-    <string name="error_registration">Error during registration</string>
-    <string name="error_login">Error during login</string>
-    <string name="error_email_exist">Error! Email exist</string>
-    <string name="error_weight">Error! Weight must be > 0</string>
-    <string name="error_check_fields">Error! Check the fields</string>
-    <string name="error_email_password_incorrect">Error! Email or password incorrect</string>
+    <string name="field_not_empty">Il campo non può rimanere vuoto</string>
+    <string name="error_email">Errore! Email non valida</string>
+    <string name="error_password_too_short">Errore! La password deve avere almeno 8 caratteri</string>
+    <string name="error_password_not_match">Errore! Password non corrisponde</string>
+    <string name="error_registration">Errore durante la registrazione</string>
+    <string name="error_login">Errore durante il login</string>
+    <string name="error_email_exist">Errore! La Email esiste</string>
+    <string name="error_weight">Errore! Il peso deve essere > 0</string>
+    <string name="error_check_fields">Errore! Controlla i campi</string>
+    <string name="error_email_password_incorrect">Errore! Email o password non corretti</string>
 
-    <string name="birthday_date_picker_title">Select birthday date</string>
-    <string name="license_date_picker_title">Select driving license issue date</string>
+    <string name="birthday_date_picker_title">Seleziona data di nascita</string>
+    <string name="license_date_picker_title">Seleziona data acquisizione patente</string>
 
     <!-- nav_menu -->
     <string name="menu_logout">Logout</string>
     <string name="menu_login">Login</string>
-    <string name="menu_register">Register</string>
-    <string name="menu_settings">Settings</string>
+    <string name="menu_register">Registrati</string>
+    <string name="menu_settings">Impostazioni</string>
 
     <!-- menu_bottom_navigation -->
-    <string name="bottom_navigation_alcohol_level">Alcohol level</string>
-    <string name="bottom_navigation_passages">Passages</string>
-    <string name="bottom_navigation_profile">My profile</string>
+    <string name="bottom_navigation_alcohol_level">Tasso alcolemico</string>
+    <string name="bottom_navigation_passages">Passaggi</string>
+    <string name="bottom_navigation_profile">Profilo</string>
 
     <string name="volume">Volume (ml)</string>
-    <string name="alcohol_content">Alcohol content (% vol.)</string>
-    <string name="quantity">Quantity</string>
-    <string name="hour_intake">Hour intake drink</string>
-    <string name="add_drink">Add drink</string>
-    <string name="time_taken_drink">Select the time you taken the drink</string>
+    <string name="alcohol_content">Contenuto alcolico (% vol.)</string>
+    <string name="quantity">Quantità</string>
+    <string name="hour_intake">Ora assunzione drink</string>
+    <string name="add_drink">Aggiungi drink</string>
+    <string name="time_taken_drink">Seleziona quando hai assunto il drink</string>
 
     <!-- AlcoholLevelFragment -->
-    <string name="plus_add_drink">+ Add drink</string>
-    <string name="select_drink">Select drink</string>
-    <string name="plus_add_custom_drink">+ Add custom drink</string>
-    <string name="question_full_stomach">Are you on a full stomach?</string>
-    <string name="question_new_driver">Are you a new driver?</string>
-    <string name="yes">Yes</string>
+    <string name="plus_add_drink">+ Aggiungi drink</string>
+    <string name="select_drink">Seleziona drink</string>
+    <string name="plus_add_custom_drink">+ Aggiungi drink personalizzato</string>
+    <string name="question_full_stomach">Sei a stomaco pieno?</string>
+    <string name="question_new_driver">Sei neopatentao?</string>
+    <string name="yes">Si</string>
     <string name="no">No</string>
-    <string name="enter_weight">Enter your weight</string>
-    <string name="calculate">Calculate</string>
-    <string name="error_enter_drink">Enter at least one drink</string>
+    <string name="enter_weight">Inserisci il peso</string>
+    <string name="calculate">Calcola</string>
+    <string name="error_enter_drink">Inserisci almeno un drink</string>
 
     <!-- DrinkActivity -->
     <string name="volume_drink_added">Volume: </string>
-    <string name="alcohol_content_drink_added">Alcohol content: </string>
-    <string name="hour_taken">Hour taken: </string>
-    <string name="error_quantity">The quantity cannot be zero</string>
+    <string name="alcohol_content_drink_added">Tasso alcolemico: </string>
+    <string name="hour_taken">Ora assunzione: </string>
+    <string name="error_quantity">La quantità non può essere 0</string>
 
-    <string name="hour">Hour</string>
+    <string name="hour">Ora</string>
 
-    <string name="custom_drink">Custom drink</string>
+    <string name="custom_drink">Drink personalizzato</string>
 
-    <string name="search">Search</string>
-    <string name="search_drink">Search a drink</string>
+    <string name="search">Cerca</string>
+    <string name="search_drink">Cerca un drink</string>
 
     <string name="loading">Loading...</string>
 
     <!-- ResultCalculationActivity -->
-    <string name="your_alcohol_content">Your blood alcohol content is:</string>
-    <string name="time_for_drive">Time to wait before you can drive:</string>
-    <string name="passed">Passed</string>
-    <string name="not_passed">Not Passed</string>
-    <string name="hour_and">hour and</string>
-    <string name="minute">minute</string>
-
+    <string name="your_alcohol_content">Il tuo tasso alcolemico è:</string>
+    <string name="time_for_drive">Tempo da aspettare per poter guidare:</string>
+    <string name="passed">Passato</string>
+    <string name="not_passed">Non passato</string>
+    <string name="hour_and">ora e</string>
+    <string name="minute">minuti</string>
 
     <!-- Settings -->
-    <string name="title_activity_settings">SettingsActivity</string>
-    <string name="alcohol_level_calculation_category">Alcohol level calculation</string>
-    <string name="limit_for_drive">Limit of blood alcohol content for drive</string>
-    <string name="limit_for_new_driver">Limit of blood alcohol content for new driver</string>
-    <string name="error_limit_pref">Value insert how limit is not valid</string>
+    <string name="title_activity_settings">Impostazioni</string>
+    <string name="alcohol_level_calculation_category">Calcolo tasso alcolemico</string>
+    <string name="limit_for_drive">Limite tasso alcolemico</string>
+    <string name="limit_for_new_driver">Limite tasso alcolemico per i neopatentati</string>
+    <string name="error_limit_pref">Il valore inserito come limite non è valido</string>
 
     <!-- Profile -->
-    <string name="save_data">Save data</string>
-    <string name="error_update_profile">Error during update profile</string>
-    <string name="ok_update_profile">Profile changed successfully</string>
-    <string name="update_email">Update email</string>
-    <string name="update_password">Update password</string>
-    <string name="delete_account">Delete account</string>
-    <string name="message_dialog_box_delete">Are you sure to delete this account?</string>
-    <string name="error_during_delete_user">Error during delete user</string>
-    <string name="fidelity_points_profile">Your fidelity points are</string>
+    <string name="save_data">Salva i dati</string>
+    <string name="error_update_profile">Errore durante modifica del profilo</string>
+    <string name="ok_update_profile">Profilo modificato correttamente</string>
+    <string name="update_email">Modifica email</string>
+    <string name="update_password">Modifica password</string>
+    <string name="delete_account">Cancella account</string>
+    <string name="message_dialog_box_delete">Sei sicuro di cancellare l\'account?</string>
+    <string name="error_during_delete_user">Errore durante la cancellazione dell\'utente</string>
+    <string name="fidelity_points_profile">I tuoi punti fedeltà sono</string>
 
     <!-- ModifyPasswordActivity -->
-    <string name="old_password">Old password</string>
-    <string name="new_password">New password</string>
-    <string name="confirm_new_password">Confirm new password</string>
-    <string name="change_password">Change password</string>
-    <string name="error_update_password">Error update password</string>
-    <string name="error_old_password">Error! Old password is wrong</string>
-    <string name="password_changed">Password changed</string>
+    <string name="old_password">Vecchia password</string>
+    <string name="new_password">Nuova password</string>
+    <string name="confirm_new_password">Conferma nuova password</string>
+    <string name="change_password">Cambia password</string>
+    <string name="error_update_password">Errore durante modifica password</string>
+    <string name="error_old_password">Errore! La vecchia password è sbagliata</string>
+    <string name="password_changed">Password modificata</string>
 
     <!-- ModifyEmailActivity -->
-    <string name="new_email">New email</string>
-    <string name="change_email">Change email</string>
-    <string name="error_update_email">Error update email</string>
-    <string name="error_old_email">Error! Old email is wrong</string>
-    <string name="email_changed">Email changed</string>
-    <string name="error_password">Error! The password is wrong</string>
+    <string name="new_email">Nuova email</string>
+    <string name="change_email">Cambia email</string>
+    <string name="error_update_email">Errore durante modifica email</string>
+    <string name="error_old_email">Errore! Vecchia email è errata</string>
+    <string name="email_changed">Email modificata</string>
+    <string name="error_password">Errore! La password è errata</string>
 
     <!-- PassagesChoiceFragment -->
-    <string name="passage_request">Passage request</string>
-    <string name="passage_provide">Passage Provide</string>
-    <string name="recent_offers">Recent Offers</string>
-    <string name="summary_required_passage">Summary required passage</string>
-    <string name="already_offered">Your offer is still active!</string>
+    <string name="passage_request">Richiedi passaggio</string>
+    <string name="passage_provide">Passagi richiesti</string>
+    <string name="recent_offers">Offerte recenti</string>
+    <string name="summary_required_passage">Resoconto passaggio richiesto</string>
+    <string name="already_offered">La tua offerta è ancora attiva!</string>
 
     <!-- RequestPassageActivity -->
-    <string name="departure_information">Departure information</string>
-    <string name="address">Address</string>
-    <string name="city">City</string>
-    <string name="current_location">Use your current location</string>
-    <string name="arrival_information">Arrival information</string>
-    <string name="other_informations">Other informations</string>
-    <string name="number_person">Number person</string>
-    <string name="require_passage">Require passage</string>
-    <string name="insert_ride_informations">Insert ride informations</string>
-    <string name="title_activity_maps">Map</string>
-    <string name="error_departure_address">Error! Departure address is not valid</string>
-    <string name="error_arrival_address">Error! Arrival address is not valid</string>
-    <string name="error_number_person">Error! Passengers exceed limit</string>
-    <string name="passage_created">The passage is created</string>
-    <string name="error_time_passage">Error! Hour not valid</string>
+    <string name="departure_information">Informazioni sulla partenza</string>
+    <string name="address">Indirizzo</string>
+    <string name="city">Città</string>
+    <string name="current_location">Usa la tua posizione</string>
+    <string name="arrival_information">Informazioni sull\'arrivo</string>
+    <string name="other_informations">Altre informazioni</string>
+    <string name="number_person">Numero di persone</string>
+    <string name="require_passage">Richiedi passaggio</string>
+    <string name="insert_ride_informations">Inserisci info passaggio</string>
+    <string name="error_departure_address">Errore! Indirizzo di partenza non valido</string>
+    <string name="error_arrival_address">Errore! Indirizzo di arrivo non valido</string>
+    <string name="error_number_person">Errore! Passeggeri eccedono il limite</string>
+    <string name="passage_created">Passaggio creato</string>
+    <string name="error_time_passage">Errore! Ora non valida</string>
 
     <!-- PassageProvideActivity -->
-    <string name="departure_city">Departure city</string>
-    <string name="arrival_city">Arrival city</string>
-    <string name="error_search_passage">Error! Fill at least one field</string>
-    <string name="no_result">No result</string>
+    <string name="departure_city">Partenza</string>
+    <string name="arrival_city">Arrivo</string>
+    <string name="error_search_passage">Errore! Riempi almeno un campo</string>
+    <string name="no_result">Nessun risultato</string>
 
     <!-- PassageSummaryActivity -->
-    <string name="user_informations">User informations</string>
-    <string name="age">Age</string>
-    <string name="passage_informations">Passage Informations</string>
-    <string name="departure">Departure</string>
-    <string name="arrival">Arrival</string>
-    <string name="go_to_departure">Go to departure</string>
-    <string name="route_on_map">Route on map</string>
-    <string name="offer_price">Offer a price</string>
-    <string name="offer_passage">Offer passage</string>
-    <string name="passage">Passage</string>
-    <string name="error_location">Error to take your location</string>
-    <string name="offer_created">Offer created</string>
-    <string name="error_create_offer">Error during creation operation</string>
-    <string name="withdraw_offer">Withdraw the offer</string>
-    <string name="offer_blocked">You can not make an offer since you are requesting a passage</string>
-    <string name="error_passage_removed">Error! the passage was removed</string>
-    <string name="fidelity_points">Fidelity points</string>
+    <string name="user_informations">Informazioni utente</string>
+    <string name="age">Età</string>
+    <string name="passage_informations">Informazioni passaggio</string>
+    <string name="departure">Partenza</string>
+    <string name="arrival">Arrivo</string>
+    <string name="go_to_departure">Vai alla partenza</string>
+    <string name="route_on_map">Vedi sulla mappa</string>
+    <string name="offer_price">Offri un prezzo</string>
+    <string name="offer_passage">Offri passaggio</string>
+    <string name="passage">Passaggio</string>
+    <string name="error_location">Errore nel prendere la tua posizione</string>
+    <string name="offer_created">Offerta creata</string>
+    <string name="error_create_offer">Errore nella operazione di creazione</string>
+    <string name="withdraw_offer">Ritira offerta</string>
+    <string name="offer_blocked">Non puoi fare un\'offerta finchè richiedi un passaggio</string>
+    <string name="error_passage_removed">Errore! Il passaggio è stato rimosso</string>
+    <string name="fidelity_points">Punti fedeltà</string>
 
     <!-- ReceivedOffersActivity -->
-    <string name="received_offers">Received offers</string>
-    <string name="price">Price</string>
-    <string name="accept">Accept</string>
-    <string name="decline">Decline</string>
-    <string name="do_not_ask_again">Do not ask again</string>
-    <string name="error_decline_offer">Error during decline offer</string>
-    <string name="declined_offer">Offer declined</string>
-    <string name="error_accept_offer">Error during accept offer</string>
-    <string name="accepted_offer">Offer Accepted</string>
+    <string name="received_offers">Offerte ricevute</string>
+    <string name="price">Prezzo</string>
+    <string name="accept">Accetta</string>
+    <string name="decline">Declina</string>
+    <string name="do_not_ask_again">Non chiedere più</string>
+    <string name="error_decline_offer">Errore durante declinazione di offerta</string>
+    <string name="declined_offer">Offerta declinata</string>
+    <string name="error_accept_offer">Errore durante accetazione offerta</string>
+    <string name="accepted_offer">Offerta accettata</string>
 
     <!-- MyPassageSummary -->
-    <string name="my_passage_summary">My passage summary</string>
-    <string name="request_new_passage">Request new passage</string>
-    <string name="delete_passage">Delete passage</string>
-    <string name="delete_passage_error">Error during delete operation</string>
-    <string name="passage_canceled">Passage canceled</string>
+    <string name="my_passage_summary">Resoconto passaggio</string>
+    <string name="request_new_passage">Richiedi nuovo passaggio</string>
+    <string name="delete_passage">Cancella passaggio</string>
+    <string name="delete_passage_error">Errore durante cancellazione passaggio</string>
+    <string name="passage_canceled">Passaggio cancellato</string>
 
     <!-- MadeOffersActivity -->
-    <string name="made_offers">Made offers</string>
-    <string name="state">State offer</string>
-    <string name="last_price">Last price</string>
-    <string name="there_are_not_offers">There are not offers</string>
+    <string name="made_offers">Offerte fatte</string>
+    <string name="state">Stato offerta</string>
+    <string name="last_price">Ultimo prezzo</string>
+    <string name="there_are_not_offers">Non ci sono offerte</string>
 
     <!-- Notification -->
-    <string name="offer_declined_notification">Your offer has been declined</string>
-    <string name="offer_accepted_notification">Your offer has been accepted</string>
-    <string name="offer_wait_notification">You have a new offer</string>
-    <string name="offer_withdraw_notification">One of your offers has been withdrawn</string>
+    <string name="offer_declined_notification">La tua offerta è stata declinata</string>
+    <string name="offer_accepted_notification">La tua offerta è stata accettata</string>
+    <string name="offer_wait_notification">Hai una nuova offerta</string>
+    <string name="offer_withdraw_notification">Un\'offerta è stata ritirata</string>
 
-    <string name="passage_offer_exist">You have a passage or offer active</string>
+    <string name="passage_offer_exist">Hai un passagio o un\'offerta attiva</string>
 </resources>

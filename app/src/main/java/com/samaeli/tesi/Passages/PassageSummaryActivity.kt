@@ -59,7 +59,6 @@ class PassageSummaryActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //setContentView(R.layout.activity_passage_summary)
         binding = ActivityPassageSummaryBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
@@ -94,7 +93,7 @@ class PassageSummaryActivity : AppCompatActivity() {
 
         binding.offerPassageButtonPassageSummary.setOnClickListener {
             if(validatePriceField()){
-                Log.d(TAG,"Prezzo ok")
+                Log.d(TAG,"Price is ok")
                 checkIfPassageExist()
             }else{
                 Log.d(TAG,"Error price")
@@ -156,6 +155,7 @@ class PassageSummaryActivity : AppCompatActivity() {
 
     // Metodo che permette di caricare l'offerta fatta su firebase
     private fun uploadOfferToFirebase(){
+        // Si inizia il dialog del loading
         loadingDialog!!.startLoadingDialog()
         val uidBidder = FirebaseAuth.getInstance().uid
         val uidRequester = passage!!.uid
@@ -189,7 +189,7 @@ class PassageSummaryActivity : AppCompatActivity() {
                 }
     }
 
-    //Metodo che ha il compito di visualizzare su Google maps l anavigazione dal punto in cui si trova
+    //Metodo che ha il compito di visualizzare su Google maps la anavigazione dal punto in cui si trova
     // l'utente al punto di partenza del passaggio
     private fun showRouteToDeparture(){
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
@@ -393,8 +393,6 @@ class PassageSummaryActivity : AppCompatActivity() {
         month = formatter_month.format(timestamp)
         year = formatter_year.format(timestamp)
 
-        //Log.d(TAG,formatter_day.toString()+" "+formatter_month.toString()+" "+formatter_year.toString())
-        //return formatter.format(timestamp)
     }
 
     // Metodo che ha il compito di controllare che l'utente abbia inserito il prezzo per l'offerta che sta facendo

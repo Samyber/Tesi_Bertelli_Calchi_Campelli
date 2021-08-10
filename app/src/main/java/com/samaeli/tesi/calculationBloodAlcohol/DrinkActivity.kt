@@ -39,7 +39,6 @@ class DrinkActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //setContentView(R.layout.activity_drink)
         binding = ActivityDrinkBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
@@ -71,6 +70,7 @@ class DrinkActivity : AppCompatActivity() {
 
             picker.show(supportFragmentManager, "")
 
+            // Se l'utente decide di cliccare su ok l'ora inserita viene visualizzata nell'editText
             picker.addOnPositiveButtonClickListener {
                 hour = picker.hour
                 minute = picker.minute
@@ -86,7 +86,7 @@ class DrinkActivity : AppCompatActivity() {
 
 
         binding.addButtonDrink.setOnClickListener {
-            error = false // variabile che vale true se si è verificato almeno un errore durante l'inserimento dei dati del drink
+            error = false // variabile che vale true se si è verificato almeno un errore nei valori inseriti dall'utente
             if(!validateFields()){
                 Log.d(TAG,"Error during adding drink")
                 Toast.makeText(this,getString(R.string.error_check_fields),Toast.LENGTH_LONG).show()
@@ -112,7 +112,7 @@ class DrinkActivity : AppCompatActivity() {
         db!!.insertDrinkAdded(drinkAdded)
     }
 
-    // Metodo ceh controlla che i dati inseriti dall'utente siano corretti
+    // Metodo che controlla che i dati inseriti dall'utente siano corretti
     private fun validateFields():Boolean{
         if(drink == null){
             validateName()

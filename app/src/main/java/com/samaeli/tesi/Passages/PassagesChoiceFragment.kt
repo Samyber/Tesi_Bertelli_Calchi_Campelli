@@ -20,21 +20,25 @@ class PassagesChoiceFragment : Fragment() {
     private var _binding : FragmentPassagesChoiceBinding? = null
     private val binding get() = _binding!!
 
-    private var typeUser :String = "bidder"
+    private var typeUser :String = BIDDER
+
+    // Variabile che vale true se l'utente ha fatto un'offerta che è nello stato di wait
+    private var offer_wait = false
+
+    companion object{
+        val TAG = "Passages Choice Fragment"
+        const val BIDDER = "bidder"
+        const val REQUESTER = "requester"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
-    private var offer_wait = false
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         _binding = FragmentPassagesChoiceBinding.inflate(inflater,container,false)
         val view = binding.root
-
-        //setVisibilityRecentOffer()
-        //setVisibilityRequestNewPassage()
 
         binding.passageRequestButtonChoisePassages.setOnClickListener {
             // Se l'utente ha fatto un'offerta che è nello stato di wait non può richiedere un passaggio
@@ -43,7 +47,7 @@ class PassagesChoiceFragment : Fragment() {
             }else {
                 // Se l'utente ha richiesto un passaggio si apre la schermata del resoconto altrimenti
                     // quella per poter richiedere un nuovo passaggio
-                if (typeUser == "requester") {
+                if (typeUser.equals(REQUESTER)) {
                     val intent = Intent(activity, MyPassageSummaryActivity::class.java)
                     startActivity(intent)
                 } else {
@@ -61,7 +65,7 @@ class PassagesChoiceFragment : Fragment() {
 
         // Si apre schermata delle offerte recenti
         binding.recentOffertsButtonChoisePassages.setOnClickListener {
-            if(typeUser.equals("requester")){
+            if(typeUser.equals(REQUESTER)){
                 val intent = Intent(activity,ReceivedOffersActivity::class.java)
                 startActivity(intent)
             }else{
@@ -123,10 +127,10 @@ class PassagesChoiceFragment : Fragment() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(!snapshot.exists()){
                     binding.passageRequestButtonChoisePassages.text = getString(R.string.passage_request)
-                    typeUser = "bidder"
+                    typeUser = BIDDER
                 }else{
                     binding.passageRequestButtonChoisePassages.text = getString(R.string.summary_required_passage)
-                    typeUser = "requester"
+                    typeUser = REQUESTER
                 }
             }
 
@@ -145,12 +149,13 @@ class PassagesChoiceFragment : Fragment() {
         val ref = FirebaseDatabase.getInstance().getReference("received_offers/$uid")
         ref.addValueEventListener(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
+                // Si controlla se è stata ricevuta un'offerta
                 if(snapshot.exists()){
                     snapshot.children.forEach {
                         val offer = it.getValue(Offer::class.java)
                         if(offer!!.visibility==true){
                             binding.recentOffertsButtonChoisePassages.visibility = View.VISIBLE
-                            Log.d("Fragment choice","Recent Offers visible1")
+                            Log.d(TAG,"Recent Offers visible1")
                             offer_exist = true
                             return
                         }
@@ -160,12 +165,13 @@ class PassagesChoiceFragment : Fragment() {
                     val ref2 = FirebaseDatabase.getInstance().getReference("made_offers/$uid")
                     ref2.addValueEventListener(object:ValueEventListener{
                         override fun onDataChange(snapshot: DataSnapshot) {
+                            // Si controlla se è stata fatta un'offerta
                             if(snapshot.exists()){
                                 binding.recentOffertsButtonChoisePassages.visibility = View.VISIBLE
-                                Log.d("Fragment choice","Recent Offers visible")
+                                Log.d(TAG,"Recent Offers visible")
                             }else{
                                 binding.recentOffertsButtonChoisePassages.visibility = View.INVISIBLE
-                                Log.d("Fragment choice","Recent Offers invisible")
+                                Log.d(TAG,"Recent Offers invisible")
                             }
                         }
 
@@ -194,9 +200,7 @@ class PassagesChoiceFragment : Fragment() {
             }
 
             override fun onChildRemoved(snapshot: DataSnapshot) {
-                //binding.passageRequestButtonChoisePassages.text = activity!!.getString(R.string.passage_request)
-                //binding.passageRequestButtonChoisePassages.text = context!!.getString(R.string.passage_request)
-                typeUser="bidder"
+                typeUser=BIDDER
                 binding.recentOffertsButtonChoisePassages.visibility = View.INVISIBLE
             }
 
@@ -209,29 +213,4 @@ class PassagesChoiceFragment : Fragment() {
         })
     }
 
-    /*private fun setVisibilityRequestNewPassage(){
-        val uid = FirebaseAuth.getInstance().uid
-        val ref = FirebaseDatabase.getInstance().getReference("received_offers/$uid")
-        ref.addValueEventListener(object : ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if(!snapshot.exists()){
-                    binding.newRequestPassageButtonPassageChoice.visibility = View.GONE
-                }else{
-                    snapshot.children.forEach{
-                        val offer = it.getValue(Offer::class.java)
-                        if(offer!!.state.equals("accepted")){
-                            binding.newRequestPassageButtonPassageChoice.visibility = View.VISIBLE
-                        }else{
-                            binding.newRequestPassageButtonPassageChoice.visibility = View.GONE
-                            return
-                        }
-                    }
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-            }
-
-        })
-    }*/
 }

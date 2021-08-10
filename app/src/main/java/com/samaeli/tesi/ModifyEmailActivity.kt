@@ -34,7 +34,6 @@ class ModifyEmailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //setContentView(R.layout.activity_modify_email)
 
         binding = ActivityModifyEmailBinding.inflate(layoutInflater)
         val view = binding.root
@@ -48,19 +47,20 @@ class ModifyEmailActivity : AppCompatActivity() {
             title = getString(R.string.update_email)
         }
 
+        // Si preleva l'utente dall'intent
         user = intent.getParcelableExtra("user")
 
         binding.oldEmailEditTextModifyEmail.setText(user!!.email)
 
         binding.changeEmailButtonModifyEmail.setOnClickListener {
             Log.d(TAG,"Try to modify email")
-            error = false
+            error = false // variabile che vale true se si è verificato almeno un errore nei valori inseriti dall'utente
             if(!validateUpdateEmail()){
                 Log.d(TAG,getString(R.string.error_update_email))
                 Toast.makeText(this,getString(R.string.error_update_email),Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
-            Log.d(TAG, "Campi ok")
+            Log.d(TAG, "Fields are ok")
             // Start schermata di caricamento
             loadingDialog!!.startLoadingDialog()
             updateEmail()
@@ -93,7 +93,6 @@ class ModifyEmailActivity : AppCompatActivity() {
                                 loadingDialog!!.dismissLoadingDialog()
                                 // If che viene eseguito se la nuova mail inserita dall'utente esiste gia
                                 if(it is FirebaseAuthUserCollisionException){
-                                    //Toast.makeText(this, getString(R.string.error_update_email), Toast.LENGTH_LONG).show()
                                     Log.d(RegisterActivity.TAG, getString(R.string.error_update_email))
                                     binding.newEmailInputLayoutModifyEmail.error = getString(R.string.error_email_exist)
                                 }else {
@@ -112,7 +111,6 @@ class ModifyEmailActivity : AppCompatActivity() {
                         Toast.makeText(this,"Error: ${it.message}",Toast.LENGTH_LONG).show()
                     }
                     Log.d(TAG,"Error: ${it.message}")
-                    //Toast.makeText(this,"Error: ${it.message}",Toast.LENGTH_LONG).show()
                 }
     }
 
@@ -154,11 +152,6 @@ class ModifyEmailActivity : AppCompatActivity() {
             error = true
             return
         }
-        /*if(!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-            binding.emailInputLayoutLogin.error = getString(R.string.error_email)
-            error = true
-            return
-        }*/
         if(!oldEmail.equals(user!!.email)){
             binding.oldEmailInputLayoutModifyEmail.error = getString(R.string.error_old_email)
             error = true

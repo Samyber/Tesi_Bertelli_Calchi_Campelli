@@ -52,6 +52,7 @@ class ReceivedOfferItem(val offer:Offer, val context:Context):Item<ViewHolder>()
                 val user = snapshot.getValue(User::class.java)
                 viewHolder.itemView.nameTextViewReceivedOffer.text = user!!.name+" "+user!!.surname
 
+                // Calcolo dell'età dell'utente
                 getDate(user!!.birthdayDate)
                 val now : LocalDate = LocalDate.now()
                 val birthday = LocalDate.of(year!!.toInt() ,month!!.toInt(),day!!.toInt())
@@ -91,29 +92,6 @@ class ReceivedOfferItem(val offer:Offer, val context:Context):Item<ViewHolder>()
         return R.layout.item_received_offer
     }
 
-    /*private fun declineOffer(){
-        val uidBidder = offer.uidBidder
-        val uidRequester = offer.uidRequester
-        val ref = FirebaseDatabase.getInstance().getReference("received_offers/$uidRequester/$uidBidder")
-        ref.removeValue()
-                .addOnSuccessListener {
-                    val ref2 = FirebaseDatabase.getInstance().getReference("made_offers/$uidBidder/$uidRequester")
-
-                    val newOffer = Offer(offer!!.uidBidder,offer.uidRequester,offer.price,"declined",true)
-                    ref2.setValue(newOffer)
-                            .addOnSuccessListener {
-                                addDeclinedOffer(uidBidder)
-                            }
-                            .addOnFailureListener {
-                                Toast.makeText(context,context.getString(R.string.error_decline_offer),Toast.LENGTH_LONG).show()
-                            }
-
-                }
-                .addOnFailureListener {
-                    Toast.makeText(context,context.getString(R.string.error_decline_offer),Toast.LENGTH_LONG).show()
-                }
-    }*/
-
     // Metodo che ha il compito di declinare un'offerta
     private fun declineOffer(){
         val uidBidder = offer.uidBidder
@@ -146,23 +124,6 @@ class ReceivedOfferItem(val offer:Offer, val context:Context):Item<ViewHolder>()
             }
 
         })
-        /*ref.removeValue()
-                .addOnSuccessListener {
-                    val ref2 = FirebaseDatabase.getInstance().getReference("made_offers/$uidBidder/$uidRequester")
-
-                    val newOffer = Offer(offer!!.uidBidder,offer.uidRequester,offer.price,"declined",true)
-                    ref2.setValue(newOffer)
-                            .addOnSuccessListener {
-                                addDeclinedOffer(uidBidder)
-                            }
-                            .addOnFailureListener {
-                                Toast.makeText(context,context.getString(R.string.error_decline_offer),Toast.LENGTH_LONG).show()
-                            }
-
-                }
-                .addOnFailureListener {
-                    Toast.makeText(context,context.getString(R.string.error_decline_offer),Toast.LENGTH_LONG).show()
-                }*/
     }
 
     // Metodo che ha il compito di accettare un'offerta
@@ -171,7 +132,7 @@ class ReceivedOfferItem(val offer:Offer, val context:Context):Item<ViewHolder>()
         val uidRequester = offer.uidRequester
         // Si imposta lo stato dell'offerta ad "accepted"
         offer.state=Offer.ACCEPTED
-        // Caricamento dell'offerta accetta
+        // Caricamento dell'offerta accettata
         val ref = FirebaseDatabase.getInstance().getReference("received_offers/$uidRequester/$uidBidder")
         ref.setValue(offer)
                 .addOnSuccessListener {
@@ -218,7 +179,7 @@ class ReceivedOfferItem(val offer:Offer, val context:Context):Item<ViewHolder>()
         offer.state = Offer.DECLINED
         ref.setValue(offer)
                 .addOnSuccessListener {
-                    Log.d("CIAOOOOOOOOOOO","ADD Declined offer")
+                    Log.d(TAG,"ADD Declined offer")
                     Toast.makeText(context,context.getString(R.string.declined_offer),Toast.LENGTH_LONG).show()
                     ReceivedOffersActivity.displayReceivedOffers(context)
                 }

@@ -35,18 +35,19 @@ class SettingsActivity : AppCompatActivity() {
             createListenerLimit(prefLimit,prefLimitNewDriver)
         }
 
-        // Metodo eseguito se il valore inserito dall'utente come limite di tasso alcolemico non è valido
+        // Metodo eseguito se il valore inserito dall'utente come limite di tasso alcolemico per i non neopatentati non è valido
         private fun errorPrefLimit(prefLimit : EditTextPreference?){
             prefLimit?.text = "0.5"
             Toast.makeText(activity,getString(R.string.error_limit_pref),Toast.LENGTH_LONG).show()
         }
 
+        // Metodo eseguito se il valore inserito dall'utente come limite di tasso alcolemico per i neopatentati non è valido
         private fun errorPrefLimitNewDriver(prefLimitNewDriver: EditTextPreference?){
             prefLimitNewDriver?.text = "0.0"
             Toast.makeText(activity,getString(R.string.error_limit_pref),Toast.LENGTH_LONG).show()
         }
 
-        // Metodo che permette di controllare che il valore inserito dall'utente come limite di tasso alcolemico sia valido
+        // Metodo che permette di controllare che i valori inseriti dall'utente come limiti di tasso alcolemico siano validi
         private fun createListenerLimit(prefLimit : EditTextPreference?, prefLimitNewDriver: EditTextPreference?){
             val listener = object : SharedPreferences.OnSharedPreferenceChangeListener{
                 override fun onSharedPreferenceChanged(
@@ -82,29 +83,5 @@ class SettingsActivity : AppCompatActivity() {
             }
             PreferenceManager.getDefaultSharedPreferences(activity).registerOnSharedPreferenceChangeListener(listener)
         }
-
-        /*private fun createListenerLimitNewDriver(prefLimitNewDriver : EditTextPreference?){
-            val listener = object : SharedPreferences.OnSharedPreferenceChangeListener{
-                override fun onSharedPreferenceChanged(
-                        sharedPreferences: SharedPreferences?,
-                        key: String?
-                ) {
-                    val limitPrefValue = sharedPreferences?.getString("limit_edit_text_preference","")
-                    if(limitPrefValue.isNullOrEmpty() || limitPrefValue.toString()!!.isBlank()){
-                        errorPrefLimit(prefLimit)
-                    }
-                    try {
-                        val num = parseDouble(limitPrefValue)
-                        if(num < 0){
-                            errorPrefLimit(prefLimit)
-                        }
-                    }catch (e:NumberFormatException){
-                        errorPrefLimit(prefLimit)
-                    }
-                }
-
-            }
-            PreferenceManager.getDefaultSharedPreferences(activity).registerOnSharedPreferenceChangeListener(listener)
-        }*/
     }
 }

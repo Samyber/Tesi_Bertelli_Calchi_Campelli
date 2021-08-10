@@ -21,6 +21,7 @@ class MadeOfferItem(val offer:Offer, val context:Context):Item<ViewHolder>() {
         return R.layout.item_made_offer
     }
 
+    // Metodo che ha il compito di completare i campi con le informazioni dell'utente
     private fun completeUserInformations(viewHolder: ViewHolder){
         val ref = FirebaseDatabase.getInstance().getReference("users/${offer.uidRequester}")
         ref.addValueEventListener(object : ValueEventListener{
@@ -36,6 +37,7 @@ class MadeOfferItem(val offer:Offer, val context:Context):Item<ViewHolder>() {
         })
     }
 
+    // Metodo che ha il compito di completare i campi con le informazioni del passaggio
     private fun completePassageInformations(viewHolder: ViewHolder){
         val ref = FirebaseDatabase.getInstance().getReference("passages/${offer.uidRequester}")
         ref.addValueEventListener(object : ValueEventListener{

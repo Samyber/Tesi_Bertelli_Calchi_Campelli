@@ -31,7 +31,6 @@ class MyPassageSummaryActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //setContentView(R.layout.activity_my_passage_summary)
         binding = ActivityMyPassageSummaryBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
@@ -59,10 +58,6 @@ class MyPassageSummaryActivity : AppCompatActivity() {
             finish()
         }
 
-        /*binding.newRequestButtonMyPassageSummary.setOnClickListener {
-            Log.d(TAG,"Try to request new passage")
-        }*/
-
         completeFields()
     }
 
@@ -81,7 +76,6 @@ class MyPassageSummaryActivity : AppCompatActivity() {
         ref.addValueEventListener(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(!snapshot.exists()){
-                    //displayDeletePassageButton()
                     binding.deleteButtonMyPassageSummary.visibility = View.VISIBLE
                 }else {
                     snapshot.children.forEach {
@@ -140,7 +134,6 @@ class MyPassageSummaryActivity : AppCompatActivity() {
                     ref2.removeValue()
                             .addOnSuccessListener {
                                 Log.d(TAG,"Offer delete from receive_offers")
-                                //TODO
                             }
 
 

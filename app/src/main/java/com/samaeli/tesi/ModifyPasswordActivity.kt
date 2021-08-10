@@ -28,7 +28,6 @@ class ModifyPasswordActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //setContentView(R.layout.activity_modify_password)
         binding = ActivityModifyPasswordBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
@@ -42,7 +41,7 @@ class ModifyPasswordActivity : AppCompatActivity() {
 
         binding.changePasswordButtonModifyPassword.setOnClickListener {
             Log.d(TAG,"Try to modify password")
-            error = false
+            error = false // variabile che vale true se si è verificato almeno un errore nei valori inseriti dall'utente
             if(!validateUpdatePassword()){
                 Log.d(TAG,getString(R.string.error_update_password))
                 Toast.makeText(this,getString(R.string.error_update_password),Toast.LENGTH_LONG).show()
@@ -68,8 +67,6 @@ class ModifyPasswordActivity : AppCompatActivity() {
         // Reautenticazione dell'utente
         user.reauthenticate(credential)
                 .addOnSuccessListener {
-                    /*binding.oldPasswordInputLayoutModifyPassword.error = ""
-                    binding.oldPasswordInputLayoutModifyPassword.isErrorEnabled = false*/
                     user.updatePassword(newPassword.toString())
                     // Stop schermata di caricamento
                     loadingDialog!!.dismissLoadingDialog()
@@ -109,7 +106,7 @@ class ModifyPasswordActivity : AppCompatActivity() {
         binding.oldPasswordInputLayoutModifyPassword.isErrorEnabled = false
     }
 
-    // Controllo che l'utente abbia inserito la nuova password
+    // Controllo che l'utente abbia inserito la nuova password e che sia lunga almeno 8 caratteri
     private fun validateNewPassword(){
         newPassword = binding.newPasswordEditTextModifyPassword.text.toString()
 
@@ -127,7 +124,7 @@ class ModifyPasswordActivity : AppCompatActivity() {
         binding.newPasswordInputLayoutModifyPassword.isErrorEnabled = false
     }
 
-    // Controllo che l'utente abbia confermato la nuova password
+    // Controllo che l'utente abbia confermato la nuova password e che sia corretta
     private fun validateConfirmNewPassword(){
         val confirmPassword = binding.confirmNewPasswordEditTextModifyPassword.text.toString()
 

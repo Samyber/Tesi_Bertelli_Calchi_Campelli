@@ -61,7 +61,6 @@ class DrinkAddedDB (){
 
     private class DBHelper(context:Context) : SQLiteOpenHelper(context, DB_NAME,null, DB_VERSION) {
 
-
         override fun onCreate(db: SQLiteDatabase?) {
             db!!.execSQL(CREATE_DRINK_ADDED_TABLE)
         }
@@ -159,7 +158,7 @@ class DrinkAddedDB (){
         return rowCount
     }
 
-    // Metodo che permette di concellare tutti i drink dal db
+    // Metodo che permette di cancellare tutti i drink dal db
     fun deleteDrinksAdded():Int{
         openWriteableDB()
         val rowCount = db!!.delete(DRINK_ADDED_TABLE,null,null)

@@ -40,6 +40,8 @@ class AlcoholLevelFragment : Fragment() {
     private var limitNewDriver : Double = 0.0
 
     companion object {
+        val TAG = "Alcohol Level Fragment"
+
         // Parametri forniti dall'Istituto superiore della sanità
         const val MALE_EMPTY_STOMACH = 0.7
         const val MALE_FULL_STOMACH = 1.2
@@ -48,6 +50,7 @@ class AlcoholLevelFragment : Fragment() {
 
         // 3 years in milliseconds for the new drivers
         const val YEARS_3 = 94672800000
+        // 21 years in milliseconds for the new drivers
         const val YEARS_21 = 662709600000
         // mg/l che si smaltiscono ogni minuto
         const val DIGESTION_MINUTE = 0.0025
@@ -76,8 +79,6 @@ class AlcoholLevelFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        //return inflater.inflate(R.layout.fragment_alcohol_level, container, false)
         _binding = FragmentAlcoholLevelBinding.inflate(inflater, container, false)
         val view = binding.root
 
@@ -95,20 +96,14 @@ class AlcoholLevelFragment : Fragment() {
 
         binding.calculateButtonAlcoholLevel.setOnClickListener {
             // Inizio calcolo del tasso alcolemico
-            Log.d("Alcohol Fragment","Inizio calcolo tasso alcolemico")
+            Log.d(TAG,"Inizio calcolo tasso alcolemico")
             if(!checkWeight()){
-                Log.d("Alcohol Level Fragment",getString(R.string.error_weight))
+                Log.d(TAG,getString(R.string.error_weight))
                 Toast.makeText(activity,getString(R.string.error_weight),Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
             calculateAlcoholLevel()
         }
-
-        // Pezzo spostato in onResume
-        /*if(FirebaseAuth.getInstance().uid != null) {
-            completeFieldsFromFirebase()
-        }
-        completeFieldsFromSharedPreference()*/
 
         //  Oggetto di tipo DrinkAddedDb per eseguire le query su SQLite Database
         db = DrinkAddedDB(requireActivity().applicationContext)
@@ -120,11 +115,6 @@ class AlcoholLevelFragment : Fragment() {
         return view
     }
 
-    /*override fun onDestroyView() {
-        super.onDestroyView()
-        //_binding = null
-    }*/
-
     override fun onResume() {
         super.onResume()
         // Se l'utente è registrato si caricano i valori con quelli inseriti dall'utente nel suo profilo
@@ -135,8 +125,8 @@ class AlcoholLevelFragment : Fragment() {
         completeFieldsFromSharedPreference()
         limitOldDriver = parseDouble(prefs?.getString("limit_edit_text_preference","0.5"))
         limitNewDriver = parseDouble(prefs?.getString("limit_new_driver_edit_text_preference","0.0"))
-        Log.d("Alcohol Level Fragment","Limit old driver: $limitOldDriver")
-        Log.d("Alcohol Level Fragment","Limit new driver: $limitNewDriver")
+        Log.d(TAG,"Limit old driver: $limitOldDriver")
+        Log.d(TAG,"Limit new driver: $limitNewDriver")
     }
 
     override fun onPause() {
@@ -175,18 +165,18 @@ class AlcoholLevelFragment : Fragment() {
 
         // For eseguito per ogni drink inserito dall'utente
         for(drinkAdded in drinksAdded!!){
-            Log.d("Alcohol Level Fragment","Ciclo")
+            Log.d(TAG,"Ciclo")
             // Grammi di alcol = (ml di bevanda x grado alcolico x 0,79) / 100
             val gAlcohol : Double = (drinkAdded.drink!!.volume * drinkAdded.quantity * drinkAdded.drink!!.alcoholContent * 0.79)/100
             var alcoholLevel : Double = gAlcohol/(weight * c)
-            Log.d("Alcohol Level Fragment","first alcohol level "+alcoholLevel.toString())
+            Log.d(TAG,"first alcohol level "+alcoholLevel.toString())
             // Quando si è assunto il drink
             val timeMinute : Int = drinkAdded.hour * 60 + drinkAdded.minute
             // Ora
             val nowMinute : Int = Calendar.getInstance().get(Calendar.MINUTE) +
                     (Calendar.getInstance().get(Calendar.HOUR_OF_DAY)*60)
+            Log.d(TAG,"timeMinute: "+timeMinute+" now minute "+nowMinute)
 
-            Log.d("Alcohol Level Fragment","timeMinute: "+timeMinute+" now minute "+nowMinute)
             // Quanto è passato da quando si è assunto il drink ad ora
             val differenceTime : Int = if(timeMinute < nowMinute){
                 nowMinute - timeMinute
@@ -201,7 +191,7 @@ class AlcoholLevelFragment : Fragment() {
                 alcoholLevelFinal += alcoholLevel
             }
         }
-        Log.d("Alcohol Level Fragment",alcoholLevelFinal.toString())
+        Log.d(TAG,alcoholLevelFinal.toString())
 
         // Calcolo il limite del tasso alcolemico
         val limit = calculateLimit()
@@ -211,7 +201,6 @@ class AlcoholLevelFragment : Fragment() {
 
         // Go to ResultCalculationActivity
         val intent = Intent(activity,ResultCalculationActivity::class.java)
-        //intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
         intent.putExtra("alcohol_level",alcoholLevelFinal)
         intent.putExtra("time_before_driving",time)
         startActivity(intent)
@@ -312,7 +301,7 @@ class AlcoholLevelFragment : Fragment() {
                     Log.d("Fragment alcohol","Old driver")
                 }else{
                     binding.newDriverRadioGroupAlcoholLevel.check(R.id.yesNewDriverRadioButtonAlcoholLevel)
-                    Log.d("Fragment alcohol","New driver")
+                    Log.d(TAG,"New driver")
                 }
             }
 
@@ -321,6 +310,7 @@ class AlcoholLevelFragment : Fragment() {
         })
     }
 
+    // Controllo che l'utente abbia inserito il peso e che sia maggiore di 0
     private fun checkWeight():Boolean{
         val stringWeight = binding.weightEditTextAlcoholLevel.text.toString()
 
