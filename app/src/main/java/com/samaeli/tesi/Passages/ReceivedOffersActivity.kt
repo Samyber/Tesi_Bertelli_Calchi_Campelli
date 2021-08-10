@@ -242,6 +242,7 @@ class ReceivedOffersActivity : AppCompatActivity() {
                                     Log.d(TAG, "Error change passage visibility")
                                 }
                     }
+                    ref.removeEventListener(this)
                 }
 
                 override fun onCancelled(error: DatabaseError) {

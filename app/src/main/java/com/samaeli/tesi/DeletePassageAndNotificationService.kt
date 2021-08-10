@@ -63,7 +63,7 @@ class DeletePassageAndNotificationService : Service() {
                 Log.d(TAG,"RUN")
                 checkPassage()
             }
-        },0,1000 * 60 *2)
+        },0,1000 * 60 *3)
     }
 
     private fun stopTimerDeletePassage(){

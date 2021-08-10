@@ -47,7 +47,8 @@ class PassageProvideActivity : AppCompatActivity() {
         binding.searchButtonPassageProvide.setOnClickListener {
             departureCity = binding.departureCityEditProvidePassage.text.toString()
             arrivalCity = binding.arrivalCityEditProvidePassage.text.toString()
-            fetchPassage()
+            //fetchPassage()
+            refreshRecyclerView()
         }
 
         fetchPassage()
@@ -82,8 +83,75 @@ class PassageProvideActivity : AppCompatActivity() {
         return true
     }*/
 
-    //Metodo che ha il compito di prelevare i passaggi da firebase che devono essere visualizzati
     private fun fetchPassage(){
+        val ref = FirebaseDatabase.getInstance().getReference("passages/")
+        ref.addChildEventListener(object : ChildEventListener{
+            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                val passage = snapshot.getValue(Passage::class.java) ?: return
+                passagesMap[snapshot.key!!] = passage
+                //insertPassage(passage,snapshot)
+                refreshRecyclerView()
+            }
+
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+                val passage = snapshot.getValue(Passage::class.java) ?: return
+                //insertPassage(passage,snapshot)
+                passagesMap[snapshot.key!!] = passage
+                refreshRecyclerView()
+            }
+
+            override fun onChildRemoved(snapshot: DataSnapshot) {
+                //passagesMap.remove(snapshot.key!!)
+                if(passagesMap.containsKey(snapshot.key!!)){
+                    passagesMap.remove(snapshot.key!!)
+                }
+                refreshRecyclerView()
+            }
+
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+        })
+    }
+
+    // Metodo che ha il compito di verificare che un rispetti i vincoli di ricerca
+    private fun checkPassage(passage:Passage){
+        val uid = FirebaseAuth.getInstance().uid
+        if (passage != null && passage.uid != uid && passage.visibility == true) {
+            if (!arrivalCity.isNullOrEmpty() && !arrivalCity!!.isBlank()) {
+                if (!departureCity.isNullOrEmpty() && !departureCity!!.isBlank()) {
+                    // Utente ha inserito entrambe le città
+                    showPassageItemArrivalDeparture(passage, arrivalCity!!, departureCity!!)
+                } else {
+                    // Utente ha inserito solo arrival city
+                    showPassageItemArrival(passage, arrivalCity!!)
+                }
+            } else {
+                if (!departureCity.isNullOrEmpty() && !departureCity!!.isBlank()) {
+                    // Utente ha inserito solo departure city
+                    showPassageItemDeparture(passage, departureCity!!)
+                } else {
+                    // utente non ha inserito nulla
+                    showPassageItem(passage)
+                }
+            }
+        }
+    }
+
+    // Metodo che ha il compito di aggiornare il recyclerView
+    private fun refreshRecyclerView(){
+        adapter.clear()
+        passagesMap.values.forEach {
+            checkPassage(it)
+        }
+        showHideNoResult()
+    }
+
+    //Metodo che ha il compito di prelevare i passaggi da firebase che devono essere visualizzati
+    /*private fun fetchPassage(){
         val ref = FirebaseDatabase.getInstance().getReference("passages/")
         ref.addChildEventListener(object : ChildEventListener{
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
@@ -148,7 +216,7 @@ class PassageProvideActivity : AppCompatActivity() {
             adapter.add(PassageItem(it))
         }
         showHideNoResult()
-    }
+    }*/
 
     /*private fun displayPassages(snapshot: DataSnapshot){
         val uid = FirebaseAuth.getInstance().uid
@@ -228,8 +296,39 @@ class PassageProvideActivity : AppCompatActivity() {
         }
     }
 
+    // Metodo che ha il compito di visualizzare un passaggio se non è stata fatta nessun tipo di ricerca
+    private fun showPassageItem(passage: Passage){
+        Log.d(TAG,"UID Passage: ${passage.uid}")
+        adapter.add(PassageItem(passage))
+    }
+
+    // Metodo che ha il compito di visualizzare un passaggio se è stata ricercata la città di arrivo
+    private fun showPassageItemArrival(passage: Passage,arrivalCity:String){
+        if(passage.arrivalCity.contains(arrivalCity,true)){
+            Log.d(TAG,"UID Passage: ${passage.uid}")
+            adapter.add(PassageItem(passage))
+        }
+    }
+
+    // Metodo che ha il compito di visualizzare un passaggio se è stata ricercata la città di partenza
+    private fun showPassageItemDeparture(passage: Passage,departureCity:String){
+        if(passage.departureCity.contains(departureCity,true)){
+            Log.d(TAG,"UID Passage: ${passage.uid}")
+            adapter.add(PassageItem(passage))
+        }
+    }
+
+    // Metodo che ha il compito di visualizzare un passaggio se è stata ricercata sia la città di arrivo sia quella di partenza
+    private fun showPassageItemArrivalDeparture(passage: Passage,arrivalCity:String,departureCity: String){
+        if(passage.arrivalCity.contains(arrivalCity,true) &&
+                passage.departureCity.contains(departureCity,true)){
+            Log.d(TAG,"UID Passage: ${passage.uid}")
+            adapter.add(PassageItem(passage))
+        }
+    }
+
     // Metodo che ha il compito di agguingere un passaggio se non è stata fatta nessun tipo di ricerca
-    private fun addPassageItem(passage: Passage,snapshot: DataSnapshot){
+    /*private fun addPassageItem(passage: Passage,snapshot: DataSnapshot){
         Log.d(TAG,"UID Passage: ${passage.uid}")
         passagesMap[snapshot.key!!] = passage
     }
@@ -257,7 +356,7 @@ class PassageProvideActivity : AppCompatActivity() {
             Log.d(TAG,"UID Passage: ${passage.uid}")
             passagesMap[snapshot.key!!] = passage
         }
-    }
+    }*/
 
     /*private fun addPassageItem(passage: Passage){
         Log.d(TAG,"UID Passage: ${passage.uid}")

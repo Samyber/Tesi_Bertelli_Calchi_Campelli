@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Tesi_Bertelli_Calchi_Campelli</string>
+    <string name="app_name">Drink\'N\'go</string>
 
     <!-- RegisterActivity/LoginActivity -->
     <string name="name">Name</string>

@@ -131,8 +131,9 @@ class MyPassageSummaryActivity : AppCompatActivity() {
                     ref3.removeValue()
                             .addOnSuccessListener {
                                 Log.d(TAG,"Offer delete from made_offers")
-                                // TODO se l'offerta è in wait
-                                addDeclinedOffer(offer!!.uidBidder,offer)
+                                if(offer.state.equals(Offer.WAIT)) {
+                                    addDeclinedOffer(offer!!.uidBidder, offer)
+                                }
                             }
 
                     val ref2 = FirebaseDatabase.getInstance().getReference("received_offers/$uid/${offer!!.uidBidder}")

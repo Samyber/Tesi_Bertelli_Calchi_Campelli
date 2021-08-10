@@ -61,7 +61,6 @@ class RegisterActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //setContentView(R.layout.activity_register)
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
@@ -77,7 +76,7 @@ class RegisterActivity : AppCompatActivity() {
         binding.birthdayDateEditTextRegister.setOnClickListener {
             Log.d(TAG,"Try to show datePicker for birthday date")
             val timestamp = System.currentTimeMillis()
-            // COntrollo che la persona che si sta registrando abbia almeno 14 anni
+            // Controllo che la persona che si sta registrando abbia almeno 14 anni
             val constraintsBuilder = CalendarConstraints.Builder()
                     .setValidator(DateValidatorPointBackward.before(timestamp - years_14_milliseconds))
                     .setEnd(timestamp - years_14_milliseconds)
@@ -89,7 +88,7 @@ class RegisterActivity : AppCompatActivity() {
 
             datePicker.show(supportFragmentManager,"")
 
-            // Se l'utente decidedi clicca su ok la data inserita viene visualizzata neel'editText
+            // Se l'utente decide di cliccare su ok la data inserita viene visualizzata nell'editText
             datePicker.addOnPositiveButtonClickListener {
                 val date = getDate(it)
                 birthdayDate = it
@@ -113,7 +112,7 @@ class RegisterActivity : AppCompatActivity() {
 
             datePicker.show(supportFragmentManager,"")
 
-            // Se l'utente decidedi clicca su ok la data inserita viene visualizzata neel'editText
+            // Se l'utente decide di cliccare su ok la data inserita viene visualizzata nell'editText
             datePicker.addOnPositiveButtonClickListener {
                 val date = getDate(it)
                 licenseDate = it
@@ -126,7 +125,6 @@ class RegisterActivity : AppCompatActivity() {
         binding.alreadyRegisterTextView.setOnClickListener {
             Log.d(TAG,"Go to Login Activity")
             val intent = Intent(this,LoginActivity::class.java)
-            //intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
             finish()
         }
@@ -147,7 +145,7 @@ class RegisterActivity : AppCompatActivity() {
                 Toast.makeText(this,getString(R.string.error_registration),Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
-            Log.d(TAG,"Campi ok")
+            Log.d(TAG,"Fields are ok")
             // Si inizia il dialog del loading
             loadingDialog.startLoadingDialog()
             performRegistration()
@@ -156,9 +154,6 @@ class RegisterActivity : AppCompatActivity() {
         // GO to MainActivity e Alcohol Level Fragment
         binding.alcoholCalculatorTextViewRegister.setOnClickListener {
             Log.d(LoginActivity.TAG,"Main Activity")
-            /*val intent = Intent(this,MainActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)*/
             finish()
         }
 
@@ -170,6 +165,7 @@ class RegisterActivity : AppCompatActivity() {
             if(result.resultCode == Activity.RESULT_OK){
                 val data = result.data
                 if(data != null){
+                    // Foto visualizzata nel campo
                     Log.d(TAG,"Photo was selected")
                     selectPhotoUri = data.data
                     val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, selectPhotoUri)
@@ -193,8 +189,6 @@ class RegisterActivity : AppCompatActivity() {
                             // if che viene eseguito se la mail inserita dall'utente è già presente in Firebase
                             if(e is FirebaseAuthUserCollisionException){
                                 Log.d(TAG,"The email exist")
-                                //Il toast compare automaticamente senza doverlo stampare
-                                //Toast.makeText(this,getString(R.string.error_registration)+": "+getString(R.string.error_email_exist),Toast.LENGTH_LONG).show()
                                 binding.emailInputLayoutRegister.error = getString(R.string.error_email_exist)
                             }else {
                                 Toast.makeText(this, getString(R.string.error_registration), Toast.LENGTH_LONG).show()
@@ -223,7 +217,6 @@ class RegisterActivity : AppCompatActivity() {
     // immagine del profilo. Infatti quando bisognerà sostiuirla la si troverà facilmente conoscendo solo l'uid dell'utente. Altrimenti bisognerebbe
     // salvare nel profilo dell'utente, oltre all'url dell'immagine per visualizzarla, anche il suo nome nel database.
     private fun uploadImageToFirebase(){
-        //val fileName = UUID.randomUUID().toString
         val fileName = FirebaseAuth.getInstance().uid
         val ref = FirebaseStorage.getInstance().getReference("/images/$fileName")
 
@@ -235,7 +228,6 @@ class RegisterActivity : AppCompatActivity() {
         bitmap.compress(Bitmap.CompressFormat.JPEG,10,baos)
         val data = baos.toByteArray()
 
-        //ref.putFile(selectPhotoUri!!)
         ref.putBytes(data)
                 .addOnSuccessListener {
                     Log.d(TAG,"Image uploaded successfully")
@@ -260,11 +252,9 @@ class RegisterActivity : AppCompatActivity() {
         ref.setValue(user)
             .addOnSuccessListener {
                 Log.d(TAG,"User saved in db")
-                /*val intent = Intent(this,MainActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)*/
                 // Si termina il dialog del loading
                 loadingDialog.dismissLoadingDialog()
-                //startActivity(intent)
+                // Return to MainActivity
                 finish()
             }
             .addOnFailureListener {
@@ -332,7 +322,7 @@ class RegisterActivity : AppCompatActivity() {
         binding.birthdayDateInputLayoutRegister.isErrorEnabled = false
     }
 
-    // Controllo che l'utente abbia inserito il peso
+    // Controllo che l'utente abbia inserito il peso e che non sia negativo
     private fun validateWeight(){
         val stringWeight = binding.weightEditTextRegister.text.toString()
 
@@ -382,7 +372,7 @@ class RegisterActivity : AppCompatActivity() {
         binding.emailInputLayoutRegister.isErrorEnabled = false
     }
 
-    // Controllo che l'utente abbia inserito una password valida
+    // Controllo che l'utente abbia inserito una password valida e che sia lunga almeno 8 caratteri
     private fun validatePassword(){
         password = binding.passwordEditTextRegister.text.toString()
 
@@ -409,7 +399,6 @@ class RegisterActivity : AppCompatActivity() {
             error = true
             return
         }
-        //val password = binding.passwordInputLayoutRegister.editText?.text.toString()
         if(!confirmPassword.equals(password)){
             binding.confirmPasswordInputLayoutRegister.error = getString(R.string.error_password_not_match)
             error = true

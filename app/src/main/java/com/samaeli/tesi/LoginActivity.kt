@@ -26,7 +26,6 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //setContentView(R.layout.activity_login)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
@@ -38,7 +37,6 @@ class LoginActivity : AppCompatActivity() {
         binding.goToRegistrationLogin.setOnClickListener {
             Log.d(TAG,"Go to Register Activity")
             val intent = Intent(this,RegisterActivity::class.java)
-            //intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
             finish()
         }
@@ -50,16 +48,13 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(this,getString(R.string.error_login),Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
-            Log.d(TAG,"Campi ok")
+            Log.d(TAG,"Fields are ok")
             performLogin()
         }
 
         // Go to MainActivity and Alcohol Level Fragment
         binding.alcoholCalculatorTextViewLogin.setOnClickListener {
             Log.d(TAG,"Main Activity")
-            /*val intent = Intent(this,MainActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)*/
             finish()
         }
     }
@@ -68,24 +63,15 @@ class LoginActivity : AppCompatActivity() {
     private fun performLogin(){
         // Login dell'utente su Firebase
         val instance = FirebaseAuth.getInstance()
-        instance.setLanguageCode("fr")
-        //FirebaseAuth.getInstance().signInWithEmailAndPassword(email!!,password!!)
         instance.signInWithEmailAndPassword(email!!,password!!)
-            //.addOnCompleteListener {
                 .addOnSuccessListener {
-                /*if(!it.isSuccessful){
-                    Log.d(TAG,getString(R.string.error_email_password_incorrect))
-                    Toast.makeText(this,getString(R.string.error_email_password_incorrect),Toast.LENGTH_LONG).show()
-                    return@addOnCompleteListener
-                }*/
                     Log.d(TAG,"Login effettuato con utente ${it.user?.uid}")
 
+                    // Viene fatto partire il servizio in background
                     val intent = Intent(this,DeletePassageAndNotificationService::class.java)
                     startService(intent)
 
-                /*val intent = Intent(this,MainActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intent)*/
+                    // Go to MainActivity
                     finish()
             }
             .addOnFailureListener {
@@ -99,7 +85,7 @@ class LoginActivity : AppCompatActivity() {
             }
     }
 
-    // Metodo che ritorna folse se in dati inseriti dall'utente non sono validi altrimenti ritorna true
+    // Metodo che ritorna false se in dati inseriti dall'utente non sono validi altrimenti ritorna true
     private fun validateLogin():Boolean{
         validateEmail()
         validatePassword()
