@@ -169,6 +169,7 @@ class ProfileFragment : Fragment() {
             val ref = FirebaseDatabase.getInstance().getReference("passages/${user!!.uid}")
             ref.addValueEventListener(object : ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
+                    ref.removeEventListener(this)
                     // Se l'utente ha richiesto un passaggio non può cancellare il suo account
                     if(snapshot.exists()){
                         Toast.makeText(activity,getString(R.string.passage_offer_exist),Toast.LENGTH_LONG).show()
@@ -176,6 +177,7 @@ class ProfileFragment : Fragment() {
                         val ref2 = FirebaseDatabase.getInstance().getReference("made_offers/${user!!.uid}")
                         ref2.addValueEventListener(object : ValueEventListener{
                             override fun onDataChange(snapshot: DataSnapshot) {
+                                ref2.removeEventListener(this)
                                 // Se l'utente ha fatto un'offerta che è nello stato di wait non può cancellare il suo account
                                 if(!snapshot.exists()){
                                     showDialogBox()
@@ -189,13 +191,11 @@ class ProfileFragment : Fragment() {
                                     }
                                     showDialogBox()
                                 }
-                                ref2.removeEventListener(this)
                             }
                             override fun onCancelled(error: DatabaseError) {
                             }
                         })
                     }
-                    ref.removeEventListener(this)
                 }
 
                 override fun onCancelled(error: DatabaseError) {
@@ -327,29 +327,29 @@ class ProfileFragment : Fragment() {
     private fun showDialogBox(){
         AlertDialog.Builder(activity)
                 .setMessage(R.string.message_dialog_box_delete)
-                .setPositiveButton(R.string.yes,DialogInterface.OnClickListener { dialog, which ->
+                .setPositiveButton(R.string.yes, DialogInterface.OnClickListener { dialog, which ->
                     val uid = FirebaseAuth.getInstance().uid
                     val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
                     // Rimozione dell'utente da FirebaseDatabase
                     ref.removeValue()
                             .addOnCompleteListener {
-                                if(!it.isSuccessful){
-                                    Log.d(TAG,getString(R.string.error_during_delete_user))
-                                    Toast.makeText(activity,getString(R.string.error_during_delete_user),Toast.LENGTH_LONG).show()
+                                if (!it.isSuccessful) {
+                                    Log.d(TAG, getString(R.string.error_during_delete_user))
+                                    Toast.makeText(activity, getString(R.string.error_during_delete_user), Toast.LENGTH_LONG).show()
                                 }
-                                Log.d(TAG,"Cancellazione da firebase database ok")
-                                if(user!!.profileImageUrl!=null) {
+                                Log.d(TAG, "Cancellazione da firebase database ok")
+                                if (user!!.profileImageUrl != null) {
                                     deleteImage(uid)
-                                }else{
+                                } else {
                                     deleteAccount(uid)
                                 }
                             }
                             .addOnFailureListener {
-                                Log.d(TAG,getString(R.string.error_during_delete_user))
-                                Toast.makeText(activity,getString(R.string.error_during_delete_user),Toast.LENGTH_LONG).show()
+                                Log.d(TAG, getString(R.string.error_during_delete_user))
+                                Toast.makeText(activity, getString(R.string.error_during_delete_user), Toast.LENGTH_LONG).show()
                             }
                 })
-                .setNegativeButton(R.string.no,DialogInterface.OnClickListener { dialog, which ->
+                .setNegativeButton(R.string.no, DialogInterface.OnClickListener { dialog, which ->
                     dialog.cancel()
                 })
                 .show()

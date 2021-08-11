@@ -17,7 +17,7 @@
     <string name="select_image">Seleziona Immagine</string>
     <string name="male">Maschio</string>
     <string name="female">Femmina</string>
-    <string name="select_gender">Seleziona il tuo genere:</string>
+    <string name="select_gender">Genere:</string>
     <string name="alcohol_level_calculator_login">Vai al calcolo del tasso alcolemico senza login</string>
     <string name="alcohol_level_calculator_register">Vai al calcolo del tasso alcolemico senza registrazione</string>
 

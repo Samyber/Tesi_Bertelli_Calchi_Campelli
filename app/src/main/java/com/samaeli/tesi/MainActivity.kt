@@ -148,6 +148,7 @@ class MainActivity : AppCompatActivity() {
                 if(alcoholLevelFragment == null || !alcoholLevelFragment.isVisible){
                     supportFragmentManager.beginTransaction().replace(R.id.fragmentContainerMainActivity,AlcoholLevelFragment(),
                             "AlcoholLevelFragment").commit()
+                    binding.bottomNavigationView.selectedItemId = R.id.bottomNavigationAlcoholLevel
                 }
                 // Logout dell'utente da Firebase
                 FirebaseAuth.getInstance().signOut()

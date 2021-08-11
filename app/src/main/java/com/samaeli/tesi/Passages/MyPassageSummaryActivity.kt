@@ -126,7 +126,7 @@ class MyPassageSummaryActivity : AppCompatActivity() {
                     ref3.removeValue()
                             .addOnSuccessListener {
                                 Log.d(TAG,"Offer delete from made_offers")
-                                if(offer.state.equals(Offer.WAIT)) {
+                                if(offer.state.equals(Offer.WAIT) && offer.visibility==true) {
                                     addDeclinedOffer(offer!!.uidBidder, offer)
                                 }
                             }
