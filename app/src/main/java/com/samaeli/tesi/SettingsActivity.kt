@@ -12,6 +12,11 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import java.lang.Double.parseDouble
 import java.lang.NumberFormatException
+/*
+    Activity che ha il compito di visualizzare le impostazioni dell'app.
+    Nelle impostazioni si può settare il limite del tasso alcolemico sia per i neopatentati che per
+    i NON neopatentati
+ */
 
 class SettingsActivity : AppCompatActivity() {
 

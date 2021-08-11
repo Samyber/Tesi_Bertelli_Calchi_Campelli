@@ -11,6 +11,11 @@ import com.samaeli.tesi.Passages.PassagesChoiceFragment
 import com.samaeli.tesi.calculationBloodAlcohol.AlcoholLevelFragment
 import com.samaeli.tesi.databinding.ActivityMainBinding
 
+/*
+    Activity principale che contiene la bottomNavigationView e in cui vengono visualizzati i vari
+    fragment in base al bottone che viene premuto
+ */
+
 class MainActivity : AppCompatActivity() {
 
     companion object{
@@ -44,6 +49,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 R.id.bottomNavigationPassages ->{
+                    // Se l'utente non è loggato lo si rimanda all'activity del Login
                     if(FirebaseAuth.getInstance().uid == null){
                         val intent = Intent(this,LoginActivity::class.java)
                         startActivity(intent)
@@ -59,6 +65,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 R.id.bottomNavigationProfile ->{
+                    // Se l'utente non è loggato lo si rimanda all'activity del Login
                     if(FirebaseAuth.getInstance().uid == null){
                         val intent = Intent(this,LoginActivity::class.java)
                         startActivity(intent)
@@ -84,7 +91,8 @@ class MainActivity : AppCompatActivity() {
         val passageChoiceFragment = supportFragmentManager.findFragmentByTag("PassagesChoiceFragment")
         val profileFragment = supportFragmentManager.findFragmentByTag("ProfileFragment")
 
-        // Se l'AlcoholLevelFragment è visibile ma il bottone selezionato nella BottomNavigationView è diverso si seleziona quello dell'AlcoholLevel
+        // If eseguito se l'AlcoholLevelFragment è visibile ma il bottone selezionato nella BottomNavigationView
+        // è diverso si seleziona quello dell'AlcoholLevel.
         // Serve quando l'utente clicca il bottone MyProfile o Passages senza essere loggato
         if(alcoholLevelFragment != null && alcoholLevelFragment.isVisible && binding.bottomNavigationView.selectedItemId != R.id.bottomNavigationAlcoholLevel){
             binding.bottomNavigationView.selectedItemId = R.id.bottomNavigationAlcoholLevel
@@ -114,6 +122,8 @@ class MainActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
+    // Metodo che il compito di far visualizzare le voci del menù opportune in base a se l'utente è
+    // loggato oppure no
     private fun displayCorrectItemsMenu(){
         if(menu != null) {
             if (FirebaseAuth.getInstance().uid != null) {

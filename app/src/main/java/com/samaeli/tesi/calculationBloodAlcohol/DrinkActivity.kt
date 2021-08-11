@@ -18,7 +18,10 @@ import com.samaeli.tesi.models.DrinkAdded
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_drink.*
 import kotlinx.android.synthetic.main.fragment_profile.*
-
+/*
+    Activity che ha il compito di far inserire all'utente uno specifico drink che ha selezionato
+    dall'elenco oppure di inserirne uno personalizzato
+ */
 class DrinkActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDrinkBinding
@@ -45,6 +48,7 @@ class DrinkActivity : AppCompatActivity() {
 
         db = DrinkAddedDB(this)
 
+        // Si preleva il drink selezionato dall'intent
         drink = intent.getParcelableExtra(SelectDrinkActivity.DRINK_KEY)
 
         // Se drink == null => l'utente vuole inserire un drink custom e quindi si nasconde l'immagine

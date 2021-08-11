@@ -10,8 +10,9 @@ import com.samaeli.tesi.databinding.ActivityResultCalculationBinding
 import com.samaeli.tesi.databinding.FragmentAlcoholLevelBinding
 import kotlinx.android.synthetic.main.activity_result_calculation.*
 import java.math.RoundingMode
-
-// Activity che mostra il risultato del calcolo del tasso alcolemico
+/*
+    Activity che mostra il risultato del calcolo del tasso alcolemico
+ */
 class ResultCalculationActivity : AppCompatActivity() {
 
     companion object{
@@ -26,6 +27,7 @@ class ResultCalculationActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        // Si prelevano i valori dall'intent
         val alcoholLevel = intent.getDoubleExtra("alcohol_level",0.0)
         val timeBeforeDriving = intent.getIntExtra("time_before_driving",0)
 

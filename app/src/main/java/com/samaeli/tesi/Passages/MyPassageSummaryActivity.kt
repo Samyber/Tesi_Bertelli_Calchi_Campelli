@@ -1,6 +1,5 @@
 package com.samaeli.tesi.Passages
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -18,7 +17,9 @@ import com.samaeli.tesi.R
 import com.samaeli.tesi.databinding.ActivityMyPassageSummaryBinding
 import com.samaeli.tesi.models.Offer
 import com.samaeli.tesi.models.Passage
-
+/*
+    Activity che ha il compito di far visualizzare il resoconto del passaggio richiesto dall'utente
+ */
 class MyPassageSummaryActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityMyPassageSummaryBinding

@@ -8,9 +8,9 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.text.Editable
 import com.samaeli.tesi.models.Drink
 import com.samaeli.tesi.models.DrinkAdded
-
-// Classe che ha il compito di eseguery le query per aggiungere ed eliminare i dati dal database locale
-
+/*
+    Classe che ha il compito di eseguery le query per aggiungere ed eliminare i dati dal database locale
+ */
 class DrinkAddedDB (){
     var context:Context?=null
 

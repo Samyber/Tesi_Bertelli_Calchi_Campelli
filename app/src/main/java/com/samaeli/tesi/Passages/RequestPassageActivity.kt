@@ -28,7 +28,9 @@ import com.samaeli.tesi.databinding.ActivityResultCalculationBinding
 import com.samaeli.tesi.models.Passage
 import java.io.IOException
 import java.util.*
-
+/*
+    Activity che ha il compito di far richiedere all'utente un nuovo passaggio
+ */
 class RequestPassageActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityRequestPassageBinding
@@ -70,7 +72,7 @@ class RequestPassageActivity : AppCompatActivity() {
         // Mostro DataPicker quando utente clicca su editText dell'ora
         binding.hourEditRequestPassage.inputType = InputType.TYPE_NULL
         binding.hourEditRequestPassage.setOnClickListener {
-            Log.d(DrinkActivity.TAG, "Try to show timePicker")
+            Log.d(TAG, "Try to show timePicker")
             val picker = MaterialTimePicker.Builder()
                     .setTimeFormat(TimeFormat.CLOCK_24H)
                     .setTitleText(getString(R.string.time_taken_drink))
@@ -86,7 +88,7 @@ class RequestPassageActivity : AppCompatActivity() {
                 if (minuteString.length == 1) {
                     minuteString = "0" + minuteString
                 }
-                Log.d(DrinkActivity.TAG, hour.toString() + ":" + minuteString)
+                Log.d(TAG, hour.toString() + ":" + minuteString)
                 binding.hourEditRequestPassage.setText(hour.toString() + ":" + minuteString)
             }
         }
@@ -216,6 +218,7 @@ class RequestPassageActivity : AppCompatActivity() {
         try{
             val addressListDeparture: List<Address> = geocoder.getFromLocationName(departureAddress + " " + departureCity, 1)
 
+            // Se non è stato trovato un indirizzo si stampa un messaggio di errore
             if (addressListDeparture.size < 1) {
                 Log.d(TAG, "Departure address not found")
                 Toast.makeText(this, getString(R.string.error_departure_address), Toast.LENGTH_LONG).show()
@@ -230,6 +233,7 @@ class RequestPassageActivity : AppCompatActivity() {
 
             val addressListArrival : List<Address> = geocoder.getFromLocationName(arrivalAddress+" "+arrivalCity,1)
 
+            // Se non è stato trovato un indirizzo si stampa un messaggio di errore
             if(addressListArrival.size < 1){
                 Log.d(TAG,"Arrival address not found")
                 Toast.makeText(this,getString(R.string.error_arrival_address),Toast.LENGTH_LONG).show()

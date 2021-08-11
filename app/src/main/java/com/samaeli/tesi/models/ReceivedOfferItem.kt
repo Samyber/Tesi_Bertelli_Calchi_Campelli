@@ -148,6 +148,8 @@ class ReceivedOfferItem(val offer:Offer, val context:Context):Item<ViewHolder>()
                 .addOnFailureListener {
                     Toast.makeText(context,context.getString(R.string.error_accept_offer),Toast.LENGTH_LONG).show()
                 }
+        // L'offerta accettata viene caricara su "accepted_offers/" su firebase,
+        // sezione che viene controllata dal servizio in background per stampare le notifiche
         val ref3 = FirebaseDatabase.getInstance().getReference("accepted_offers/$uidBidder")
         ref3.setValue(offer)
                 .addOnSuccessListener {
@@ -173,7 +175,8 @@ class ReceivedOfferItem(val offer:Offer, val context:Context):Item<ViewHolder>()
 
     }
 
-    // Metodo che ha il compito di caricare l'offerta declinata in "delete_offers"
+    // Metodo che ha il compito di caricare l'offerta declinata in "delete_offers" su firebase,
+    // sezione che viene controllata dal servizio in background per stampare le notifiche
     private fun addDeclinedOffer(uidBidder:String){
         val ref = FirebaseDatabase.getInstance().getReference("delete_offers/$uidBidder")
         offer.state = Offer.DECLINED

@@ -75,6 +75,7 @@ class LoginActivity : AppCompatActivity() {
                     finish()
             }
             .addOnFailureListener {
+                //  If che viene eseguito se le credenziali inserite dall'utente non sono valide
                 if(it is FirebaseAuthInvalidCredentialsException){
                     Log.d(TAG,getString(R.string.error_email_password_incorrect))
                     Toast.makeText(this,getString(R.string.error_email_password_incorrect),Toast.LENGTH_LONG).show()

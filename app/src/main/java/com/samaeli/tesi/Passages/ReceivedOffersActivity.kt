@@ -18,7 +18,10 @@ import com.samaeli.tesi.models.ReceivedOfferItem
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import okhttp3.internal.Internal.instance
-
+/*
+    Activity che ha il compito di mostrare le offerte che sono state ricevute per il passaggio richiesto e
+    da la possibilità di accettarle o declinarle
+ */
 class ReceivedOffersActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityReceivedOffersBinding
@@ -123,7 +126,8 @@ class ReceivedOffersActivity : AppCompatActivity() {
             ref.addValueEventListener(listener)
         }
 
-        // Metodo che aggiunge l'offerta declinata in "delete_offers"
+        // Metodo che aggiunge l'offerta declinata in "delete_offers" su firebase,
+        // sezione che viene controllata dal servizio in background per stampare le notifiche
         private fun addDeclinedOffer(uidBidder:String,offer:Offer,context: Context){
             val ref = FirebaseDatabase.getInstance().getReference("delete_offers/$uidBidder")
             offer.state = Offer.DECLINED

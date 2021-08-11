@@ -38,6 +38,11 @@ import java.io.ByteArrayOutputStream
 import java.lang.Exception
 import java.text.SimpleDateFormat
 
+/*
+    Fragment che ha il compito di far visualizzare le informazioni dell'utente e di poterle modificarle.
+    Sono presenti anche i bottoni di modifica della mail, della password e di cancellazione dell'account.
+ */
+
 class ProfileFragment : Fragment() {
 
     companion object{
@@ -76,7 +81,7 @@ class ProfileFragment : Fragment() {
         binding.birthdayDateEditTextProfile.setOnClickListener {
             Log.d(RegisterActivity.TAG,"Try to show datePicker for birthday date")
             val timestamp = System.currentTimeMillis()
-            // Controllo che la persona che si sta registrando abbia almeno 14 anni
+            // Controllo che la persona abbia almeno 14 anni
             val constraintsBuilder = CalendarConstraints.Builder()
                     .setValidator(DateValidatorPointBackward.before(timestamp - RegisterActivity.years_14_milliseconds))
                     .setEnd(timestamp - RegisterActivity.years_14_milliseconds)
@@ -380,6 +385,7 @@ class ProfileFragment : Fragment() {
                 }
     }
 
+    // Metodo che ritorna la data corrispondente al timestamp passato come parametro
     private fun getDate(timestamp:Long):String{
         val formatter = SimpleDateFormat("dd/MM/yyyy")
         return formatter.format(timestamp)

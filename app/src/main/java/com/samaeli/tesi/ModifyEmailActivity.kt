@@ -15,7 +15,9 @@ import com.google.firebase.database.FirebaseDatabase
 import com.samaeli.tesi.databinding.ActivityModifyEmailBinding
 import com.samaeli.tesi.databinding.ActivityModifyPasswordBinding
 import com.samaeli.tesi.models.User
-
+/*
+    Activity che ha il compito di modificare la mail dell'utente
+ */
 class ModifyEmailActivity : AppCompatActivity() {
 
     companion object{
@@ -79,7 +81,7 @@ class ModifyEmailActivity : AppCompatActivity() {
     private fun updateEmail(){
         val credential = EmailAuthProvider.getCredential(oldEmail!!,password!!)
         val currentUser = FirebaseAuth.getInstance().currentUser
-        // Reautenticazione dell'utente
+        // Reautenticazione dell'utente (necessaria per la modifica della mail)
         currentUser!!.reauthenticate(credential)
                 .addOnSuccessListener {
                     // Modifica della mail

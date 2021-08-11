@@ -1,9 +1,7 @@
 package com.samaeli.tesi
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -13,11 +11,9 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.text.InputType
 import android.util.Log
-import android.widget.ScrollView
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.preference.PreferenceManager
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -29,9 +25,6 @@ import com.samaeli.tesi.databinding.ActivityRegisterBinding
 import com.samaeli.tesi.models.User
 import java.io.ByteArrayOutputStream
 import java.lang.Exception
-//import kotlinx.android.synthetic.main.activity_register.*
-import java.lang.String.format
-import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -185,6 +178,7 @@ class RegisterActivity : AppCompatActivity() {
                         try {
                             throw it.exception!!
                         }catch (e : Exception) {
+                            // Stop del Dialog di caricamento
                             loadingDialog.dismissLoadingDialog()
                             // if che viene eseguito se la mail inserita dall'utente è già presente in Firebase
                             if(e is FirebaseAuthUserCollisionException){
@@ -262,6 +256,7 @@ class RegisterActivity : AppCompatActivity() {
                 finish()
             }
             .addOnFailureListener {
+                // Si termina il dialog del loading
                 loadingDialog.dismissLoadingDialog()
                 Log.d(TAG,"Impossibile salvare l'utente nel db: ${it.message}")
                 Toast.makeText(this,getString(R.string.error_registration)+": ${it.message}",Toast.LENGTH_LONG).show()
@@ -326,7 +321,7 @@ class RegisterActivity : AppCompatActivity() {
         binding.birthdayDateInputLayoutRegister.isErrorEnabled = false
     }
 
-    // Controllo che l'utente abbia inserito il peso e che non sia negativo
+    // Controllo che l'utente abbia inserito il peso e che sia > 0
     private fun validateWeight(){
         val stringWeight = binding.weightEditTextRegister.text.toString()
 

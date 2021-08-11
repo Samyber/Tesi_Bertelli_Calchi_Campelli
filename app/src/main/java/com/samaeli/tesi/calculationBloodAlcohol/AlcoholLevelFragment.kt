@@ -27,6 +27,11 @@ import java.lang.Double.parseDouble
 import java.util.*
 import kotlin.collections.ArrayList
 
+/*
+    Fragment che ha il compito di effettuare il calcolo del tasso alcolemico dell'utente
+    sulla base dei drink che ha inserito
+ */
+
 class AlcoholLevelFragment : Fragment() {
 
     private var _binding : FragmentAlcoholLevelBinding? = null
@@ -34,7 +39,7 @@ class AlcoholLevelFragment : Fragment() {
 
     private var prefs : SharedPreferences? = null
 
-    // Variabile che contiene il limite del tasso alcolemico per far guidare i non neopatentati
+    // Variabile che contiene il limite del tasso alcolemico per far guidare i NON neopatentati
     private var limitOldDriver : Double = 0.5
     // Variabile che contiene il limite del tasso alcolemico per far guidare i neopatentati
     private var limitNewDriver : Double = 0.0
@@ -42,7 +47,7 @@ class AlcoholLevelFragment : Fragment() {
     companion object {
         val TAG = "Alcohol Level Fragment"
 
-        // Parametri forniti dall'Istituto superiore della sanità
+        // Parametri forniti dall'Istituto superiore della sanità per il calcolo del tasso alcolemico
         const val MALE_EMPTY_STOMACH = 0.7
         const val MALE_FULL_STOMACH = 1.2
         const val FEMALE_EMPTY_STOMACH = 0.5
@@ -52,7 +57,7 @@ class AlcoholLevelFragment : Fragment() {
         const val YEARS_3 = 94672800000
         // 21 years in milliseconds for the new drivers
         const val YEARS_21 = 662709600000
-        // mg/l che si smaltiscono ogni minuto
+        // mg/l di alcol che si smaltiscono ogni minuto
         const val DIGESTION_MINUTE = 0.0025
         private var drinksAdded : ArrayList<DrinkAdded>? = null
 
@@ -172,7 +177,7 @@ class AlcoholLevelFragment : Fragment() {
             Log.d(TAG,"first alcohol level "+alcoholLevel.toString())
             // Quando si è assunto il drink
             val timeMinute : Int = drinkAdded.hour * 60 + drinkAdded.minute
-            // Ora
+            // Ora attuale
             val nowMinute : Int = Calendar.getInstance().get(Calendar.MINUTE) +
                     (Calendar.getInstance().get(Calendar.HOUR_OF_DAY)*60)
             Log.d(TAG,"timeMinute: "+timeMinute+" now minute "+nowMinute)
@@ -245,7 +250,7 @@ class AlcoholLevelFragment : Fragment() {
         }
     }
 
-    // Se l'utente è loggato e si ruota lo schermo si manteien memorizzzato solo se è a stomaco pieno oopure no.
+    // Se l'utente è loggato e si ruota lo schermo si mantiene memorizzzato solo se è a stomaco pieno oopure no.
     // Gli altri valori vengono rispristinati a quelli memorizzati nel profilo dell'utente
     // Metodo che ripristina i valori inseriti dall'utente se si ruota lo schermo
     private fun completeFieldsFromSharedPreference(){
@@ -298,7 +303,7 @@ class AlcoholLevelFragment : Fragment() {
                 // Controllo se l'utente è neopatentato oppure no
                 if(timestamp - user.birthdayDate > YEARS_21 && timestamp - user.licenseDate > YEARS_3){
                     binding.newDriverRadioGroupAlcoholLevel.check(R.id.noNewDriverRadioButtonAlcoholLevel)
-                    Log.d("Fragment alcohol","Old driver")
+                    Log.d(TAG,"Old driver")
                 }else{
                     binding.newDriverRadioGroupAlcoholLevel.check(R.id.yesNewDriverRadioButtonAlcoholLevel)
                     Log.d(TAG,"New driver")

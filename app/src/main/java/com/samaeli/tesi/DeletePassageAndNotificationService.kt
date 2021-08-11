@@ -18,9 +18,10 @@ import com.samaeli.tesi.Passages.MyPassageSummaryActivity
 import com.samaeli.tesi.models.Offer
 import com.samaeli.tesi.models.Passage
 import java.util.*
-
-// Servizio in background che ha il compito di cancellare un passaggio se l'ora attuale supera l'ora a cui è stato richiesto
-// Il servizio inoltre ha il compito di inviare le notifiche
+/*
+    Servizio in background che ha il compito di cancellare un passaggio se l'ora attuale supera l'ora
+    a cui è stato richiesto. Il servizio inoltre ha il compito di inviare le notifiche
+*/
 class DeletePassageAndNotificationService : Service() {
 
     var timerDeletePassage : Timer? = null
@@ -40,6 +41,10 @@ class DeletePassageAndNotificationService : Service() {
     override fun onBind(intent: Intent): IBinder? {
         Log.d(TAG,"onBind Not used")
         return null
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        return START_STICKY
     }
 
     override fun onCreate() {
@@ -260,6 +265,7 @@ class DeletePassageAndNotificationService : Service() {
                         }
                     }
                 }
+                ref.removeEventListener(this)
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -283,7 +289,7 @@ class DeletePassageAndNotificationService : Service() {
                     ref3.removeValue()
                             .addOnSuccessListener {
                                 Log.d(TAG,"Offerta cancellata da made_offers")
-                                if(offer.state.equals(Offer.WAIT)) {
+                                if(offer.state.equals(Offer.WAIT) && offer.visibility==true) {
                                     addDeclinedOffer(offer!!.uidBidder, offer)
                                 }
                             }

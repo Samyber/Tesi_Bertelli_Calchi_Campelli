@@ -12,6 +12,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.samaeli.tesi.databinding.ActivityModifyPasswordBinding
 
+/*
+    Activity che ha il compito di modificare la password dell'utente
+ */
+
 class ModifyPasswordActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityModifyPasswordBinding
@@ -64,7 +68,7 @@ class ModifyPasswordActivity : AppCompatActivity() {
     private fun updatePassword(){
         val user = FirebaseAuth.getInstance().currentUser
         val credential = EmailAuthProvider.getCredential(user!!.email.toString(),oldPassword.toString())
-        // Reautenticazione dell'utente
+        // Reautenticazione dell'utente (necessaria per la modifica della password)
         user.reauthenticate(credential)
                 .addOnSuccessListener {
                     user.updatePassword(newPassword.toString())

@@ -15,7 +15,9 @@ import com.samaeli.tesi.models.Passage
 import com.samaeli.tesi.models.PassageItem
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
-
+/*
+    Activity che ha il compito di visualizzare la lista dei passaggi che sono stati richiesti dagli utenti
+ */
 class PassageProvideActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityPassageProvideBinding

@@ -15,7 +15,9 @@ import com.samaeli.tesi.models.Offer
 import com.samaeli.tesi.models.Passage
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
-
+/*
+    Activity che ha il compito di mostrare la lista delle offerte che sono state fatte
+ */
 class MadeOffersActivity : AppCompatActivity() {
 
     companion object{
@@ -25,6 +27,7 @@ class MadeOffersActivity : AppCompatActivity() {
     private lateinit var binding : ActivityMadeOffersBinding
     private var adapter : GroupAdapter<ViewHolder>? = null
 
+    // HashMap che contiene le offerte che sono state fatte dall'utente
     private var madeOffersMap = HashMap<String,Offer>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -108,6 +111,7 @@ class MadeOffersActivity : AppCompatActivity() {
         })
     }*/
 
+    // Metodo che ha il compito di prelevare da Firebase le offerte che sono state fatte dall'utente
     private fun displayMadeOffers(){
         val uid = FirebaseAuth.getInstance().uid
         val ref = FirebaseDatabase.getInstance().getReference("made_offers/$uid")
@@ -140,6 +144,7 @@ class MadeOffersActivity : AppCompatActivity() {
         })
     }
 
+    // Metodo che ha il compito di aggiornare il recyclerView
     private fun refreshRecyclerView(){
         adapter!!.clear()
         madeOffersMap.values.forEach {

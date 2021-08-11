@@ -16,9 +16,9 @@ import com.samaeli.tesi.models.Drink
 import com.samaeli.tesi.models.DrinkItem
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
-
-// Activity che ha il compito di mostrare la lista dei drink che l'utente può scegliere
-
+/*
+    Activity che ha il compito di mostrare la lista dei drink che l'utente può scegliere
+*/
 class SelectDrinkActivity : AppCompatActivity() {
 
     companion object{

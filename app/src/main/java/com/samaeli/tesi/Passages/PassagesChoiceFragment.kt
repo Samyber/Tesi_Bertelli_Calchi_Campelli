@@ -13,7 +13,11 @@ import com.google.firebase.database.*
 import com.samaeli.tesi.R
 import com.samaeli.tesi.databinding.FragmentPassagesChoiceBinding
 import com.samaeli.tesi.models.Offer
-
+/*
+    Fragment che viene visualizzato se l'utente clicca su Passages nel bottomNavigationView della
+    Main Activity. Questo fragment mostra i bottoni tramite i quali un utente può richiedere un passagio,
+    visualizzare i passaggi richiesti dagli altri utenti e visualizzare le offere recenti
+ */
 
 class PassagesChoiceFragment : Fragment() {
 
@@ -45,8 +49,8 @@ class PassagesChoiceFragment : Fragment() {
             if(offer_wait==true){
                 Toast.makeText(activity,getString(R.string.already_offered),Toast.LENGTH_LONG).show()
             }else {
-                // Se l'utente ha richiesto un passaggio si apre la schermata del resoconto altrimenti
-                    // quella per poter richiedere un nuovo passaggio
+                // Se l'utente ha richiesto un passaggio si apre la schermata del resoconto del passaggio chiesto
+                    // altrimenti quella per poter richiedere un nuovo passaggio
                 if (typeUser.equals(REQUESTER)) {
                     val intent = Intent(activity, MyPassageSummaryActivity::class.java)
                     startActivity(intent)
@@ -118,7 +122,7 @@ class PassagesChoiceFragment : Fragment() {
         })
     }
 
-    // Metodo che cambia il testo del primo bottono in base a se l'utente ha già chiesto un passaggio
+    // Metodo che cambia il testo del primo bottone in base a se l'utente ha già chiesto un passaggio
     // oppure no
     private fun setRequestPassageButtonText(){
         val uid = FirebaseAuth.getInstance().uid

@@ -37,7 +37,10 @@ import java.time.LocalDate
 import java.time.Year
 import java.time.temporal.ChronoUnit
 import java.util.*
-
+/*
+    Activity che ha il compito di far visualizzare le informazioni su un passaggio richiesto da un
+    utente e di poter fare un'offerta per quel passaggio
+ */
 class PassageSummaryActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityPassageSummaryBinding
@@ -108,6 +111,8 @@ class PassageSummaryActivity : AppCompatActivity() {
             ref.removeValue()
             val ref2 = FirebaseDatabase.getInstance().getReference("received_offers/$uidRequester/$uidBidder")
             ref2.removeValue()
+            // Offerta aggiunta in "withdraw_offers/" su firebase, sezione che viene controllata dal
+            // servizio in background per stampare le notifiche se un'offerta è stata ritirata
             val ref3 = FirebaseDatabase.getInstance().getReference("withdraw_offers/$uidRequester")
             ref3.setValue(offer)
             finish()
@@ -189,7 +194,7 @@ class PassageSummaryActivity : AppCompatActivity() {
                 }
     }
 
-    //Metodo che ha il compito di visualizzare su Google maps la anavigazione dal punto in cui si trova
+    //Metodo che ha il compito di visualizzare su Google maps la navigazione dal punto in cui si trova
     // l'utente al punto di partenza del passaggio
     private fun showRouteToDeparture(){
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
