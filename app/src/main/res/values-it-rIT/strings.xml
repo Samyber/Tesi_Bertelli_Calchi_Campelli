@@ -202,4 +202,6 @@
     <string name="offer_withdraw_notification">Un\'offerta è stata ritirata</string>
 
     <string name="passage_offer_exist">Hai un passagio o un\'offerta attiva</string>
+
+    <string name="error_not_connected">Errore! Non connesso</string>
 </resources>

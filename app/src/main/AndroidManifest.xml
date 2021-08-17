@@ -7,6 +7,8 @@
          location permissions for the "MyLocation" functionality.
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -15,7 +17,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Tesi_Bertelli_Calchi_Campelli">
-        <activity android:name=".Passages.MadeOffersActivity"></activity>
+        <activity android:name=".NotConnectedActivity"></activity>
+        <activity android:name=".Passages.MadeOffersActivity" />
 
         <service
             android:name=".DeletePassageAndNotificationService"
@@ -37,7 +40,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-
 
         <activity android:name=".Passages.RequestPassageActivity" />
         <activity android:name=".ModifyEmailActivity" />
@@ -73,6 +75,15 @@
         </activity>
         <activity android:name=".LoginActivity" />
         <activity android:name=".RegisterActivity" />
+
+        <receiver
+            android:name=".ConnectivityReceiver"
+            android:label="ConnectivityReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

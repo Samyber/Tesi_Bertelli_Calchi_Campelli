@@ -1,15 +1,17 @@
 package com.samaeli.tesi
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.samaeli.tesi.Passages.PassagesChoiceFragment
 import com.samaeli.tesi.calculationBloodAlcohol.AlcoholLevelFragment
 import com.samaeli.tesi.databinding.ActivityMainBinding
+
 
 /*
     Activity principale che contiene la bottomNavigationView e in cui vengono visualizzati i vari
@@ -20,6 +22,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object{
         val TAG = "Main Activity"
+        var active = false
     }
 
     private var menu : Menu? = null
@@ -32,50 +35,69 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        // Serve per registrare il Broadcast Receiver che viene eseguito quando si cambia lo stato della
+        // connessione solo la prima volta
+        if(ConnectivityReceiver.status==false) {
+            val intentFilter = IntentFilter("android.net.conn.CONNECTIVITY_CHANGE")
+            this.registerReceiver(ConnectivityReceiver(), intentFilter)
+            ConnectivityReceiver.status = true
+        }
+
         // Display AlcoholLevelFragment
-        supportFragmentManager.beginTransaction().replace(R.id.fragmentContainerMainActivity,AlcoholLevelFragment(),
-                "AlcoholLevelFragment").commit()
+        supportFragmentManager.beginTransaction().replace(
+            R.id.fragmentContainerMainActivity, AlcoholLevelFragment(),
+            "AlcoholLevelFragment"
+        ).commit()
 
         binding.bottomNavigationView.selectedItemId = R.id.bottomNavigationAlcoholLevel
         binding.bottomNavigationView.setOnItemSelectedListener {
             when(it.itemId){
-                R.id.bottomNavigationAlcoholLevel ->{
-                    val alcoholLevelFragment = supportFragmentManager.findFragmentByTag("AlcoholLevelFragment")
+                R.id.bottomNavigationAlcoholLevel -> {
+                    val alcoholLevelFragment =
+                        supportFragmentManager.findFragmentByTag("AlcoholLevelFragment")
                     // Se l'AlcoholLevelFragment non è visibile lo si ricarica
-                    if(alcoholLevelFragment == null || !alcoholLevelFragment.isVisible){
-                        Log.d(TAG,"Try to show AlcoholLevelFragment")
-                        supportFragmentManager.beginTransaction().replace(R.id.fragmentContainerMainActivity,AlcoholLevelFragment(),
-                            "AlcoholLevelFragment").commit()
+                    if (alcoholLevelFragment == null || !alcoholLevelFragment.isVisible) {
+                        Log.d(TAG, "Try to show AlcoholLevelFragment")
+                        supportFragmentManager.beginTransaction().replace(
+                            R.id.fragmentContainerMainActivity, AlcoholLevelFragment(),
+                            "AlcoholLevelFragment"
+                        ).commit()
                     }
                 }
-                R.id.bottomNavigationPassages ->{
+                R.id.bottomNavigationPassages -> {
                     // Se l'utente non è loggato lo si rimanda all'activity del Login
-                    if(FirebaseAuth.getInstance().uid == null){
-                        val intent = Intent(this,LoginActivity::class.java)
+                    if (FirebaseAuth.getInstance().uid == null) {
+                        val intent = Intent(this, LoginActivity::class.java)
                         startActivity(intent)
-                    }else{
-                        val passagesChoiceFragment = supportFragmentManager.findFragmentByTag("PassagesChoiceFragment")
+                    } else {
+                        val passagesChoiceFragment =
+                            supportFragmentManager.findFragmentByTag("PassagesChoiceFragment")
                         // Se il PassageChoiceFragment non è visibile lo si ricarica
-                        if(passagesChoiceFragment == null || !passagesChoiceFragment.isVisible) {
+                        if (passagesChoiceFragment == null || !passagesChoiceFragment.isVisible) {
                             Log.d(TAG, "Try to show PassagesChoiceFragment")
-                            supportFragmentManager.beginTransaction().replace(R.id.fragmentContainerMainActivity,
-                                    PassagesChoiceFragment(),
-                                    "PassagesChoiceFragment").commit()
+                            supportFragmentManager.beginTransaction().replace(
+                                R.id.fragmentContainerMainActivity,
+                                PassagesChoiceFragment(),
+                                "PassagesChoiceFragment"
+                            ).commit()
                         }
                     }
                 }
-                R.id.bottomNavigationProfile ->{
+                R.id.bottomNavigationProfile -> {
                     // Se l'utente non è loggato lo si rimanda all'activity del Login
-                    if(FirebaseAuth.getInstance().uid == null){
-                        val intent = Intent(this,LoginActivity::class.java)
+                    if (FirebaseAuth.getInstance().uid == null) {
+                        val intent = Intent(this, LoginActivity::class.java)
                         startActivity(intent)
-                    }else {
-                        val profileFragment = supportFragmentManager.findFragmentByTag("ProfileFragment")
+                    } else {
+                        val profileFragment =
+                            supportFragmentManager.findFragmentByTag("ProfileFragment")
                         // Se il ProfileFragment non è visibile lo si ricarica
                         if (profileFragment == null || !profileFragment.isVisible) {
                             Log.d(TAG, "Try to show ProfileFragment")
-                            supportFragmentManager.beginTransaction().replace(R.id.fragmentContainerMainActivity, ProfileFragment(),
-                                    "ProfileFragment").commit()
+                            supportFragmentManager.beginTransaction().replace(
+                                R.id.fragmentContainerMainActivity, ProfileFragment(),
+                                "ProfileFragment"
+                            ).commit()
                         }
                     }
                 }
@@ -104,20 +126,34 @@ class MainActivity : AppCompatActivity() {
 
         // Visualizzazione del fragment corretto se l'utente ruota il dispositivo
         if(binding.bottomNavigationView.selectedItemId == R.id.bottomNavigationPassages && (passageChoiceFragment==null || !passageChoiceFragment.isVisible)){
-            Log.d(TAG,"Try to show PassagesChoiceFragment")
-            supportFragmentManager.beginTransaction().replace(R.id.fragmentContainerMainActivity,
-                    PassagesChoiceFragment(),
-                    "PassagesChoiceFragment").commit()
+            Log.d(TAG, "Try to show PassagesChoiceFragment")
+            supportFragmentManager.beginTransaction().replace(
+                R.id.fragmentContainerMainActivity,
+                PassagesChoiceFragment(),
+                "PassagesChoiceFragment"
+            ).commit()
         }else if(binding.bottomNavigationView.selectedItemId == R.id.bottomNavigationProfile && (profileFragment==null || !profileFragment.isVisible)){
             Log.d(TAG, "Try to show ProfileFragment")
-            supportFragmentManager.beginTransaction().replace(R.id.fragmentContainerMainActivity, ProfileFragment(),
-                    "ProfileFragment").commit()
+            supportFragmentManager.beginTransaction().replace(
+                R.id.fragmentContainerMainActivity, ProfileFragment(),
+                "ProfileFragment"
+            ).commit()
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        active = true
+    }
+
+    override fun onStop() {
+        active = false
+        super.onStop()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         this.menu = menu
-        menuInflater.inflate(R.menu.nav_menu,menu)
+        menuInflater.inflate(R.menu.nav_menu, menu)
         displayCorrectItemsMenu()
         return super.onCreateOptionsMenu(menu)
     }
@@ -143,11 +179,14 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.menuLogout -> {
-                val alcoholLevelFragment = supportFragmentManager.findFragmentByTag("AlcoholLevelFragment")
+                val alcoholLevelFragment =
+                    supportFragmentManager.findFragmentByTag("AlcoholLevelFragment")
                 // Se l'AlcoholLevelFragment non è visibile lo si ricarica
-                if(alcoholLevelFragment == null || !alcoholLevelFragment.isVisible){
-                    supportFragmentManager.beginTransaction().replace(R.id.fragmentContainerMainActivity,AlcoholLevelFragment(),
-                            "AlcoholLevelFragment").commit()
+                if (alcoholLevelFragment == null || !alcoholLevelFragment.isVisible) {
+                    supportFragmentManager.beginTransaction().replace(
+                        R.id.fragmentContainerMainActivity, AlcoholLevelFragment(),
+                        "AlcoholLevelFragment"
+                    ).commit()
                     binding.bottomNavigationView.selectedItemId = R.id.bottomNavigationAlcoholLevel
                 }
                 // Logout dell'utente da Firebase
@@ -162,17 +201,17 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.menuLogin -> {
                 // Go to Login Activity
-                val intent = Intent(this,LoginActivity::class.java)
+                val intent = Intent(this, LoginActivity::class.java)
                 startActivity(intent)
             }
             R.id.menuRegister -> {
                 // Go to Register Activity
-                val intent = Intent(this,RegisterActivity::class.java)
+                val intent = Intent(this, RegisterActivity::class.java)
                 startActivity(intent)
             }
             R.id.menuSettings -> {
                 // Go to settings activity
-                val intent = Intent(this,SettingsActivity::class.java)
+                val intent = Intent(this, SettingsActivity::class.java)
                 startActivity(intent)
             }
         }
