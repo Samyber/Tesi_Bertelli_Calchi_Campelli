@@ -6,6 +6,10 @@ import android.content.Intent
 import android.net.ConnectivityManager
 import android.util.Log
 
+/*
+    Connectivity receiver che ha il compito di controllare che il telefono sia connesso ad internet.
+    Se non lo è viene visualizzata una pagina di errore
+ */
 class ConnectivityReceiver : BroadcastReceiver() {
 
     companion object{
@@ -13,44 +17,12 @@ class ConnectivityReceiver : BroadcastReceiver() {
         var status = false
     }
 
-    /*override fun onReceive(context: Context?, intent: Intent?) {
-
-        Log.d(TAG,"Connectivity change")
-
-        val connectivityManager = context!!.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
-        if(checkConnectivity(connectivityManager)){
-            Log.d(TAG,"Connection OK")
-        }else{
-            Log.d(TAG,"NOT connected")
-        }
-
-    }
-
-    private fun checkConnectivity(connectivityManager: ConnectivityManager):Boolean{
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val nw      = connectivityManager.activeNetwork ?: return false
-            val actNw = connectivityManager.getNetworkCapabilities(nw) ?: return false
-            return when {
-                actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-                actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-                //for other device how are able to connect with Ethernet
-                actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
-                //for check internet over Bluetooth
-                actNw.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH) -> true
-                else -> false
-            }
-        } else {
-            return connectivityManager.activeNetworkInfo?.isConnected ?: false
-        }
-    }*/
-
     override fun onReceive(context: Context, intent: Intent?) {
         Log.d("News reader", "Connectivity changed")
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo = connectivityManager.activeNetworkInfo
-        //val service = Intent(context, NewsReaderService::class.java)
+
         if (networkInfo != null && networkInfo.isConnected) {
             Log.d("News reader", "Connected")
             // Intent che carica MainActivity
