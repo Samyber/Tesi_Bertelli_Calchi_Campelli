@@ -59,6 +59,7 @@ class AlcoholLevelFragment : Fragment() {
         const val YEARS_21 = 662709600000
         // mg/l di alcol che si smaltiscono ogni minuto
         const val DIGESTION_MINUTE = 0.0025
+        const val MINUTE_IN_A_DAY = 60 * 24
         private var drinksAdded : ArrayList<DrinkAdded>? = null
 
         var db: DrinkAddedDB? = null
@@ -183,12 +184,17 @@ class AlcoholLevelFragment : Fragment() {
             Log.d(TAG,"timeMinute: "+timeMinute+" now minute "+nowMinute)
 
             // Quanto è passato da quando si è assunto il drink ad ora
-            val differenceTime : Int = if(timeMinute < nowMinute){
+            /*val differenceTime : Int = if(timeMinute < nowMinute){
                 nowMinute - timeMinute
             }else{
                 timeMinute - nowMinute
+            }*/
+            val differenceTime : Int = if(timeMinute < nowMinute){
+                nowMinute - timeMinute
+            }else{
+                (nowMinute + MINUTE_IN_A_DAY) - timeMinute
             }
-            // Calcolo del tasso alcolemico che il drink ha dato all'utente tenedo conto del tempo
+            // Calcolo del tasso alcolemico che il drink ha dato all'utente tenendo conto del tempo
             // che è trascorso da quando l'ha assunto
             alcoholLevel -= (DIGESTION_MINUTE * differenceTime)
             // Se maggiore di zero lo sommo al tasso alcolemico totale

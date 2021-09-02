@@ -40,7 +40,7 @@ class ResultCalculationActivity : AppCompatActivity() {
         binding.alcoholContentTextViewResultCalculation.text = getString(R.string.your_alcohol_content)+" "+alcoholLevelTwoDecimal+" mg/l"
 
         // Se il tempo che bisogna aspettare per potersi mettere alla guida è zero =>
-        // Si mostra la schermata Seccess altrimenti not success
+        // Si mostra la schermata Success altrimenti Not Success
         if(timeBeforeDriving == 0){
             displaySuccess()
         }else{

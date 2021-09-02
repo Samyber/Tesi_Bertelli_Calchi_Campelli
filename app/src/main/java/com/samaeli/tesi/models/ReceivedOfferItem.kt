@@ -105,7 +105,7 @@ class ReceivedOfferItem(val offer:Offer, val context:Context):Item<ViewHolder>()
                         .addOnSuccessListener {
                             val ref2 = FirebaseDatabase.getInstance().getReference("made_offers/$uidBidder/$uidRequester")
 
-                            val newOffer = Offer(offer!!.uidBidder,offer.uidRequester,offer.price,"declined",true)
+                            val newOffer = Offer(offer!!.uidBidder,offer.uidRequester,offer.price,Offer.DECLINED,true)
                             ref2.setValue(newOffer)
                                     .addOnSuccessListener {
                                         addDeclinedOffer(uidBidder)
